@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4.5 92 13" role="img" aria-label="OffDeal">
+  <circle cx="7" cy="11" r="6.2" fill="none" stroke="#fff" stroke-width="2.1"/>
+  <circle cx="13.2" cy="11" r="6.2" fill="none" stroke="#fff" stroke-width="2.1"/>
+  <text x="24" y="15.8" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#fff" letter-spacing="-0.35">OffDeal</text>
+</svg>

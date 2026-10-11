@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install — SheetSpeed</title>
+  <meta name="description" content="Install SheetSpeed Core from the Chrome Web Store. Org IT: allowlist Store extension ID ljlmgielacploapelnjhodicgbjipcaa." />
+  <link rel="icon" href="assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" aria-label="SheetSpeed home">
+        <img src="assets/sheetspeed-logo.png" alt="" width="36" height="36" />
+        <span class="brand-name">SheetSpeed</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="nav" id="site-nav" data-nav aria-label="Site">
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="faq.html">FAQ</a>
+        <a class="nav-cta" href="install.html" aria-current="page">Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="install">
+    <div class="page-hero wrap">
+      <h1>Add to Chrome</h1>
+      <p>SheetSpeed Core — native shortcuts for Sheets + Slides. No Google API OAuth or AI helper.</p>
+    </div>
+
+    <section>
+      <div class="wrap install-stack">
+        <article class="install-primary" id="store">
+          <p class="pill-status">Chrome Web Store · Pending review</p>
+          <h2>Install from the Store</h2>
+          <p class="install-lead">Managed Chrome blocks Developer mode — <strong>Load unpacked is not the path</strong>. Prefer <strong>Add to Chrome</strong> from the Store when the listing is live. IT allowlist is optional only if policy blocks Store install.</p>
+          <a
+            class="btn btn-primary"
+            id="cws-link"
+            href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Add to Chrome</a>
+          <p class="hero-note">Listing is pending Google review — the public URL may show “not available” until published.</p>
+
+          <div class="allowlist-box">
+            <h3>Org IT allowlist (optional)</h3>
+            <p>Only if Store install is blocked. Google Admin → Chrome → Apps &amp; extensions → add by ID:</p>
+            <p class="ext-id"><code>ljlmgielacploapelnjhodicgbjipcaa</code></p>
+            <p>This differs from the unpacked lab ID <code>ilmephppeembpfahnppdbgonfohdcedj</code> — Chrome installs from the Store under the Store ID. Set <strong>Allow install</strong> (or Force install). Users refresh Chrome, then Add to Chrome from the Store listing.</p>
+          </div>
+
+          <p class="legal-links">
+            <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+          </p>
+        </article>
+
+        <details class="install-secondary">
+          <summary>Personal Chrome with Developer mode (local Core / Full)</summary>
+          <div class="secondary-body">
+            <p>Only when your browser allows Developer mode. Not available on Coinbase-managed Chrome.</p>
+            <ol class="plain-steps">
+              <li>Use the repo <code>extension</code> folder (Full) or <code>npm run package:core</code> and extract so <code>manifest.json</code> is at the folder root.</li>
+              <li>Open <code>chrome://extensions</code> → enable Developer mode → <strong>Load unpacked</strong> → select that folder.</li>
+              <li>Refresh a Google Sheet or Slide. Confirm the ◈ SheetSpeed launcher and Core/Full footer status.</li>
+            </ol>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/sheetspeed-logo.png" alt="" width="32" height="32" />
+          <span>SheetSpeed</span>
+        </div>
+        <div class="footer-links">
+          <a href="features.html">Features</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="faq.html">FAQ</a>
+          <a href="install.html">Install</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+        </div>
+      </div>
+      <p class="footer-meta">SheetSpeed Core · Store ID ljlmgielacploapelnjhodicgbjipcaa · Chrome 114+</p>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+</body>
+</html>

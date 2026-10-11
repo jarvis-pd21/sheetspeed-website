@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 54 13.5" role="img" aria-label="PwC">
+  <g fill="#fff" transform="translate(0,4.2) scale(0.42)">
+    <rect x="0" y="0" width="28" height="6"/>
+    <rect x="6" y="8" width="22" height="6"/>
+    <rect x="12" y="16" width="16" height="6"/>
+  </g>
+  <text x="18" y="15.6" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#fff">pwc</text>
+</svg>

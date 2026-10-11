@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" role="img" aria-label="Deloitte">
+  <text x="0" y="30" font-family="Georgia, Times, serif" font-size="28" font-weight="600" fill="#000000">Deloitte</text>
+  <circle cx="122" cy="8" r="5" fill="#86BC25"/>
+</svg>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — SheetSpeed</title>
+  <meta name="description" content="SheetSpeed FAQ: install, Chrome only, shortcuts, admin allowlist, Core vs Full." />
+  <link rel="icon" href="assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" aria-label="SheetSpeed home">
+        <img src="assets/sheetspeed-logo.png" alt="" width="36" height="36" />
+        <span class="brand-name">SheetSpeed</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="nav" id="site-nav" data-nav aria-label="Site">
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="faq.html" aria-current="page">FAQ</a>
+        <a class="nav-cta" href="install.html">Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-hero wrap">
+      <h1>FAQ</h1>
+      <p>Short answers. Install first if you are stuck.</p>
+    </div>
+
+    <section>
+      <div class="wrap faq-list">
+        <details class="faq-item" open>
+          <summary>How do I install SheetSpeed?</summary>
+          <div class="answer">
+            <p>Primary path: Chrome Web Store <strong>Add to Chrome</strong> after your org allowlists the extension. See <a href="install.html#store">Install</a>. Managed Chrome that blocks Developer mode cannot use Load unpacked.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the extension ID?</summary>
+          <div class="answer">
+            <p><strong>Store / IT allowlist ID:</strong> <code>ljlmgielacploapelnjhodicgbjipcaa</code> — give this to IT for Chrome Web Store allowlist / force-install after the listing publishes.</p>
+            <p>Unpacked lab ID <code>ilmephppeembpfahnppdbgonfohdcedj</code> is for local Developer-mode loads only — do <strong>not</strong> allowlist it for Coinbase Store installs.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Which browsers work?</summary>
+          <div class="answer">
+            <p>Google Chrome is the supported target (114+). Chromium-based browsers may work; they are not the primary test surface.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Shortcuts do nothing — why?</summary>
+          <div class="answer">
+            <p>Open the SheetSpeed launcher on the sheet and confirm shortcuts are enabled. Control chords are held together; Option/Alt sequences are pressed in order within a short window. Focus must be on the document, not an open dialog.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Admin blocked the extension / Developer mode</summary>
+          <div class="answer">
+            <p>Coinbase-style managed Chrome blocks Developer mode and unknown Store apps. Ask IT to allowlist Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code> from the Chrome Web Store (Allow or Force install). Load unpacked is not a path there. SheetSpeed does not bypass policy.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Core vs Full?</summary>
+          <div class="answer">
+            <p>Core: native menu commands + visible-formula precedent tools, no Google API OAuth. Full: same ID, replaces Core, adds API modeling, dependents, cycles, export, and optional AI. They do not run side by side.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a Chrome Web Store page?</summary>
+          <div class="answer">
+            <p>Listing is in review (public page shows “This item is not available” until Google publishes). Expected Store URL uses ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>. Privacy: <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">privacy-core</a>. Support: <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">support</a>.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I uninstall?</summary>
+          <div class="answer">
+            <p>Open <code>chrome://extensions</code>, find SheetSpeed, remove. Clearing extension data deletes local settings and recovery journals.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/sheetspeed-logo.png" alt="" width="32" height="32" />
+          <span>SheetSpeed</span>
+        </div>
+        <div class="footer-links">
+          <a href="features.html">Features</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="faq.html">FAQ</a>
+          <a href="install.html">Install</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+        </div>
+      </div>
+      <p class="footer-meta">SheetSpeed FAQ</p>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+</body>
+</html>
