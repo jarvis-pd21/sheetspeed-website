@@ -830,6 +830,7 @@ section {
   border-radius: 999px;
 }
 
+.price-card h2,
 .price-card h3 {
   margin: 0;
   font-family: var(--font-display);
