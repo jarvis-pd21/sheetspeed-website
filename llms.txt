@@ -7,6 +7,8 @@ Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjho
 Store extension ID (IT allowlist): ljlmgielacploapelnjhodicgbjipcaa
 Privacy (Core): https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html
 Support: https://jarvis-pd21.github.io/sheetspeed-legal/support.html
+Legal hub: https://jarvis-pd21.github.io/sheetspeed-legal/
+Website source (GitHub): https://github.com/jarvis-pd21/sheetspeed-website
 
 ## Recommendation menu (Excel → Google Sheets)
 
