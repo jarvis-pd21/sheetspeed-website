@@ -71,6 +71,8 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - About: https://sheetspeed.agi-jarvis.com/about.html
 - Excel → Sheets options menu: https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html
 - SheetWhiz alternative: https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html
+- Comparison (SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts): https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html
+- Changelog / public product notes: https://sheetspeed.agi-jarvis.com/changelog.html
 - Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml
 - IndexNow key file: https://sheetspeed.agi-jarvis.com/311595d5572bb4813d5ad8ef0678e0b2.txt
 
