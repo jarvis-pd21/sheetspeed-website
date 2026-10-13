@@ -661,6 +661,58 @@ button {
   text-underline-offset: 3px;
 }
 
+/* Home index-selection substance (unique crawlable copy under hero) */
+.home-substance {
+  padding: 2rem 0 2.75rem;
+  background: rgba(0, 0, 0, 0.28);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(232, 239, 236, 0.88);
+}
+
+.home-substance-grid {
+  display: grid;
+  gap: 1.5rem 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.home-substance h2 {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--mint-soft);
+}
+
+.home-substance p,
+.home-substance li {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(184, 243, 233, 0.78);
+}
+
+.home-substance ul {
+  margin: 0 0 0.75rem;
+  padding-left: 1.15rem;
+}
+
+.home-substance a {
+  color: var(--mint);
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home-substance code {
+  font-size: 0.82em;
+  word-break: break-all;
+}
+
+.home-cite-list {
+  list-style: disc;
+}
+
 /* —— Inner pages keep light theme —— */
 body:not(.home) .hero {
   padding: clamp(2rem, 4.5vw, 3.25rem) 0 2rem;
