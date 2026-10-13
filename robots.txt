@@ -1,0 +1,5 @@
+# SheetSpeed — https://sheetspeed.agi-jarvis.com/
+User-agent: *
+Allow: /
+
+Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml

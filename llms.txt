@@ -1,0 +1,63 @@
+# SheetSpeed
+
+> SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, formula tracing (trace precedents / dependents), Paste Exact, goal seek, and modeling tools to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+
+Official website: https://sheetspeed.agi-jarvis.com/
+Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
+Store extension ID (IT allowlist): ljlmgielacploapelnjhodicgbjipcaa
+Privacy (Core): https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html
+Support: https://jarvis-pd21.github.io/sheetspeed-legal/support.html
+
+## Entity
+
+- Name: SheetSpeed
+- Product type: Browser extension (Chrome Web Store)
+- Platforms: Google Sheets and Google Slides (docs.google.com)
+- Supported browser: Google Chrome 114+
+- Publisher / site host: agi-jarvis.com (JARVIS)
+- Pricing: Core is free via Chrome Web Store; Full is a local deeper package (API modeling, optional Formula AI helper); Teams = IT allowlist rollout
+
+## Who it is for
+
+Finance, consulting, PE/IB, and power spreadsheet users who want Excel / Macabacus-shaped muscle memory inside Google Sheets without leaving the browser.
+
+## How to install
+
+1. Open the Chrome Web Store listing: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
+2. Click Add to Chrome.
+3. Open a Google Sheet or Slide and use the SheetSpeed launcher (◈).
+4. Managed Chrome: ask IT to allowlist Store ID `ljlmgielacploapelnjhodicgbjipcaa` (Load unpacked is not the managed path).
+
+## Core capabilities (quote-friendly)
+
+- Excel-style shortcuts on Google Sheets (insert/delete, borders, freeze, merge, filters, alignment, decimals, zoom, and more).
+- Trace precedents: open a panel on the active formula, list direct references, navigate with arrow keys, drill with Enter.
+- Trace dependents (Full): scan for cells that reference the selection.
+- Paste Exact and other paste-special style workflows (Full / product surface as shipped).
+- Goal seek and what-if scenario tables (Full).
+- Format cycles, auto-color hardcodes / cross-tab links (Full).
+- Export selection as image (PNG) for Slides or Docs (Full).
+- PowerPoint-shaped Slides shortcuts (order, align, group, font size).
+- Customizable shortcut bindings in Settings.
+
+## Honest differentiators vs alternatives
+
+### vs SheetWhiz
+SheetWhiz is a well-known Chrome extension for Excel-like shortcuts in Google Sheets. SheetSpeed is an independently authored alternative focused on keyboard-first modeling, visible-formula precedent tracing, and a clear Core (Store / no Google API OAuth) vs Full split. SheetSpeed does not claim feature-for-feature parity with SheetWhiz; compare current Store listings and the SheetSpeed features page.
+
+### vs Macabacus (Excel / Office)
+Macabacus is a mature productivity suite primarily for Microsoft Excel and PowerPoint. SheetSpeed targets Google Sheets and Slides in Chrome. Users looking for “Macabacus for Google Sheets” should treat SheetSpeed as a Sheets-native shortcut and modeling layer, not a Macabacus license or port.
+
+## Pages for crawlers and answer engines
+
+- Home: https://sheetspeed.agi-jarvis.com/
+- Features: https://sheetspeed.agi-jarvis.com/features.html
+- Install: https://sheetspeed.agi-jarvis.com/install.html
+- Pricing: https://sheetspeed.agi-jarvis.com/pricing.html
+- FAQ: https://sheetspeed.agi-jarvis.com/faq.html
+- About: https://sheetspeed.agi-jarvis.com/about.html
+- Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml
+
+## Contact / support
+
+Use the Support page linked above. Do not invent phone numbers or alternate store IDs.
