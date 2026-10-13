@@ -14,6 +14,19 @@
     });
   }
 
+  // Logo marquee: CSS infinite scroll; pause on hover + touch (iOS has no hover).
+  document.querySelectorAll("[data-marquee]").forEach((marquee) => {
+    const pause = () => marquee.classList.add("is-paused");
+    const resume = () => marquee.classList.remove("is-paused");
+    marquee.addEventListener("pointerdown", pause, { passive: true });
+    marquee.addEventListener("pointerup", resume, { passive: true });
+    marquee.addEventListener("pointercancel", resume, { passive: true });
+    marquee.addEventListener("pointerleave", resume, { passive: true });
+    marquee.addEventListener("touchstart", pause, { passive: true });
+    marquee.addEventListener("touchend", resume, { passive: true });
+    marquee.addEventListener("touchcancel", resume, { passive: true });
+  });
+
   const stage = document.querySelector("[data-trace-stage]");
   if (!stage) return;
 
@@ -24,8 +37,6 @@
   const hintEl = stage.querySelector("[data-key-hint]");
   const glow = stage.querySelector("[data-cell-glow]");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Logo marquee is CSS-driven (infinite scroll + pause-on-hover).
 
   const scenes = [
     {

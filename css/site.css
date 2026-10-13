@@ -27,6 +27,9 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -38,8 +41,12 @@ body {
     radial-gradient(700px 420px at 8% 90%, rgba(14, 42, 38, 0.08), transparent 50%),
     linear-gradient(165deg, #eef5f2 0%, var(--paper) 38%, #fff 100%);
   min-height: 100vh;
+  min-height: 100dvh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 body.home {
@@ -75,8 +82,10 @@ button {
   top: 0;
   z-index: 40;
   backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
   background: rgba(243, 247, 245, 0.88);
   border-bottom: 1px solid rgba(201, 216, 211, 0.7);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 .site-header--thin {
@@ -85,10 +94,12 @@ button {
 }
 
 .header-inner {
-  height: var(--header-h);
+  min-height: var(--header-h);
+  height: auto;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 16px;
+  padding-block: 0.35rem;
 }
 
 .brand {
@@ -141,6 +152,7 @@ button {
   align-items: center;
   justify-content: center;
   margin-left: auto;
+  min-height: 44px;
   padding: 0.55rem 1.15rem;
   border-radius: 999px;
   background: var(--mint);
@@ -150,6 +162,9 @@ button {
   border: 0;
   box-shadow: 0 4px 18px rgba(111, 212, 196, 0.35);
   transition: transform 0.15s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: rgba(111, 212, 196, 0.35);
+  touch-action: manipulation;
+  flex-shrink: 0;
 }
 
 .nav-cta:hover {
@@ -169,12 +184,14 @@ button {
 
 /* —— Install-first hero —— */
 .hero--install {
-  min-height: calc(100svh - var(--header-h));
+  min-height: calc(100svh - var(--header-h) - env(safe-area-inset-top, 0px));
+  min-height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: clamp(1.5rem, 3.5vw, 2.5rem) 0 0;
   gap: clamp(1.75rem, 4vw, 2.75rem);
+  overflow-x: clip;
 }
 
 .hero-grid {
@@ -188,6 +205,11 @@ button {
   width: min(var(--max), calc(100% - 48px));
 }
 
+.hero-copy {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .brand-mark {
   margin: 0 0 0.75rem;
   font-family: var(--font-display);
@@ -197,6 +219,9 @@ button {
   line-height: 1.05;
   color: #fff;
   text-transform: none;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  max-width: 100%;
 }
 
 .hero-copy .lede {
@@ -218,12 +243,15 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
+  min-height: 44px;
   padding: 0.95rem 1.55rem;
   border-radius: 999px;
   font-weight: 700;
   font-size: 1.05rem;
   border: 1px solid transparent;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: rgba(111, 212, 196, 0.35);
+  touch-action: manipulation;
 }
 
 .btn:hover {
@@ -243,8 +271,12 @@ button {
 
 .btn-hero {
   font-size: 1.15rem;
+  min-height: 52px;
   padding: 1.1rem 1.85rem;
   animation: cta-pulse 2.8s ease-in-out infinite;
+  width: fit-content;
+  max-width: 100%;
+  text-align: center;
 }
 
 @keyframes cta-pulse {
@@ -290,8 +322,12 @@ button {
 .marquee {
   overflow: hidden;
   width: 100%;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  /* Avoid iOS compositing glitches with fixed heights on the track */
+  contain: paint;
 }
 
 .marquee-track {
@@ -299,21 +335,25 @@ button {
   align-items: center;
   gap: 3.25rem;
   width: max-content;
+  max-height: none;
+  height: auto;
   padding-inline: 1.5rem;
   animation: marquee-scroll 42s linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
-.marquee:hover .marquee-track {
+.marquee:hover .marquee-track,
+.marquee.is-paused .marquee-track {
   animation-play-state: paused;
 }
 
 @keyframes marquee-scroll {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -1071,7 +1111,7 @@ section {
 
 .site-footer--compact {
   margin-top: 0;
-  padding: 1.5rem 0;
+  padding: 1.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
   background: #061210;
 }
 
@@ -1141,21 +1181,52 @@ section {
 }
 
 @media (max-width: 900px) {
+  .wrap {
+    width: min(var(--max), calc(100% - 32px));
+  }
+
+  .wrap.hero-grid {
+    width: min(var(--max), calc(100% - 32px));
+  }
+
   .hero-grid,
   .feature-grid,
   .pricing-grid,
   .plus-block {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero--install {
-    min-height: auto;
-    padding-top: 1.5rem;
+    /* Fill first screen on phones without forcing clipped overflow */
+    min-height: calc(100svh - var(--header-h) - env(safe-area-inset-top, 0px));
+    min-height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
+    padding-top: 1.25rem;
+    justify-content: flex-start;
+    gap: 1.5rem;
   }
 
   .brand-mark {
-    font-size: clamp(2rem, 10vw, 2.8rem);
-    white-space: normal;
+    /* Fit “SheetSpeed” on ~350px content width without clipping */
+    font-size: clamp(1.85rem, 8.4vw, 2.45rem);
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    overflow: visible;
+  }
+
+  .hero-copy .lede {
+    font-size: 1.05rem;
+    max-width: none;
+  }
+
+  .btn-hero {
+    width: 100%;
+    font-size: 1.08rem;
+    padding: 1rem 1.35rem;
+  }
+
+  .hero-note {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .sheet-stage {
@@ -1163,9 +1234,56 @@ section {
     margin-inline: auto;
   }
 
+  .trace-panel {
+    width: min(96%, 300px);
+  }
+
+  .trace-rows {
+    min-height: 128px;
+  }
+
+  .trust-marquee {
+    padding: 1rem 0 1.15rem;
+  }
+
+  .trust-marquee-label {
+    width: min(var(--max), calc(100% - 32px));
+  }
+
   .marquee-track {
-    gap: 2.4rem;
-    animation-duration: 36s;
+    gap: 1.85rem;
+    padding-inline: 1rem;
+    animation-duration: 38s;
+  }
+
+  .marquee-track .logo {
+    height: 26px;
+  }
+
+  .marquee-track .logo-meta,
+  .marquee-track .logo-jpm,
+  .marquee-track .logo-vector,
+  .marquee-track .logo-137,
+  .marquee-track .logo-pwc,
+  .marquee-track .logo-offdeal,
+  .marquee-track .logo-deloitte {
+    height: 24px;
+  }
+
+  .marquee-track .logo-coinbase {
+    max-width: 140px;
+  }
+
+  .marquee-track .logo-gemspring {
+    max-width: 220px;
+  }
+
+  .marquee-track .logo-meta {
+    max-width: 130px;
+  }
+
+  .marquee-track .logo-vector {
+    max-width: 240px;
   }
 
   .nav {
@@ -1175,7 +1293,7 @@ section {
   .nav.open {
     display: flex;
     position: absolute;
-    top: var(--header-h);
+    top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
     left: 0;
     right: 0;
     flex-direction: column;
@@ -1186,6 +1304,10 @@ section {
 
   .menu-toggle {
     display: inline-flex;
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
   }
 
   .launcher-chip {
@@ -1194,6 +1316,39 @@ section {
 
   .logo-strip-list {
     gap: 1rem 1.25rem;
+  }
+
+  .footer-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .slim-inner a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Narrow phones (iPhone SE → standard widths) */
+@media (max-width: 430px) {
+  .brand-name {
+    font-size: 0.95rem;
+  }
+
+  .brand-mark {
+    /* ~33px at 390 CSS px — full wordmark with ~30px side room */
+    font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+  }
+
+  .nav-cta {
+    padding-inline: 0.95rem;
+    font-size: 0.85rem;
+  }
+
+  .header-inner {
+    gap: 10px;
   }
 }
 
