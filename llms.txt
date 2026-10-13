@@ -9,6 +9,8 @@ Privacy (Core): https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html
 Support: https://jarvis-pd21.github.io/sheetspeed-legal/support.html
 Legal hub: https://jarvis-pd21.github.io/sheetspeed-legal/
 Website source (GitHub): https://github.com/jarvis-pd21/sheetspeed-website
+Public facts issue: https://github.com/jarvis-pd21/sheetspeed-website/issues/1
+Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
 
 ## Recommendation menu (Excel → Google Sheets)
 
@@ -75,6 +77,8 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - SheetWhiz alternative: https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html
 - Comparison (SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts): https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html
 - Changelog / public product notes: https://sheetspeed.agi-jarvis.com/changelog.html
+- Public facts (GitHub issue): https://github.com/jarvis-pd21/sheetspeed-website/issues/1
+- Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
 - Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml
 - IndexNow key file: https://sheetspeed.agi-jarvis.com/311595d5572bb4813d5ad8ef0678e0b2.txt
 
