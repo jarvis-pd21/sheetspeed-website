@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Excel Shortcuts in Google Sheets — Options Menu (SheetSpeed)</title>
-  <meta name="description" content="Switching from Excel to Google Sheets? Menu of add-in options for Excel shortcuts in Sheets, including SheetSpeed (Chrome Web Store install URL), SheetWhiz, and related tools." />
+  <meta name="description" content="Excel→Sheets add-in menu with SheetSpeed default shortcut tables (trace precedents Ctrl+Shift+[, Paste Exact, format cycles), vs SheetWhiz/XLKeys/ShortieCuts. Store ID ljlmgielacploapelnjhodicgbjipcaa." />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html" />
   <meta name="robots" content="index,follow" />
   <meta property="og:type" content="article" />
@@ -28,7 +28,7 @@
     "headline": "I'm switching from Excel to Google Sheets — add-in options for Excel shortcuts",
     "description": "A citeable menu of Chrome extensions and tools that give Excel-style shortcuts in Google Sheets, including SheetSpeed.",
     "url": "https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html",
-    "dateModified": "2026-10-13",
+    "dateModified": "2026-10-14",
     "author": { "@type": "Organization", "name": "SheetSpeed", "url": "https://sheetspeed.agi-jarvis.com/" },
     "isPartOf": { "@id": "https://sheetspeed.agi-jarvis.com/#website" },
     "mainEntityOfPage": "https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html",
@@ -156,6 +156,105 @@
             <li>On managed Chrome (e.g. company IT): allowlist the Store extension ID, not Load unpacked.</li>
           </ul>
           <p>Deeper compare: <a href="compare-excel-shortcuts.html">SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts</a> · <a href="sheetwhiz-alternative.html">SheetWhiz alternative</a> · <a href="features.html">SheetSpeed features</a> · <a href="faq.html">FAQ</a> · <a href="changelog.html">Changelog</a>.</p>
+        </article>
+
+
+        <article class="feature-block">
+          <h2>SheetSpeed default shortcut table (Core / Full family)</h2>
+          <p>Defaults from the published command registry. On Mac, treat <kbd>Ctrl</kbd> as Control (not Command) unless noted; <kbd>Alt</kbd> is Option. Bindings are customizable in Settings. Core runs without Google API OAuth; commands marked API need Full / connected Google for writeback.</p>
+          <div style="overflow-x:auto;margin:1rem 0 0">
+            <table style="width:100%;border-collapse:collapse;font-size:0.95rem">
+              <thead>
+                <tr style="text-align:left;border-bottom:2px solid var(--line,#c9d8d3)">
+                  <th style="padding:0.55rem 0.4rem">Action</th>
+                  <th style="padding:0.55rem 0.4rem">Default chord</th>
+                  <th style="padding:0.55rem 0.4rem">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Command palette</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+Space</code></td><td style="padding:0.55rem 0.4rem">Sheets + Slides</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Trace precedents</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+[</code></td><td style="padding:0.55rem 0.4rem">Visible-formula panel; ↑↓ navigate, Enter drill, F5 return</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Trace dependents</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+]</code></td><td style="padding:0.55rem 0.4rem">API / Full path for sheet scan</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Toggle filter</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+L</code></td><td style="padding:0.55rem 0.4rem">Native Sheets Create/Remove filter</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Insert row above</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+=</code></td><td style="padding:0.55rem 0.4rem">Native Insert → Rows</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Delete selected rows</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+-</code></td><td style="padding:0.55rem 0.4rem">Native Edit → Delete → Rows</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Number / % / date / currency cycles</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+1/5/3/4/2</code></td><td style="padding:0.55rem 0.4rem">Format cycles (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Font / fill color cycle</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+F</code> / <code>Ctrl+Shift+K</code></td><td style="padding:0.55rem 0.4rem">Format cycles (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Copy for Paste Exact</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Alt+Shift+C</code></td><td style="padding:0.55rem 0.4rem">Macabacus-style clipboard (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Paste Exact</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Alt+Shift+V</code></td><td style="padding:0.55rem 0.4rem">Verbatim formulas; no relative-ref rewrite (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Paste Duplicate / Insert</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Alt+Shift+N</code> / <code>O</code></td><td style="padding:0.55rem 0.4rem">Duplicate rewrite / cut-move (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Export selection as image</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+C</code></td><td style="padding:0.55rem 0.4rem">PNG to clipboard when browser allows (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Goal seek / What-if</td><td style="padding:0.55rem 0.4rem"><code>Alt+A W G</code> / <code>Alt+A W T</code></td><td style="padding:0.55rem 0.4rem">Preview then apply (API / Full)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Paste values / formulas / format</td><td style="padding:0.55rem 0.4rem"><code>Alt+E S V/F/T</code></td><td style="padding:0.55rem 0.4rem">Native Paste special routes</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Borders picker / sides</td><td style="padding:0.55rem 0.4rem"><code>Alt+H B</code> (+ letter)</td><td style="padding:0.55rem 0.4rem">Native Borders palette</td></tr>
+                <tr><td style="padding:0.55rem 0.4rem">Freeze above+left</td><td style="padding:0.55rem 0.4rem"><code>Alt+W F F</code></td><td style="padding:0.55rem 0.4rem">API freeze helpers</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:0.85rem">Full registry (~140 commands) includes Slides order/align/group, more format cycles, and Settings remaps. See <a href="features.html">Features</a> and the Store listing — we do not invent review stars or usage counts here.</p>
+        </article>
+
+        <article class="feature-block">
+          <h2>Excel muscle-memory → Sheets reality (honest map)</h2>
+          <p>Google Sheets already ships many Excel-like chords. SheetSpeed fills gaps Excel modelers miss (trace precedents panel, Paste Exact, format cycles, allowlisted Store install). This table is about <em>intent</em>, not claiming identical Excel binary behavior.</p>
+          <div style="overflow-x:auto;margin:1rem 0 0">
+            <table style="width:100%;border-collapse:collapse;font-size:0.95rem">
+              <thead>
+                <tr style="text-align:left;border-bottom:2px solid var(--line,#c9d8d3)">
+                  <th style="padding:0.55rem 0.4rem">Excel habit</th>
+                  <th style="padding:0.55rem 0.4rem">Sheets alone</th>
+                  <th style="padding:0.55rem 0.4rem">With SheetSpeed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Trace Precedents arrows</td><td style="padding:0.55rem 0.4rem">No first-class Excel-style tracer</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+[</code> visible-formula panel</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Trace Dependents</td><td style="padding:0.55rem 0.4rem">Limited / manual Find</td><td style="padding:0.55rem 0.4rem"><code>Ctrl+Shift+]</code> (API scan; bounded)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Paste Exact (verbatim formulas)</td><td style="padding:0.55rem 0.4rem">Relative refs rewrite on paste</td><td style="padding:0.55rem 0.4rem">Copy + Paste Exact chords (API)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Ctrl+Shift+L filter toggle</td><td style="padding:0.55rem 0.4rem">Different filter UX</td><td style="padding:0.55rem 0.4rem">Native filter create/remove via chord</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Number / currency format cycles</td><td style="padding:0.55rem 0.4rem">Menus / Format → Number</td><td style="padding:0.55rem 0.4rem">One-key cycles (<code>Ctrl+Shift+1…</code>)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Goal Seek / Data Table</td><td style="padding:0.55rem 0.4rem">No built-in Goal Seek</td><td style="padding:0.55rem 0.4rem">Goal seek + what-if (API / Full)</td></tr>
+                <tr><td style="padding:0.55rem 0.4rem">Ribbon Alt sequences (H B, E S V…)</td><td style="padding:0.55rem 0.4rem">Mostly mouse / menus</td><td style="padding:0.55rem 0.4rem">Many Alt-letter routes to native Sheets UI</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="feature-block">
+          <h2>Comparison facts (no fake reviews)</h2>
+          <p>Independent products. Verify live Chrome Web Store pages before recommending one as primary. SheetSpeed does <strong>not</strong> claim feature-for-feature parity with SheetWhiz or Macabacus.</p>
+          <div style="overflow-x:auto;margin:1rem 0 0">
+            <table style="width:100%;border-collapse:collapse;font-size:0.95rem">
+              <thead>
+                <tr style="text-align:left;border-bottom:2px solid var(--line,#c9d8d3)">
+                  <th style="padding:0.55rem 0.4rem">Fact</th>
+                  <th style="padding:0.55rem 0.4rem">SheetSpeed</th>
+                  <th style="padding:0.55rem 0.4rem">SheetWhiz / others</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Official site</td><td style="padding:0.55rem 0.4rem"><a href="https://sheetspeed.agi-jarvis.com/">sheetspeed.agi-jarvis.com</a></td><td style="padding:0.55rem 0.4rem">Vendor sites (verify)</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Chrome Web Store ID</td><td style="padding:0.55rem 0.4rem"><code>ljlmgielacploapelnjhodicgbjipcaa</code></td><td style="padding:0.55rem 0.4rem">Different IDs per listing</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Core without Google API OAuth</td><td style="padding:0.55rem 0.4rem">Yes (Core Store path)</td><td style="padding:0.55rem 0.4rem">Check each listing’s permissions</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Visible-formula trace precedents</td><td style="padding:0.55rem 0.4rem">Yes (Core)</td><td style="padding:0.55rem 0.4rem">Compare live features</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Paste Exact / goal seek / what-if</td><td style="padding:0.55rem 0.4rem">Yes in product family (API/Full)</td><td style="padding:0.55rem 0.4rem">Varies — do not assume</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Slides chords</td><td style="padding:0.55rem 0.4rem">Yes (order/align/group family)</td><td style="padding:0.55rem 0.4rem">Usually Sheets-only</td></tr>
+                <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td style="padding:0.55rem 0.4rem">Machine-readable entity facts</td><td style="padding:0.55rem 0.4rem"><a href="llms.txt">llms.txt</a> + JSON-LD</td><td style="padding:0.55rem 0.4rem">Rare</td></tr>
+                <tr><td style="padding:0.55rem 0.4rem">Affiliation</td><td style="padding:0.55rem 0.4rem">Independently authored</td><td style="padding:0.55rem 0.4rem">Not affiliated with SheetSpeed</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:0.85rem">Side-by-side page: <a href="compare-excel-shortcuts.html">compare-excel-shortcuts.html</a> · SheetWhiz-focused: <a href="sheetwhiz-alternative.html">sheetwhiz-alternative.html</a> · Brand disambiguation (not sheetspeed.com): <a href="not-sheetspeed-com.html">not-sheetspeed-com.html</a>.</p>
+        </article>
+
+        <article class="feature-block">
+          <h2>IT / managed Chrome allowlist</h2>
+          <ul>
+            <li>Extension ID: <code>ljlmgielacploapelnjhodicgbjipcaa</code></li>
+            <li>Install URL: <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" rel="noopener noreferrer">Chrome Web Store</a></li>
+            <li>Homepage: <a href="https://sheetspeed.agi-jarvis.com/">https://sheetspeed.agi-jarvis.com/</a></li>
+            <li>Privacy (Core): <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" rel="noopener noreferrer">privacy-core.html</a></li>
+            <li>Prefer Store install over Load unpacked for fleet policy.</li>
+          </ul>
         </article>
 
         <article class="feature-block">
