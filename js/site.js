@@ -14,17 +14,9 @@
     });
   }
 
-  // Logo marquee: CSS infinite scroll; pause on hover + touch (iOS has no hover).
+  // Logo strip: static wrap/grid only (scroll+overflow/mask was mid-glyph chopping wordmarks).
   document.querySelectorAll("[data-marquee]").forEach((marquee) => {
-    const pause = () => marquee.classList.add("is-paused");
-    const resume = () => marquee.classList.remove("is-paused");
-    marquee.addEventListener("pointerdown", pause, { passive: true });
-    marquee.addEventListener("pointerup", resume, { passive: true });
-    marquee.addEventListener("pointercancel", resume, { passive: true });
-    marquee.addEventListener("pointerleave", resume, { passive: true });
-    marquee.addEventListener("touchstart", pause, { passive: true });
-    marquee.addEventListener("touchend", resume, { passive: true });
-    marquee.addEventListener("touchcancel", resume, { passive: true });
+    marquee.classList.add("is-static");
   });
 
   const stage = document.querySelector("[data-trace-stage]");

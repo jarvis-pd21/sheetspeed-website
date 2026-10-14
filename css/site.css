@@ -327,42 +327,35 @@ button {
 }
 
 .marquee {
-  overflow: hidden;
+  /* Static strip — no overflow clip / mask (those were mid-glyph chopping wordmarks). */
+  overflow: visible;
   width: 100%;
   max-width: 100%;
-  -webkit-overflow-scrolling: touch;
-  /* Softer edge fade so wordmarks aren’t mistaken for cropped glyphs */
-  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
-  /* Avoid iOS compositing glitches with fixed heights on the track */
-  contain: paint;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  box-sizing: border-box;
 }
 
 .marquee-track {
-  display: flex;
-  align-items: center;
-  gap: 3.25rem;
-  width: max-content;
-  max-height: none;
+  display: block;
+  width: 100%;
+  max-width: min(var(--max), 100%);
+  margin-inline: auto;
   height: auto;
-  padding-inline: 1.5rem;
-  animation: marquee-scroll 42s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
-.marquee:hover .marquee-track,
-.marquee.is-paused .marquee-track {
-  animation-play-state: paused;
+.marquee-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.75rem 3rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@keyframes marquee-scroll {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+/* Duplicate set is only for legacy markup / reduced-motion parity — never shown. */
+.marquee-group[aria-hidden="true"] {
+  display: none !important;
 }
 
 /* Height-driven slots — never max-width-crop wordmarks (Safari flex + img max-width:100%) */
@@ -370,8 +363,8 @@ button {
   flex: 0 0 auto;
   display: block;
   height: 32px;
-  width: auto;
-  max-width: none !important;
+  width: auto !important;
+  max-width: 100%;
   object-fit: contain;
   object-position: center;
   opacity: 0.92;
@@ -1296,26 +1289,51 @@ section {
     width: min(var(--max), calc(100% - 32px));
   }
 
+  /*
+   * Phones/tablets: 2-column grid — every wordmark fully inside its cell.
+   * Continuous scroll on ≤900px always bisects logos at the clip edge.
+   */
+  .marquee {
+    overflow: visible;
+    padding-inline: 1.25rem;
+  }
+
   .marquee-track {
-    gap: 1.85rem;
-    padding-inline: 1rem;
-    animation-duration: 38s;
+    display: block;
+    width: 100%;
+    max-width: min(var(--max), 100%);
+    margin-inline: auto;
+    animation: none !important;
+    transform: none !important;
   }
 
-  .marquee-track .logo {
-    height: 26px;
+  .marquee-group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 1.15rem;
+    padding-right: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
+  .marquee-track .logo,
+  .marquee-track .logo-coinbase,
   .marquee-track .logo-google,
   .marquee-track .logo-meta,
   .marquee-track .logo-jpm,
   .marquee-track .logo-pwc,
   .marquee-track .logo-deloitte {
-    height: 24px;
-  }
-
-  .marquee-track .logo-coinbase {
-    height: 24px;
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 20px !important;
+    max-height: 20px !important;
+    object-fit: contain;
+    object-position: center;
+    justify-self: stretch;
   }
 
   .nav {
@@ -1385,6 +1403,43 @@ section {
     font-size: 0.85rem;
     border-radius: 10px;
   }
+
+  .marquee {
+    padding-inline: 1.35rem;
+  }
+
+  .marquee-track .logo,
+  .marquee-track .logo-coinbase,
+  .marquee-track .logo-google,
+  .marquee-track .logo-meta,
+  .marquee-track .logo-jpm,
+  .marquee-track .logo-pwc,
+  .marquee-track .logo-deloitte {
+    height: 18px !important;
+    max-height: 18px !important;
+  }
+}
+
+/* Very narrow: stack logos in one column so nothing can overflow. */
+@media (max-width: 360px) {
+  .marquee-group {
+    grid-template-columns: 1fr;
+    row-gap: 0.95rem;
+  }
+
+  .marquee-track .logo,
+  .marquee-track .logo-coinbase,
+  .marquee-track .logo-google,
+  .marquee-track .logo-meta,
+  .marquee-track .logo-jpm,
+  .marquee-track .logo-pwc,
+  .marquee-track .logo-deloitte {
+    height: 20px !important;
+    max-height: 20px !important;
+    max-width: 220px !important;
+    justify-self: center;
+    width: auto !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1393,19 +1448,5 @@ section {
   *::after {
     animation: none !important;
     transition: none !important;
-  }
-
-  .marquee-track {
-    flex-wrap: wrap;
-    justify-content: center;
-    width: min(var(--max), calc(100% - 32px));
-    margin-inline: auto;
-    row-gap: 1.1rem;
-    transform: none !important;
-  }
-
-  /* Hide duplicate set when not scrolling */
-  .marquee-track > [aria-hidden="true"] {
-    display: none;
   }
 }
