@@ -99,6 +99,11 @@
 
     <section>
       <div class="wrap feature-blocks">
+        <article class="feature-block" id="2026-10-14d">
+          <h2>2026-10-14 — Index-selection fix (edge sitemap + home entity)</h2>
+          <p>Diagnosed crawled-not-indexed as selection deferral plus a <strong>stale Cloudflare Worker sitemap</strong> (<code>sheetspeed-sitemap</code>) that served outdated XML without full <code>lastmod</code> while GitHub Pages already had fresh dates. Strengthened home H1/entity copy, added WebPage <code>dateModified</code>, softened unverifiable “Trusted by” logo claim, and re-synced origin sitemap. Morning GSC retry now auto-runs SERP + ChatGPT + Gemini probes after Indexed / <code>site:</code> evidence.</p>
+        </article>
+
         <article class="feature-block" id="2026-10-14c">
           <h2>2026-10-14 — Store-aligned public name</h2>
           <p>Aligned the site, <a href="llms.txt">llms.txt</a>, and SoftwareApplication schema with the Chrome Web Store listing title <strong>SheetSpeed – Shortcuts &amp; New Capabilities for Sheets + Slides</strong> (entity cite name remains <strong>SheetSpeed</strong>). Dropped user-facing “SheetSpeed Core — Native Shortcuts…” product-title phrasing; Core/Full stay package tiers only. Public CWS page may still show the old title until Google publishes the pending review.</p>

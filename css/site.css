@@ -221,8 +221,11 @@ button {
   margin: 0 0 0.75rem;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-size: clamp(1.55rem, 3.2vw, 2.55rem);
   letter-spacing: -0.035em;
+  line-height: 1.12;
+  max-width: 22ch;
+  text-wrap: balance;
   line-height: 1.05;
   color: #fff;
   text-transform: none;
@@ -1245,11 +1248,12 @@ section {
   }
 
   .brand-mark {
-    /* Fit “SheetSpeed” on ~350px content width without clipping */
-    font-size: clamp(1.85rem, 8.4vw, 2.45rem);
-    letter-spacing: -0.04em;
-    white-space: nowrap;
+    /* Entity + intent H1 may wrap; keep SheetSpeed as the lead line */
+    font-size: clamp(1.45rem, 6.8vw, 2.05rem);
+    letter-spacing: -0.035em;
+    white-space: normal;
     overflow: visible;
+    max-width: none;
   }
 
   .hero-copy .lede {
@@ -1388,8 +1392,7 @@ section {
   }
 
   .brand-mark {
-    /* ~33px at 390 CSS px — full wordmark with ~30px side room */
-    font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+    font-size: clamp(1.4rem, 6.6vw, 1.95rem);
   }
 
   .header-inner {
