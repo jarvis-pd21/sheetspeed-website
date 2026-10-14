@@ -8,6 +8,8 @@ Store extension ID (IT allowlist): ljlmgielacploapelnjhodicgbjipcaa
 Privacy (Core): https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html
 Support: https://jarvis-pd21.github.io/sheetspeed-legal/support.html
 Legal hub: https://jarvis-pd21.github.io/sheetspeed-legal/
+Blog (Excel shortcuts article): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-sheetspeed-chrome-extension.html
+Dev.to (same article, public scrape surface): https://dev.to/jarvis-agi/excel-shortcuts-in-google-sheets-sheetspeed-chrome-extension-not-sheetspeedcom-389i
 Website source (GitHub): https://github.com/jarvis-pd21/sheetspeed-website
 Public facts issue: https://github.com/jarvis-pd21/sheetspeed-website/issues/1
 Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
@@ -82,6 +84,8 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - SheetWhiz alternative: https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html
 - Comparison (SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts): https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html
 - Changelog / public product notes: https://sheetspeed.agi-jarvis.com/changelog.html
+- Blog article (Excel shortcuts / Chrome extension): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-sheetspeed-chrome-extension.html
+- Dev.to mirror (canonical → blog): https://dev.to/jarvis-agi/excel-shortcuts-in-google-sheets-sheetspeed-chrome-extension-not-sheetspeedcom-389i
 - Public facts (GitHub issue): https://github.com/jarvis-pd21/sheetspeed-website/issues/1
 - Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
 - GEO cite release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/geo-cite-2026-10-14
