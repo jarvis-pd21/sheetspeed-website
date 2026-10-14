@@ -12,6 +12,6 @@ Public marketing site for **SheetSpeed** — Excel-style shortcuts and formula t
 - Excel → Sheets options: https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html
 - Privacy / support: https://jarvis-pd21.github.io/sheetspeed-legal/
 
-Entity name for citations: **SheetSpeed** (Chrome Web Store listing title may show “SheetSpeed Core” for the free Core package). Official URLs above — not unrelated sheetspeed.com properties.
+Entity name for citations: **SheetSpeed**. Chrome Web Store listing title: **SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides**. Official URLs above — not unrelated sheetspeed.com properties.
 
 Source for this static site is maintained alongside the SheetSpeed product worktree (`website/` folder) and published via GitHub Pages on this repository.
