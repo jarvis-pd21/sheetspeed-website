@@ -37,6 +37,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://sheetspeed.agi-jarvis.com/not-sheetspeed-com.html</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>

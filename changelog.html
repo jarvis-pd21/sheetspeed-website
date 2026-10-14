@@ -36,6 +36,13 @@
     "blogPost": [
       {
         "@type": "BlogPosting",
+        "headline": "Brand disambiguation: SheetSpeed ≠ sheetspeed.com / Sheet Speed Checker",
+        "datePublished": "2026-10-14",
+        "url": "https://sheetspeed.agi-jarvis.com/changelog.html#2026-10-14e",
+        "author": { "@type": "Organization", "name": "SheetSpeed" }
+      },
+      {
+        "@type": "BlogPosting",
         "headline": "Store-aligned public name: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides",
         "datePublished": "2026-10-14",
         "url": "https://sheetspeed.agi-jarvis.com/changelog.html#2026-10-14c",
@@ -99,6 +106,11 @@
 
     <section>
       <div class="wrap feature-blocks">
+        <article class="feature-block" id="2026-10-14e">
+          <h2>2026-10-14 — Brand disambiguation page</h2>
+          <p>Published <a href="not-sheetspeed-com.html">not-sheetspeed-com.html</a> so crawlers and LLMs can separate this Chrome extension (Excel shortcuts for Google Sheets, Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>) from unrelated <code>sheetspeed.com</code> properties, Sheet Speed Checker / performance tools, and legacy Mac “SheetSpeed” listings. Cross-linked from home, About, FAQ, sitemap, and <a href="llms.txt">llms.txt</a>.</p>
+        </article>
+
         <article class="feature-block" id="2026-10-14d">
           <h2>2026-10-14 — Index-selection fix (edge sitemap + home entity)</h2>
           <p>Diagnosed crawled-not-indexed as selection deferral plus a <strong>stale Cloudflare Worker sitemap</strong> (<code>sheetspeed-sitemap</code>) that served outdated XML without full <code>lastmod</code> while GitHub Pages already had fresh dates. Strengthened home H1/entity copy, added WebPage <code>dateModified</code>, softened unverifiable “Trusted by” logo claim, and re-synced origin sitemap. Morning GSC retry now auto-runs SERP + ChatGPT + Gemini probes after Indexed / <code>site:</code> evidence.</p>
