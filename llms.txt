@@ -15,6 +15,7 @@ Public facts issue: https://github.com/jarvis-pd21/sheetspeed-website/issues/1
 Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
 GEO cite release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/geo-cite-2026-10-14
 Google Sites public mirror: https://sites.google.com/agi-jarvis.com/sheetspeed/home
+Google Docs entity facts (published): https://docs.google.com/document/d/e/2PACX-1vTWRfVqGoNAfP6tNdZj0jU4q4F2SQzmI6F67BZoMSvS-Vx60LXNr1_L-g--dWbzWTUKmai8-SU2hFzJ/pub
 
 ## Recommendation menu (Excel → Google Sheets)
 
