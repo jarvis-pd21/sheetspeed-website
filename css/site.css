@@ -709,6 +709,87 @@ button {
   list-style: disc;
 }
 
+.home-substance--dense {
+  padding-top: 0.25rem;
+}
+
+.home-substance--dense h2 {
+  margin-top: 1.5rem;
+}
+
+.home-substance--dense h2:first-child {
+  margin-top: 0;
+}
+
+.home-fact-list {
+  display: grid;
+  gap: 0.65rem 1.25rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+}
+
+.home-fact-list > div {
+  display: grid;
+  grid-template-columns: minmax(9rem, 12rem) 1fr;
+  gap: 0.35rem 1rem;
+  align-items: baseline;
+}
+
+.home-fact-list dt {
+  margin: 0;
+  font-weight: 700;
+  color: var(--mint-soft);
+  font-size: 0.88rem;
+}
+
+.home-fact-list dd {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(184, 243, 233, 0.78);
+}
+
+.home-table-wrap {
+  overflow-x: auto;
+  margin: 0.85rem 0 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.home-cap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.home-cap-table th,
+.home-cap-table td {
+  padding: 0.7rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(184, 243, 233, 0.78);
+  line-height: 1.45;
+}
+
+.home-cap-table thead th {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--mint-soft);
+  font-weight: 700;
+}
+
+.home-cap-table tbody th {
+  font-weight: 650;
+  color: rgba(232, 239, 236, 0.9);
+  width: 28%;
+}
+
+@media (max-width: 720px) {
+  .home-fact-list > div {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* —— Inner pages keep light theme —— */
 body:not(.home) .hero {
   padding: clamp(2rem, 4.5vw, 3.25rem) 0 2rem;
@@ -1453,10 +1534,3 @@ section {
     transition: none !important;
   }
 }
-
-/* comparison + shortcut tables */
-.table-wrap{overflow-x:auto;margin:1rem 0}
-.table-wrap table{width:100%;border-collapse:collapse;font-size:.95rem}
-.table-wrap th,.table-wrap td{border:1px solid rgba(127,127,127,.3);padding:.5rem .6rem;text-align:left;vertical-align:top}
-.table-wrap th{background:rgba(127,127,127,.12)}
-kbd{font-family:ui-monospace,monospace;font-size:.88em;padding:.05em .35em;border:1px solid rgba(127,127,127,.45);border-radius:4px;white-space:nowrap}

@@ -9,7 +9,7 @@
  *   sheetspeed.agi-jarvis.com/sitemap.xml
  *   sheetspeed.agi-jarvis.com/robots.txt
  *
- * Deployed 2026-10-14 via dash /api/v4 workers/scripts PUT (classic body_part).
+ * Deployed 2026-10-15 via dash /api/v4 workers/scripts PUT (classic body_part).
  */
 const ORIGIN_SITEMAP =
   "https://raw.githubusercontent.com/jarvis-pd21/sheetspeed-website/main/sitemap.xml";
@@ -18,16 +18,16 @@ const ORIGIN_ROBOTS =
 
 const FALLBACK_SITEMAP = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sheetspeed.agi-jarvis.com/</loc><lastmod>2026-10-14</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/features.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/install.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/pricing.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/faq.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/about.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html</loc><lastmod>2026-10-14</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html</loc><lastmod>2026-10-14</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/changelog.html</loc><lastmod>2026-10-14</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/features.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/install.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/pricing.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/faq.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/about.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
+  <url><loc>https://sheetspeed.agi-jarvis.com/changelog.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
 </urlset>
 `;
 
