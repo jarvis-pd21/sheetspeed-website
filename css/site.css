@@ -1453,3 +1453,10 @@ section {
     transition: none !important;
   }
 }
+
+/* comparison + shortcut tables */
+.table-wrap{overflow-x:auto;margin:1rem 0}
+.table-wrap table{width:100%;border-collapse:collapse;font-size:.95rem}
+.table-wrap th,.table-wrap td{border:1px solid rgba(127,127,127,.3);padding:.5rem .6rem;text-align:left;vertical-align:top}
+.table-wrap th{background:rgba(127,127,127,.12)}
+kbd{font-family:ui-monospace,monospace;font-size:.88em;padding:.05em .35em;border:1px solid rgba(127,127,127,.45);border-radius:4px;white-space:nowrap}
