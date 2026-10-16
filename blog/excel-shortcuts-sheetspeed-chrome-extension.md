@@ -24,7 +24,7 @@ SheetSpeed focuses on:
 
 - Excel-shaped keyboard commands on Google Sheets (Core listing on the Chrome Web Store)
 - Visible-formula **trace precedents** navigation
-- A clear Core (Store, no Google API OAuth) vs Full (deeper modeling) split
+- A clear free Core (no Google API OAuth) vs Pro split
 - PowerPoint-shaped shortcuts for Google Slides in the same product family
 
 It does **not** claim feature-for-feature parity with every competitor. Compare live Store listings before you choose.
