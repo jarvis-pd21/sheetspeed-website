@@ -16,11 +16,11 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="SheetSpeed Pricing" />
   <meta name="twitter:description" content="Free Core for Excel-style Google Sheets shortcuts." />
-  <link rel="icon" href="/assets/icon-128.png" type="image/png" />
+  <link rel="icon" href="assets/icon-128.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/site.css?v=20261015inter3" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css?v=20261012philios" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,14 +33,29 @@
   </script>
 </head>
 <body>
-<header class="x-head"><div class="x-head-in"><a class="x-brand" href="/"><img src="/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="/blog/">Blog</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+<header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" aria-label="SheetSpeed home">
+        <img src="assets/sheetspeed-logo.png" alt="" width="36" height="36" />
+        <span class="brand-name">SheetSpeed</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="nav" id="site-nav" data-nav aria-label="Site">
+        <a href="features.html">Features</a>
+        <a href="pricing.html" aria-current="page">Pricing</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+        <a class="nav-cta" href="install.html">Install</a>
+      </nav>
+    </div>
+  </header>
 <main class="pricing-v2" style="max-width:1000px;margin:0 auto;padding:48px 24px">
   <h1>Simple pricing. Core is free forever.</h1>
   <p>Try every Pro feature free for 14 days. No card required.</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:28px">
     <section class="plan" style="border:1px solid #d9dee5;border-radius:12px;padding:24px">
       <h2>Core</h2><div class="amount">$0</div><p>Free forever</p>
-      <ul><li>Excel-style shortcuts: rows/cols, borders, merge, filters, alignment, decimals, zoom</li>
+      <ul><li>Excel-style shortcuts: rows/cols, borders, freeze, merge, filters, alignment, decimals, zoom</li>
       <li>Trace precedents panel (arrow keys, Enter to drill)</li><li>PowerPoint-style Slides chords</li>
       <li>Custom shortcuts</li><li>No Google OAuth; stays on your device</li></ul>
       <a class="btn" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Add to Chrome, free</a>
@@ -48,8 +63,11 @@
     <section class="plan featured" style="border:2px solid #1a7f4b;border-radius:12px;padding:24px">
       <h2>Pro</h2><div class="amount">$7.99<span>/mo</span></div><p>or <strong>$69/year</strong> (save 28%)</p>
       <ul><li>Everything in Core</li><li>Trace dependents: find every formula that uses a cell</li>
-      <li>Goal seek: solve for the input that hits your target</li><li>What-if tables: one- and two-variable scenarios</li>
+      <li>Goal seek: solve for the input that hits your target</li><li>What-if data tables: one- and two-variable scenarios</li>
+      <li>Freeze panes (Alt W F F / rows / columns)</li><li>Auto-color: inputs blue, formulas black, links green</li>
+      <li>Font and fill color cycles</li><li>Export selection as an image</li>
       <li>More tools coming, included free for Pro</li></ul>
+      <p style="font-size:13px">Pro tools connect to Google Sheets with your permission (Google sign-in), and only for the sheet you're working in.</p>
       <a class="btn primary" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Start 14-day free trial</a>
       <p class="soon" style="font-size:14px;color:#5a6472">Pro launches soon. Install free now and you'll get the trial automatically.</p>
       <p style="font-size:14px">No card required. Cancel any time.</p>
@@ -72,6 +90,28 @@
   <p><strong>Team or invoice?</strong> Email <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</p>
 </main>
 
-<footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" rel="noopener">Privacy</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" rel="noopener">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+<footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/sheetspeed-logo.png" alt="" width="32" height="32" />
+          <span>SheetSpeed</span>
+        </div>
+        <div class="footer-links">
+          <a href="features.html">Features</a>
+          <a href="excel-shortcuts-google-sheets.html">Excel → Sheets</a>
+          <a href="compare-excel-shortcuts.html">Compare</a>
+          <a href="changelog.html">Changelog</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="faq.html">FAQ</a>
+          <a href="install.html">Install</a>
+          <a href="about.html">About</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+        </div>
+      </div>
+      <p class="footer-meta">SheetSpeed – Shortcuts &amp; New Capabilities for Sheets + Slides · Free on Chrome Web Store</p>
+    </div>
+  </footer>
 </body>
 </html>
