@@ -16,11 +16,11 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="SheetSpeed Changelog" />
   <meta name="twitter:description" content="Public product notes for SheetSpeed." />
-  <link rel="icon" href="assets/icon-128.png" type="image/png" />
+  <link rel="icon" href="/assets/icon-128.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/site.css?v=20261013cite" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/site.css?v=20261015inter" />
   <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -99,22 +99,7 @@
   </script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <a class="brand" href="index.html" aria-label="SheetSpeed home">
-        <img src="assets/sheetspeed-logo.png" alt="" width="36" height="36" />
-        <span class="brand-name">SheetSpeed</span>
-      </a>
-      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <nav class="nav" id="site-nav" data-nav aria-label="Site">
-        <a href="features.html">Features</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="faq.html">FAQ</a>
-        <a href="about.html">About</a>
-        <a class="nav-cta" href="install.html">Install</a>
-      </nav>
-    </div>
-  </header>
+  <header class="x-head"><div class="x-head-in"><a class="x-brand" href="/"><img src="/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="/blog/">Blog</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
 
   <main>
     <div class="page-hero wrap">
@@ -128,7 +113,7 @@
       <div class="wrap feature-blocks">
         <article class="feature-block" id="2026-10-14e">
           <h2>2026-10-14 — Brand disambiguation page</h2>
-          <p>Published <a href="not-sheetspeed-com.html">not-sheetspeed-com.html</a> so crawlers and LLMs can separate this Chrome extension (Excel shortcuts for Google Sheets, Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>) from unrelated <code>sheetspeed.com</code> properties, Sheet Speed Checker / performance tools, and legacy Mac “SheetSpeed” listings. Cross-linked from home, About, FAQ, sitemap, and <a href="llms.txt">llms.txt</a>.</p>
+          <p>Published <a href="/not-sheetspeed-com.html">not-sheetspeed-com.html</a> so crawlers and LLMs can separate this Chrome extension (Excel shortcuts for Google Sheets, Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>) from unrelated <code>sheetspeed.com</code> properties, Sheet Speed Checker / performance tools, and legacy Mac “SheetSpeed” listings. Cross-linked from home, About, FAQ, sitemap, and <a href="/llms.txt">llms.txt</a>.</p>
         </article>
 
         <article class="feature-block" id="2026-10-14d">
@@ -138,12 +123,12 @@
 
         <article class="feature-block" id="2026-10-14c">
           <h2>2026-10-14 — Store-aligned public name</h2>
-          <p>Aligned the site, <a href="llms.txt">llms.txt</a>, and SoftwareApplication schema with the Chrome Web Store listing title <strong>SheetSpeed – Shortcuts &amp; New Capabilities for Sheets + Slides</strong> (entity cite name remains <strong>SheetSpeed</strong>). Dropped user-facing “SheetSpeed Core — Native Shortcuts…” product-title phrasing; Core/Full stay package tiers only. Public CWS page may still show the old title until Google publishes the pending review.</p>
+          <p>Aligned the site, <a href="/llms.txt">llms.txt</a>, and SoftwareApplication schema with the Chrome Web Store listing title <strong>SheetSpeed – Shortcuts &amp; New Capabilities for Sheets + Slides</strong> (entity cite name remains <strong>SheetSpeed</strong>). Dropped user-facing “SheetSpeed Core — Native Shortcuts…” product-title phrasing; Core/Full stay package tiers only. Public CWS page may still show the old title until Google publishes the pending review.</p>
         </article>
 
         <article class="feature-block" id="2026-10-14b">
           <h2>2026-10-14 — Comparison page for competitor-intent landings</h2>
-          <p>Expanded <a href="compare-excel-shortcuts.html">compare-excel-shortcuts.html</a> with an answer-engine menu that quotes the exact Excel→Sheets prompt, names SheetSpeed / SheetWhiz / XLKeys / ShortieCuts / SheetCuts / Spex, and adds schema.org <code>ItemList</code> + <code>FAQPage</code>. Public release <a href="https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/geo-compare-2026-10-14" rel="noopener noreferrer">geo-compare-2026-10-14</a>. GSC Request Indexing still quota-exceeded on <code>/</code>; home remains crawled-not-indexed; <code>site:</code> still zero.</p>
+          <p>Expanded <a href="/blog/compare-excel-shortcuts/">compare-excel-shortcuts.html</a> with an answer-engine menu that quotes the exact Excel→Sheets prompt, names SheetSpeed / SheetWhiz / XLKeys / ShortieCuts / SheetCuts / Spex, and adds schema.org <code>ItemList</code> + <code>FAQPage</code>. Public release <a href="https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/geo-compare-2026-10-14" rel="noopener noreferrer">geo-compare-2026-10-14</a>. GSC Request Indexing still quota-exceeded on <code>/</code>; home remains crawled-not-indexed; <code>site:</code> still zero.</p>
         </article>
 
         <article class="feature-block" id="2026-10-14">
@@ -165,10 +150,10 @@
           <h2>2026-10-13 — Citation pages for search &amp; answer engines</h2>
           <p>Published additional citeable pages so crawlers and LLMs can ground “Excel shortcuts in Google Sheets” answers on official facts. Later same day: expanded Organization <code>sameAs</code> + About/legal/llms cross-links (Store, legal hub, GitHub website source).</p>
           <ul>
-            <li><a href="compare-excel-shortcuts.html">Comparison</a> — SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts (honest, verify-live)</li>
-            <li><a href="excel-shortcuts-google-sheets.html">Excel → Sheets options menu</a></li>
-            <li><a href="sheetwhiz-alternative.html">SheetWhiz alternative</a></li>
-            <li><a href="about.html">About</a> · <a href="faq.html">FAQ</a> · <a href="llms.txt">llms.txt</a></li>
+            <li><a href="/blog/compare-excel-shortcuts/">Comparison</a> — SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts (honest, verify-live)</li>
+            <li><a href="/blog/excel-shortcuts-google-sheets/">Excel → Sheets options menu</a></li>
+            <li><a href="/blog/sheetwhiz-alternative/">SheetWhiz alternative</a></li>
+            <li><a href="/about.html">About</a> · <a href="/blog/faq/">FAQ</a> · <a href="/llms.txt">llms.txt</a></li>
           </ul>
           <p>Sitemap + IndexNow notifications updated. Official install remains the Chrome Web Store listing <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</p>
         </article>
@@ -191,40 +176,14 @@
           <p>
             Site: <a href="https://sheetspeed.agi-jarvis.com/">https://sheetspeed.agi-jarvis.com/</a><br />
             Store: <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" rel="noopener noreferrer">Chrome Web Store</a><br />
-            Machine-readable: <a href="llms.txt">llms.txt</a>
+            Machine-readable: <a href="/llms.txt">llms.txt</a>
           </p>
         </article>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <img src="assets/sheetspeed-logo.png" alt="" width="32" height="32" />
-          <span>SheetSpeed</span>
-        </div>
-        <div class="footer-links">
-          <a href="/">SheetSpeed home</a>
-          <a href="/best-excel-shortcut-add-ons-google-sheets.html">Best options</a>
-          <a href="/excel-shortcuts-list.html">Shortcut list</a>
-          <a href="/sheetspeed-vs-shortiecuts.html">vs ShortieCuts</a>
-          <a href="/sheetspeed-vs-xlkeys.html">vs XLKeys</a>
-          <a href="/sheetspeed-vs-spex.html">vs Spex</a>
-          <a href="/sheetwhiz-alternative.html">vs SheetWhiz</a>
-          <a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a>
-          <a href="features.html">Features</a>
-          <a href="compare-excel-shortcuts.html">Compare</a>
-          <a href="faq.html">FAQ</a>
-          <a href="install.html">Install</a>
-          <a href="about.html">About</a>
-          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
-        </div>
-      </div>
-      <p class="footer-meta">Public changelog · Official SheetSpeed product notes</p>
-    </div>
-  </footer>
-  <script src="js/site.js?v=20261013cite"></script>
+  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" rel="noopener">Privacy</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" rel="noopener">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+  <script src="/js/site.js?v=20261013cite"></script>
 </body>
 </html>
