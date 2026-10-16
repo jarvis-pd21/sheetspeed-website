@@ -1,6 +1,6 @@
 # SheetSpeed
 
-> SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, formula tracing (trace precedents / dependents), Paste Exact, goal seek, and modeling tools to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+> SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, formula tracing (trace precedents free; trace dependents, goal seek and what-if tables in Pro, launching soon) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
 
 Official website: https://sheetspeed.agi-jarvis.com/
 Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
@@ -115,6 +115,20 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 Google Sites public mirror: https://sites.google.com/agi-jarvis.com/sheetspeed/home
 - Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml
 - IndexNow key file: https://sheetspeed.agi-jarvis.com/311595d5572bb4813d5ad8ef0678e0b2.txt
+
+## Blog posts
+
+- Blog index: https://sheetspeed.agi-jarvis.com/blog/
+- Alt E S V in Google Sheets: Paste Values the Excel Way: https://sheetspeed.agi-jarvis.com/blog/alt-e-s-v-paste-values-google-sheets.html
+- Chrome Extension vs Google Sheets Add-on: Which Do You Need for Excel Shortcuts?: https://sheetspeed.agi-jarvis.com/blog/chrome-extension-vs-google-sheets-add-on.html
+- "Enable Compatible Spreadsheet Shortcuts" in Google Sheets: What It Does and Doesn't Do: https://sheetspeed.agi-jarvis.com/blog/enable-compatible-spreadsheet-shortcuts.html
+- Excel Alt Shortcuts on a Mac in Google Sheets (Use Option): https://sheetspeed.agi-jarvis.com/blog/excel-alt-shortcuts-mac-google-sheets.html
+- Borders, Freeze Panes and Filters: Excel Formatting Shortcuts in Google Sheets: https://sheetspeed.agi-jarvis.com/blog/excel-formatting-shortcuts-google-sheets.html
+- How to Get Excel Shortcuts in Google Sheets (2026 Guide for Excel Switchers): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-in-google-sheets-guide.html
+- Switching from Excel to Google Sheets: A Checklist for Analysts: https://sheetspeed.agi-jarvis.com/blog/excel-to-google-sheets-switching-checklist.html
+- Goal Seek in Google Sheets: Your Options in 2026: https://sheetspeed.agi-jarvis.com/blog/goal-seek-google-sheets.html
+- A Command Palette for Google Sheets (and When to Use Alt+/ Instead): https://sheetspeed.agi-jarvis.com/blog/google-sheets-command-palette.html
+- How to Trace Precedents in Google Sheets (Free, Keyboard-Only): https://sheetspeed.agi-jarvis.com/blog/trace-precedents-google-sheets.html
 
 ## Contact / support
 
