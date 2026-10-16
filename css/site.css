@@ -1623,3 +1623,4 @@ main *{max-width:100%;min-width:0}
 main pre,main blockquote{white-space:pre-wrap;margin-left:0;margin-right:0}
 main blockquote{border-left:3px solid #e1e1de;padding-left:1rem}
 main .page-hero,main .page-hero p{text-align:left}
+main .m-grid{display:grid!important}
