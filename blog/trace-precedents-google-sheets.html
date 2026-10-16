@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>How to Trace Precedents in Google Sheets (Free, Keyboard-Only)</title>
+  <meta name="description" content="Google Sheets has no built-in Trace Precedents. Here&#x27;s how to list every cell a formula references and jump between them with Ctrl+Shift+[." />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/blog/trace-precedents-google-sheets.html" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="SheetSpeed" />
+  <meta property="og:title" content="How to Trace Precedents in Google Sheets (Free, Keyboard-Only)" />
+  <meta property="og:description" content="Google Sheets has no built-in Trace Precedents. Here&#x27;s how to list every cell a formula references and jump between them with Ctrl+Shift+[." />
+  <meta property="og:url" content="https://sheetspeed.agi-jarvis.com/blog/trace-precedents-google-sheets.html" />
+  <meta property="og:image" content="https://sheetspeed.agi-jarvis.com/assets/sheetspeed-logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="article:published_time" content="2026-10-16" />
+  <link rel="icon" href="../assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/site.css?v=20261014article" />
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "How to Trace Precedents in Google Sheets (Free, Keyboard-Only)",
+ "description": "Google Sheets has no built-in Trace Precedents. Here's how to list every cell a formula references and jump between them with Ctrl+Shift+[.",
+ "url": "https://sheetspeed.agi-jarvis.com/blog/trace-precedents-google-sheets.html",
+ "datePublished": "2026-10-16",
+ "dateModified": "2026-10-16",
+ "author": {
+  "@type": "Organization",
+  "name": "SheetSpeed",
+  "url": "https://sheetspeed.agi-jarvis.com/"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "SheetSpeed",
+  "url": "https://sheetspeed.agi-jarvis.com/"
+ },
+ "mainEntityOfPage": "https://sheetspeed.agi-jarvis.com/blog/trace-precedents-google-sheets.html"
+}
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../index.html" aria-label="SheetSpeed home">
+        <img src="../assets/sheetspeed-logo.png" alt="" width="36" height="36" />
+        <span class="brand-name">SheetSpeed</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="nav" id="site-nav" data-nav aria-label="Site">
+        <a href="../features.html">Features</a>
+        <a href="../excel-shortcuts-google-sheets.html">Excel→Sheets</a>
+        <a href="../pricing.html">Pricing</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+        <a class="nav-cta" href="../install.html">Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-hero wrap">
+      <p class="eyebrow" style="margin:0 0 0.5rem;opacity:0.8;font-size:0.9rem">Blog · 2026-10-16</p>
+      <h1>How to Trace Precedents in Google Sheets (Free, Keyboard-Only)</h1>
+      <p>Trace precedents is the Excel auditing feature analysts miss most in Sheets. Here's how to get it back for free.</p>
+    </div>
+
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<p>In Excel, Ctrl+[ jumps to a formula's inputs and Formulas → Trace Precedents draws arrows to them. Google Sheets has neither. When you inherit a model, that makes checking a formula slow.</p>
+        </article>
+      </div>
+    </section>
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<h2>What Sheets gives you natively</h2><ul><li>Click into a formula (or press F2) and Sheets outlines each referenced range in color.</li><li><strong>Ctrl+~</strong> shows all formulas on the sheet.</li></ul><p>Both help, but neither lets you list the inputs and walk through them from the keyboard, especially when they're on other tabs.</p>
+        </article>
+      </div>
+    </section>
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<h2>Trace precedents with SheetSpeed (free Core)</h2><ol><li>Install <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" rel="noopener">SheetSpeed</a> from the Chrome Web Store.</li><li>Select a cell with a formula.</li><li>Press <strong>Ctrl+Shift+[</strong>.</li></ol><p>A panel lists every reference in the formula. Then:</p><ul><li><strong>↑ / ↓</strong> moves through the precedents and jumps to each one.</li><li><strong>Enter</strong> drills into a precedent that is itself a formula, without closing the panel.</li><li><strong>F5</strong> returns you to the original cell.</li></ul><p>It works by reading the formula on screen, locally in your browser. It doesn't ask for Google API access to your spreadsheet.</p>
+        </article>
+      </div>
+    </section>
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<h2>Trace dependents</h2><p>The reverse question, "what uses this cell?", is harder: answering it means scanning the workbook. SheetSpeed Pro (launching soon) adds <strong>Ctrl+Shift+]</strong> as a bounded, cancelable scan that tells you if it stopped before covering everything. Other extensions, including SheetWhiz, XLKeys and ShortieCuts, also offer trace dependents in paid tiers.</p>
+        </article>
+      </div>
+    </section>
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<h2>Tips for auditing a model in Sheets</h2><ul><li>Start from the output and trace backwards with Ctrl+Shift+[ and Enter.</li><li>Use F5 to get back when you've gone deep.</li><li>Pair tracing with a consistent color convention (blue inputs, black formulas) so hardcodes jump out.</li></ul>
+        </article>
+      </div>
+    </section>
+    <section>
+      <div class="wrap feature-blocks">
+        <article class="feature-block">
+<p>SheetSpeed is a free Chrome extension for Excel-style shortcuts and trace precedents in Google Sheets. We make it, so weigh our take accordingly.</p><p><a class="nav-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" rel="noopener">Add SheetSpeed to Chrome (free)</a></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../assets/sheetspeed-logo.png" alt="" width="32" height="32" />
+          <span>SheetSpeed</span>
+        </div>
+        <div class="footer-links">
+          <a href="/">SheetSpeed home</a>
+          <a href="/best-excel-shortcut-add-ons-google-sheets.html">Best options</a>
+          <a href="/excel-shortcuts-list.html">Shortcut list</a>
+          <a href="/sheetspeed-vs-shortiecuts.html">vs ShortieCuts</a>
+          <a href="/sheetspeed-vs-xlkeys.html">vs XLKeys</a>
+          <a href="/sheetspeed-vs-spex.html">vs Spex</a>
+          <a href="/sheetwhiz-alternative.html">vs SheetWhiz</a>
+          <a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a>
+          <a href="../features.html">Features</a>
+          <a href="../compare-excel-shortcuts.html">Compare</a>
+          <a href="../changelog.html">Changelog</a>
+          <a href="../pricing.html">Pricing</a>
+          <a href="../faq.html">FAQ</a>
+          <a href="../install.html">Install</a>
+          <a href="../about.html">About</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+          <a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" target="_blank" rel="noopener noreferrer">Support</a>
+        </div>
+      </div>
+      <p class="footer-meta">SheetSpeed · Cite https://sheetspeed.agi-jarvis.com/ and the Chrome Web Store listing</p>
+    </div>
+  </footer>
+  <script src="../js/site.js" defer></script>
+</body>
+</html>
