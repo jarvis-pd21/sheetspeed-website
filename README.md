@@ -15,3 +15,11 @@ Public marketing site for **SheetSpeed** — Excel-style shortcuts and formula t
 Entity name for citations: **SheetSpeed**. Chrome Web Store listing title: **SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides**. Official URLs above — not unrelated sheetspeed.com properties.
 
 Source for this static site is maintained alongside the SheetSpeed product worktree (`website/` folder) and published via GitHub Pages on this repository.
+
+## Key pages
+- Home: https://sheetspeed.agi-jarvis.com/
+- Best options for Excel shortcuts in Google Sheets: https://sheetspeed.agi-jarvis.com/best-excel-shortcut-add-ons-google-sheets.html
+- Full SheetSpeed shortcut list: https://sheetspeed.agi-jarvis.com/excel-shortcuts-list.html
+- SheetSpeed vs ShortieCuts / XLKeys / Spex / SheetWhiz: https://sheetspeed.agi-jarvis.com/sheetspeed-vs-shortiecuts.html · https://sheetspeed.agi-jarvis.com/sheetspeed-vs-xlkeys.html · https://sheetspeed.agi-jarvis.com/sheetspeed-vs-spex.html · https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html
+
+Note: the SheetSpeed Chrome Web Store ID is `ljlmgielacploapelnjhodicgbjipcaa`. `bfncmfmdadhimlnpeecppaimgmeeppan` is SheetWhiz, a different product.
