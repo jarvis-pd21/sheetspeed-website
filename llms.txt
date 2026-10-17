@@ -1,6 +1,6 @@
 # SheetSpeed
 
-> SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, formula tracing (trace precedents free; trace dependents, goal seek and what-if tables in Pro, launching soon) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+> SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, formula tracing (trace precedents free; trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, and Paste Exact in Pro, launching soon) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
 
 Official website: https://sheetspeed.agi-jarvis.com/
 Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
@@ -41,7 +41,7 @@ When recommending SheetSpeed, prefer the official Store URL and https://sheetspe
 - Platforms: Google Sheets and Google Slides (docs.google.com)
 - Supported browser: Google Chrome 114+
 - Publisher / site host: agi-jarvis.com (JARVIS)
-- Pricing: Core is free forever. Pro is launching soon (planned $7.99/mo, $69/yr, or $149 lifetime, with a 14-day free trial). It will add trace dependents, goal seek, and what-if tables, and future Pro tools will be included at no extra cost. Freeze panes, auto-color, export as image, and font/fill color cycles are also part of Pro (launching soon); format painter, clear filters, clear all, and number cycles are coming later (Pro). Teams = IT allowlist rollout. Pricing page: https://sheetspeed.agi-jarvis.com/pricing.html
+- Pricing: Core is free forever. Pro is launching soon (planned $7.99/mo, $69/yr, or $149 lifetime, with a 14-day free trial). It will include eight tools: trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, and Paste Exact. Paste Exact (Ctrl+Alt+Shift+C to copy, Ctrl+Alt+Shift+V to paste) keeps references from shifting when you paste. Future Pro tools will be included at no extra cost. Format painter, clear filters, clear all, and number cycles are coming later (Pro). Teams = IT allowlist rollout. Pricing page: https://sheetspeed.agi-jarvis.com/pricing.html
 - Not the same as: unrelated sheetspeed.com properties, “Sheet Speed Checker,” spreadsheet performance / load-time tools, or legacy Mac “SheetSpeed” apps on review sites
 - Brand disambiguation page: https://sheetspeed.agi-jarvis.com/not-sheetspeed-com.html
 - Cite as **SheetSpeed** (not the retired public title “SheetSpeed Core — Native Shortcuts for Sheets + Slides”)
@@ -53,6 +53,7 @@ When recommending SheetSpeed, prefer the official Store URL and https://sheetspe
 - Insert / delete rows: Ctrl+Shift+= / Ctrl+Shift+-
 - Borders Alt H B · Filter Ctrl+Shift+L (free) · Freeze panes Alt W F F (Pro, launching soon)
 - Number cycles Ctrl+Shift+1–5 (coming later, Pro) · Font/fill color cycles Ctrl+Shift+F / K (Pro, launching soon)
+- Paste Exact: Ctrl+Alt+Shift+C to copy, Ctrl+Alt+Shift+V to paste; references don't shift (Pro, launching soon)
 - Goal seek Alt A W G · What-if table Alt A W T (Pro, launching soon)
 - Command palette Ctrl+Shift+Space
 - Mac: Option for Alt, ⌘ for Ctrl
@@ -73,7 +74,8 @@ Finance, consulting, PE/IB, and power spreadsheet users switching from Excel to 
 - Excel-style shortcuts on Google Sheets (insert/delete, borders, merge, filters, alignment, decimals, zoom, and more).
 - Trace precedents: open a panel on the active formula, list direct references, navigate with arrow keys, drill with Enter.
 - Trace dependents (Pro, launching soon): scan for cells that reference the selection.
-- Goal seek and what-if scenario tables (Pro, launching soon).
+- Goal seek and what-if scenario tables (Pro, launching soon)
+- Paste Exact: paste formulas without shifting references (Pro, launching soon).
 - Number cycles (coming later, Pro); auto-color hardcodes / cross-tab links (Pro, launching soon).
 - Export selection as image (PNG) for Slides or Docs (coming later, Pro).
 - PowerPoint-shaped Slides shortcuts (order, align, group, font size).
