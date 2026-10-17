@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/site.css?v=20261017demos1" />
+  <link rel="stylesheet" href="/css/site.css?v=20261017loop1" />
   <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -159,19 +159,23 @@
     </section>
 
     <section class="m-demos" aria-label="SheetSpeed demos">
-      <div class="m-wrap m-grid">
-        <figure class="m-demo" data-demo-slot="trace-dependents">
-          <video autoplay muted loop playsinline preload="metadata" poster="/assets/demos/trace-dependents.jpg" aria-label="Real screen recording: SheetSpeed trace dependents in Google Sheets" width="1280" height="960"><source src="/assets/demos/trace-dependents.webm" type="video/webm"><source src="/assets/demos/trace-dependents.mp4" type="video/mp4"></video>
-          <figcaption><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>]</kbd> Trace dependents <small>(Pro, launching soon)</small></figcaption>
+      <div class="m-wrap">
+        <figure class="m-demo m-loop" data-demo-loop>
+          <div class="m-stage">
+            <video class="is-on" muted playsinline preload="auto" poster="/assets/demos/trace-dependents.jpg" width="1280" height="960" aria-label="Real screen recording: SheetSpeed trace dependents in Google Sheets"><source src="/assets/demos/trace-dependents.webm" type="video/webm"><source src="/assets/demos/trace-dependents.mp4" type="video/mp4"></video>
+          </div>
+          <figcaption class="m-cap" aria-live="polite"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>]</kbd> Trace dependents <small>(Pro, launching soon)</small></figcaption>
+          <div class="m-dots" role="tablist" aria-label="Choose a demo" hidden></div>
+          <button class="m-next" type="button" hidden>Next demo →</button>
         </figure>
-        <figure class="m-demo" data-demo-slot="paste-values">
-          <video autoplay muted loop playsinline preload="metadata" poster="/assets/demos/paste-values-palette.jpg" aria-label="Real screen recording: paste values from the SheetSpeed command palette in Google Sheets" width="1280" height="960"><source src="/assets/demos/paste-values-palette.webm" type="video/webm"><source src="/assets/demos/paste-values-palette.mp4" type="video/mp4"></video>
-          <figcaption><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Paste values from the command palette</figcaption>
-        </figure>
-        <figure class="m-demo" data-demo-slot="font-color-cycle">
-          <video autoplay muted loop playsinline preload="metadata" poster="/assets/demos/font-color-cycle.jpg" aria-label="Real screen recording: SheetSpeed font color cycle in Google Sheets" width="1280" height="960"><source src="/assets/demos/font-color-cycle.webm" type="video/webm"><source src="/assets/demos/font-color-cycle.mp4" type="video/mp4"></video>
-          <figcaption><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd> Font color cycle <small>(Pro, launching soon)</small></figcaption>
-        </figure>
+        <script type="application/json" id="demo-clips">[
+ {"id":"trace-dependents","label":"Real screen recording: SheetSpeed trace dependents in Google Sheets","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>]</kbd> Trace dependents <small>(Pro, launching soon)</small>"},
+ {"id":"paste-values-palette","label":"Real screen recording: paste values from the SheetSpeed command palette","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Paste values from the command palette <small>(free)</small>"},
+ {"id":"font-color-cycle","label":"Real screen recording: SheetSpeed font color cycle in Google Sheets","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd> Font color cycle <small>(Pro, launching soon)</small>"},
+ {"id":"number-format-cycle","label":"Real screen recording: SheetSpeed number format cycle in Google Sheets","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>1</kbd> Number format cycle <small>(coming later, Pro)</small>"},
+ {"id":"paste-exact","label":"Real screen recording: SheetSpeed Paste Exact in Google Sheets","cap":"<kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>Shift</kbd><kbd>V</kbd> Paste Exact: references don\u2019t shift <small>(Pro, launching soon)</small>"},
+ {"id":"slides-align-top","label":"Real screen recording: align objects top in Google Slides with SheetSpeed","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Align objects top in Slides <small>(free)</small>"}
+]</script>
       </div>
       <p class="m-more"><a href="/blog/how-to-enable-excel-shortcuts-in-google-sheets/">How to enable Excel shortcuts</a> · <a href="/blog/google-sheets-shortcuts-list/">Google Sheets shortcuts list</a> · <a href="/features.html">All shortcuts</a> · <a href="/blog/compare-excel-shortcuts/">Compare</a> · <a href="/pricing.html">Pricing</a></p>
     </section>
@@ -300,5 +304,6 @@
 
   <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/privacy-core.html" rel="noopener">Privacy</a><a href="https://jarvis-pd21.github.io/sheetspeed-legal/support.html" rel="noopener">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
   <script src="/js/site.js?v=20261015whynot"></script>
+  <script src="/js/demo-loop.js?v=20261017a" defer></script>
 </body>
 </html>
