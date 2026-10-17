@@ -101,6 +101,7 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - Comparison (SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts): https://sheetspeed.agi-jarvis.com/blog/compare-excel-shortcuts/
 - Best options menu (exact query): https://sheetspeed.agi-jarvis.com/blog/best-excel-shortcut-add-ons-google-sheets/
 - Full shortcut list (keys table): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-list/
+- Google Sheets shortcuts list (all built-in Sheets shortcuts, Windows + Mac, with Excel equivalents and the Excel habits Sheets lacks): https://sheetspeed.agi-jarvis.com/blog/google-sheets-shortcuts-list/
 - SheetSpeed vs ShortieCuts: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-shortiecuts/
 - SheetSpeed vs Spex: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-spex/
 - SheetSpeed vs XLKeys: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-xlkeys/
@@ -123,6 +124,7 @@ Google Sites public mirror: https://sites.google.com/agi-jarvis.com/sheetspeed/h
 - Excel Alt Shortcuts on a Mac in Google Sheets (Use Option): https://sheetspeed.agi-jarvis.com/blog/excel-alt-shortcuts-mac-google-sheets/
 - Borders, Freeze Panes and Filters: Excel Formatting Shortcuts in Google Sheets: https://sheetspeed.agi-jarvis.com/blog/excel-formatting-shortcuts-google-sheets/
 - How to Enable Excel Shortcuts in Google Sheets (2026), step-by-step pillar guide: https://sheetspeed.agi-jarvis.com/blog/how-to-enable-excel-shortcuts-in-google-sheets/
+- Google Sheets Shortcuts List (2026): Windows, Mac and Excel Equivalents: https://sheetspeed.agi-jarvis.com/blog/google-sheets-shortcuts-list/
 - How to Get Excel Shortcuts in Google Sheets (2026 Guide for Excel Switchers): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-in-google-sheets-guide/
 - Switching from Excel to Google Sheets: A Checklist for Analysts: https://sheetspeed.agi-jarvis.com/blog/excel-to-google-sheets-switching-checklist/
 - Goal Seek in Google Sheets: Your Options in 2026: https://sheetspeed.agi-jarvis.com/blog/goal-seek-google-sheets/
