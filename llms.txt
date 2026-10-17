@@ -111,7 +111,7 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - Announce release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/announce-2026-10-13
 - GEO cite release: https://github.com/jarvis-pd21/sheetspeed-website/releases/tag/geo-cite-2026-10-14
 Google Sites public mirror: https://sites.google.com/agi-jarvis.com/sheetspeed/home
-- Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml
+- Sitemap: https://sheetspeed.agi-jarvis.com/sitemap.xml · HTML site map: https://sheetspeed.agi-jarvis.com/sitemap.html
 - IndexNow key file: https://sheetspeed.agi-jarvis.com/311595d5572bb4813d5ad8ef0678e0b2.txt
 
 ## Blog posts

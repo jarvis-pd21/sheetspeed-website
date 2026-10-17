@@ -1625,3 +1625,8 @@ main blockquote{border-left:3px solid #e1e1de;padding-left:1rem}
 main .page-hero,main .page-hero p{text-align:left}
 main .m-grid{display:grid!important}
 @media(min-width:820px){main .m-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+/* 2026-10-16 consistency */
+main .btn-primary,main .btn{background:var(--ink)!important;color:#fff!important;border-radius:999px;box-shadow:none;font-weight:600;text-decoration:none}
+main .hero-note,main small{font-size:.9rem!important;color:var(--muted)}
+.sitemap-list{columns:1;padding-left:1.1rem}
+@media(min-width:720px){.sitemap-list{columns:2}}
