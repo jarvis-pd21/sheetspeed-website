@@ -1647,3 +1647,5 @@ main .hero-note,main small{font-size:.9rem!important;color:var(--muted)}
 .m-next[hidden]{display:none}
 @media(prefers-reduced-motion:reduce){.m-stage video{transition:none}}
 @media(min-width:820px){.m-hero{padding:5vh 0 2.5vh}.m-sub{margin-bottom:1.4rem}.m-loop{max-width:clamp(440px,calc((100vh - 470px) * 1.333 + 36px),760px)}}
+
+.m-ea{margin:10px 0 0;text-align:center;font-size:.85rem;color:var(--muted)}
