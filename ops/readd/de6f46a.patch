@@ -1,0 +1,223 @@
+commit de6f46a56d0e7467d0bd1fad378578f7bc719bf9
+Date: 2026-10-18 08:37:54 +0000
+Subject: Pricing and legal match live 0.1.0 Core: free plan only, paid/sign-in text conditional
+
+
+diff --git a/pricing.html b/pricing.html
+index 46b4fe5..867f496 100644
+--- a/pricing.html
++++ b/pricing.html
+@@ -65,44 +65,31 @@
+ <header class="x-head"><div class="x-head-in"><a class="x-brand" href="/"><img src="/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="/blog/">Blog</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+ <main class="pricing-v2" style="max-width:1000px;margin:0 auto;padding:48px 24px">
+   <h1>Simple pricing. Core is free forever.</h1>
+-  <p><strong>Pro Early Access:</strong> every Pro tool is free right now. The prices below start only when billing opens, and you’ll get notice in the extension and on this site before then. No card needed.</p>
+-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:28px">
+-    <section class="plan" style="border:1px solid #d9dee5;border-radius:12px;padding:24px">
+-      <h2>Core</h2><div class="amount">$0</div><p>Free forever</p>
+-      <ul><li>Excel-style shortcuts: rows/cols, borders, merge, filters, alignment, decimals, zoom</li>
+-      <li>Trace precedents panel (arrow keys, Enter to drill)</li><li>PowerPoint-style Slides chords</li>
+-      <li>Custom shortcuts</li><li>No Google sign-in needed; stays on your device</li></ul>
+-      <a class="btn" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Add to Chrome, free</a>
+-    </section>
++  <p>SheetSpeed Core is free on the Chrome Web Store. No account, no card and no Google sign-in.</p>
++  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:28px;max-width:520px">
+     <section class="plan featured" style="border:2px solid #1a7f4b;border-radius:12px;padding:24px">
+-      <h2>Pro <small>early access</small></h2><div class="amount">Free</div><p><strong>Free during early access</strong></p><p style="font-size:14px;color:#5a6472">After early access: $7.99/mo or $69/yr (save 28%)</p>
+-      <ul><li>Everything in Core</li><li>Trace dependents: find every formula that uses a cell</li>
+-      <li>Goal seek: solve for the input that hits your target</li><li>What-if data tables: one- and two-variable scenarios</li>
+-      <li>Freeze panes (Alt W F F / rows / columns)</li><li>Auto-color: inputs blue, formulas black, links green</li>
+-      <li>Font and fill color cycles</li><li>Export selection as an image</li>
+-      <li>More tools coming, included free for Pro</li></ul>
+-      <p style="font-size:13px">Pro tools connect to Google Sheets with your permission (Google sign-in), and only for the sheet you're working in.</p>
++      <h2>Core</h2><div class="amount">$0</div><p>Free</p>
++      <ul><li>Excel-style Alt shortcuts in Google Sheets: insert and delete rows and columns, borders (Alt H B), merge (Alt H M), alignment and wrap, decimals, font and font size, row height and column width, autofit</li>
++      <li>Paste special shortcuts: values, formulas, formatting, transposed, column widths (Alt E S)</li>
++      <li>Filters (Ctrl+Shift+L, Alt+Down), sort, remove duplicates, trim whitespace, split text, data validation, named ranges, pivot table</li>
++      <li>Font and fill color pickers, clear formatting, gridlines, zoom</li>
++      <li>Trace precedents (Ctrl+Shift+[) and a local formula-structure explainer</li>
++      <li>PowerPoint-style Google Slides shortcuts: arrange, group, align and distribute objects; text alignment, font and color</li>
++      <li>Command search (Ctrl+Shift+Space), custom shortcuts and keyboard diagnostics</li>
++      <li>No Google sign-in: only the <code>storage</code> and <code>activeTab</code> permissions, and it works inside the page</li></ul>
+       <a class="btn primary" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Install SheetSpeed free</a>
+-      <p class="ea-note" style="font-size:14px;color:#5a6472">Pro tools unlock free for every user, with no action needed, in v0.4.0, our next Chrome Web Store update.</p>
+-      <p style="font-size:14px">No card required. You’re never charged unless you choose to start a subscription.</p>
+-    </section>
+-    <section class="plan" style="border:1px dashed #b8860b;border-radius:12px;padding:24px">
+-      <h2>Lifetime <small>launch deal</small></h2><div class="amount">Free</div><p><strong>Free during early access</strong></p><p style="font-size:14px;color:#5a6472">After early access: $149 lifetime. One payment, Pro forever.</p>
+-      <ul><li>All Pro features, now and future</li><li>Limited-time launch price for early users, offered when billing opens</li><li>14-day money-back guarantee</li></ul>
+-      <a class="btn" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Install SheetSpeed free</a>
+-      <p class="ea-note" style="font-size:14px;color:#5a6472">Pro tools unlock free for every user, with no action needed, in v0.4.0, our next Chrome Web Store update.</p>
+     </section>
+   </div>
+   <h2 style="margin-top:40px">How SheetSpeed compares</h2>
+-  <table><tr><th></th><th>SheetSpeed Pro</th><th>ShortieCuts</th><th>SheetWhiz Pro</th><th>XLKeys Pro</th></tr>
++  <table><tr><th></th><th>SheetSpeed Core</th><th>ShortieCuts</th><th>SheetWhiz Pro</th><th>XLKeys Pro</th></tr>
+   <tr><td>Trace precedents free</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr></table>
+   <p style="font-size:13px">Competitor features from their public pricing pages as of Oct 2026.</p>
+   <h2>FAQ</h2>
+-  <p><strong>What is Pro Early Access?</strong> Right now every Pro tool is unlocked for everyone at no cost. Install SheetSpeed and use them; there’s nothing to buy and no card to enter.</p>
+-  <p><strong>What happens when billing opens?</strong> We’ll tell you first, in the extension and on this page, before any paid plan begins. Then you can choose monthly ($7.99), yearly ($69) or lifetime ($149). Nobody is charged automatically: you pay only if you start a subscription yourself. If you don’t, Core keeps working for free.</p>
+-  <p><strong>Can I cancel once billing opens?</strong> Yes. Monthly plans can be cancelled at any time. Yearly plans and the lifetime deal come with a 14-day refund. See the <a href="https://sheetspeed.agi-jarvis.com/refund/">refund policy</a>.</p>
+-  <p><strong>Who will process payments?</strong> Stripe, through ExtensionPay. We never see your card.</p>
+-  <p><strong>Team or invoice?</strong> Email <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</p>
++  <p><strong>Is SheetSpeed really free?</strong> Yes. The version on the Chrome Web Store costs nothing, and there is nothing to buy and no card to enter.</p>
++  <p><strong>Do I need to sign in with Google?</strong> No. SheetSpeed asks for no Google account access. It uses Chrome's <code>storage</code> permission for your settings and <code>activeTab</code> for the document you're using, and runs commands through the page's own menus.</p>
++  <p><strong>Which apps does it work in?</strong> Google Sheets and Google Slides, in Chrome.</p>
++  <p><strong>Can I change the shortcuts?</strong> Yes. Open SheetSpeed's settings to remap shortcuts and cycles, or press Ctrl+Shift+Space to search every command.</p>
++  <p><strong>Team or IT rollout?</strong> Admins can allowlist store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>. Questions: email <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a> or see <a href="/support/">Support</a>.</p>
+ </main>
+ 
+ <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+diff --git a/privacy/index.html b/privacy/index.html
+index 15805ac..0bbc427 100644
+--- a/privacy/index.html
++++ b/privacy/index.html
+@@ -26,40 +26,40 @@
+   <main>
+     <article class="legal-doc">
+ <h1>SheetSpeed Privacy Policy</h1>
+-  <p class="meta">Product: <strong>SheetSpeed</strong> (Chrome listing title: SheetSpeed Core) · Updated: October 17, 2026</p>
++  <p class="meta">Product: <strong>SheetSpeed</strong> (Chrome listing title: SheetSpeed Core) · Updated: October 18, 2026</p>
+ 
+ <p>Official website: <a href="https://sheetspeed.agi-jarvis.com/">https://sheetspeed.agi-jarvis.com/</a> · Chrome Web Store: <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Store listing</a> · Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</p>
+ 
+ <p class="banner"><strong>Published privacy policy</strong> for the SheetSpeed Core Chrome extension. Contact <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</p>
+ 
+ <p><em>Effective October 15, 2026. Operator: Philip Dressler, California, USA.</em></p>
+-<p>SheetSpeed is a Chrome extension that adds keyboard shortcuts, formula tracing and modeling tools to Google Sheets, Google Docs and Google Slides. <strong>SheetSpeed Core</strong> (free) works entirely inside the open document. <strong>SheetSpeed Pro</strong> (free for everyone during early access; paid plans later) adds tools that read and write your spreadsheet through the Google Sheets API, but only after you connect your Google account. We do not sell personal data, use it for advertising, or use it to train AI models.</p>
+-<p><strong>Early access:</strong> while Pro is in early access, SheetSpeed collects no license, account or payment data and does not contact ExtensionPay or Stripe. The sections below that mention ExtensionPay, Stripe, licenses or trials apply only once billing opens, and we will give notice in the extension and on our website before then.</p>
++<p>SheetSpeed is a Chrome extension that adds keyboard shortcuts and formula tools to Google documents. The free version runs entirely inside the open document and does not connect to your Google account. Some versions of SheetSpeed include optional features that work with your spreadsheet or presentation through Google's APIs; those features do nothing unless you choose to connect your Google account. We do not sell personal data, use it for advertising, or use it to train AI models.</p>
++<p>The <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Chrome Web Store listing</a> shows the permissions of the version you install. The sections below that start with “If” apply only when your installed version includes that feature and you use it.</p>
+ 
+ <h2>Data SheetSpeed accesses</h2>
+ <ul>
+-  <li><strong>Document context (Core and Pro).</strong> On Google Sheets and Slides document pages, SheetSpeed reads the visible formula text, document and tab identifiers, the selected range, and native menu/control state so it can run the command you choose.</li>
+-  <li><strong>Google Docs (Core and Pro).</strong> On Google Docs document pages, SheetSpeed reads only the native menu, toolbar and key-tip state it needs to run the Alt shortcut you press. Docs are processed locally on the page only: SheetSpeed makes no API calls for Docs, requests no Docs permission from your Google account, and does not read, store or send your document text.</li>
++  <li><strong>Document context.</strong> On the Google Sheets, Slides or Docs pages where your version of SheetSpeed runs, it reads the visible formula text, document and tab identifiers, the selected range, and native menu, toolbar and control state so it can run the command you choose. This happens locally on the page. SheetSpeed does not read, store or send the text of your Google Docs.</li>
+   <li><strong>Keyboard events.</strong> SheetSpeed checks key presses against your configured shortcuts. It does not log ordinary typing or cell contents. Local diagnostics may keep the latest modifier event and element/menu metadata on your device.</li>
+-  <li><strong>Spreadsheet data (Pro, after you connect).</strong> When you run a Pro tool (trace dependents, goal seek, what-if tables, freeze panes, auto-color, color cycles, image export), SheetSpeed calls the Google Sheets API for <em>the spreadsheet you are working in</em> to read the cells, formulas and formatting that tool needs, and, for tools that change the sheet, to write the result you confirm.</li>
+-  <li><strong>Slides images (Pro, only when you use Refresh from Sheets).</strong> When you press <kbd>Ctrl+Alt+Shift+R</kbd> (or click “Refresh from Sheets”) on a Google Slides slide, SheetSpeed reads that slide to find images previously exported by SheetSpeed (identified by the source spreadsheet link stored in the image’s link and alt text), re-reads that source range through the Google Sheets API, renders a new PNG in your browser, and replaces the image in place. It only touches the slide and presentation you are editing.</li>
+-  <li><strong>Account and license (Pro, once billing opens; not collected during early access).</strong> Your email address and plan status (trial start, paid or not) through ExtensionPay.</li>
++  <li><strong>Spreadsheet data (only if you use a feature that requires Google sign-in).</strong> If your version includes tools that connect to Google (for example trace dependents, goal seek, what-if tables or image export) and you connect your Google account, SheetSpeed calls the Google Sheets API for <em>the spreadsheet you are working in</em> to read the cells, formulas and formatting that tool needs, and, for tools that change the sheet, to write the result you confirm.</li>
++  <li><strong>Slides images (only if you use a refresh-from-Sheets feature).</strong> If your version includes refreshing SheetSpeed-exported images in Google Slides and you use it, SheetSpeed reads that slide to find images it previously exported (identified by the source spreadsheet link stored in the image’s link and alt text), re-reads that source range through the Google Sheets API, renders a new PNG in your browser, and replaces the image in place. It only touches the slide and presentation you are editing.</li>
++  <li><strong>Account and license (only if you purchase a paid plan).</strong> If paid plans are offered and you buy one, your email address and plan status are handled by ExtensionPay.</li>
+ </ul>
+ 
+-<h2>Google account connection (Pro)</h2>
++<h2>Google account connection (only if you use features that require Google sign-in)</h2>
+ <ul>
+-  <li>SheetSpeed uses Chrome's <code>identity</code> permission to ask Google for an access token. Google shows you a consent screen first, and nothing is connected unless you approve. Scopes are requested in two steps:
++  <li>The free version does not request the <code>identity</code> permission and never connects to your Google account.</li>
++  <li>If your version includes features that require Google sign-in, SheetSpeed uses Chrome's <code>identity</code> permission to ask Google for an access token. Google shows you a consent screen first, and nothing is connected unless you approve. Scopes are requested only when needed:
+    <ul>
+-    <li>When you connect for Pro tools: only <code>https://www.googleapis.com/auth/spreadsheets</code>, to read and write the spreadsheet you run a Pro tool on.</li>
+-    <li>Only the first time you use Refresh from Sheets in Google Slides: additionally <code>https://www.googleapis.com/auth/presentations</code>, to read the current slide and replace SheetSpeed images on it, and <code>https://www.googleapis.com/auth/drive.file</code>, which lets SheetSpeed create and manage <em>only the temporary files it creates itself</em>. SheetSpeed cannot see, list or open any other file in your Drive.</li>
++    <li>For spreadsheet tools: only <code>https://www.googleapis.com/auth/spreadsheets</code>, to read and write the spreadsheet you run the tool on.</li>
++    <li>Only the first time you refresh a SheetSpeed image in Google Slides: additionally <code>https://www.googleapis.com/auth/presentations</code>, to read the current slide and replace SheetSpeed images on it, and <code>https://www.googleapis.com/auth/drive.file</code>, which lets SheetSpeed create and manage <em>only the temporary files it creates itself</em>. SheetSpeed cannot see, list or open any other file in your Drive.</li>
+    </ul></li>
+   <li>The token is managed by Chrome. It is used only from your browser, only to call the Google APIs listed under Permissions, and only for the spreadsheet or presentation open in your tab (plus, for Slides refresh, the source spreadsheet of each SheetSpeed image on that slide). SheetSpeed has no server that receives your token or your spreadsheet data.</li>
+-  <li>The app may show Google's “unverified app” notice while Google's verification is pending.</li>
++  <li>Google may show an “unverified app” notice while Google's verification is pending.</li>
+   <li>You can disconnect from SheetSpeed's panel or Settings at any time, and revoke access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+   <li>SheetSpeed's use of information received from Google APIs follows the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</li>
+ </ul>
+ 
+-<h2>Refreshing Sheets images in Slides (Pro)</h2>
++<h2>Refreshing Sheets images in Slides (only if you use it)</h2>
+ <ul>
+   <li>Google Slides can only replace an image from a web address, so for each image being refreshed SheetSpeed uploads the new PNG to your own Google Drive as a temporary file (“SheetSpeed refresh (temporary).png”) and gives it a temporary “anyone with the link can view” share with discovery turned off, so it cannot be found by search.</li>
+   <li>The link is used only by Google Slides to fetch the image. Immediately afterwards, whether the update succeeded or failed, SheetSpeed removes the link share and deletes the temporary file. No SheetSpeed file stays in your Drive. If removal ever fails, SheetSpeed tells you so you can delete the file yourself. If an upload succeeded but its confirmation was lost, the next refresh finds that leftover temporary file (by its name or a SheetSpeed tag; <code>drive.file</code> only shows files SheetSpeed created) and deletes it.</li>
+@@ -69,30 +69,32 @@
+ <h2>Storage</h2>
+ <ul>
+   <li>Shortcut settings, enabled state and timeouts are stored in Chrome local storage on your device. If you turn on settings sync, they are also stored in Chrome sync storage under your Chrome profile.</li>
+-  <li>When a Pro tool changes your sheet, SheetSpeed keeps a local undo record (the original values and formatting of the affected cells) on your device so you can reverse the change. Undo records are bounded in size and you can clear them in Settings.</li>
+-  <li>Once billing opens, the cached license status (paid / trial / none) is stored locally. ExtensionPay keeps a login token in Chrome storage.</li>
++  <li>If you use a tool that changes your sheet through the Google Sheets API, SheetSpeed keeps a local undo record (the original values and formatting of the affected cells) on your device so you can reverse the change. Undo records are bounded in size and you can clear them in Settings.</li>
++  <li>If you purchase a paid plan, the cached license status is stored locally and ExtensionPay keeps a login token in Chrome storage.</li>
+ </ul>
+ 
+ <h2>Transmission and processors</h2>
+ <ul>
+-  <li><strong>Google (Pro only):</strong> Sheets API requests go directly from your browser to <code>sheets.googleapis.com</code>. Slides refresh requests go directly to <code>slides.googleapis.com</code> and the Google Drive API at <code>www.googleapis.com/drive/v3</code> and <code>www.googleapis.com/upload/drive/v3</code>.</li>
+-  <li><strong>ExtensionPay</strong> (<a href="https://extensionpay.com/privacy">privacy</a>, once billing opens; not contacted during early access): license and login checks. Your email and plan status are sent, but never your spreadsheet data.</li>
+-  <li><strong>Stripe</strong> (<a href="https://stripe.com/privacy">privacy</a>, once billing opens): payment processing, receipts and the subscription portal. Card numbers never reach SheetSpeed or ExtensionPay.</li>
++  <li><strong>Google (only if you use features that require Google sign-in):</strong> Sheets API requests go directly from your browser to <code>sheets.googleapis.com</code>. Slides refresh requests go directly to <code>slides.googleapis.com</code> and the Google Drive API at <code>www.googleapis.com/drive/v3</code> and <code>www.googleapis.com/upload/drive/v3</code>.</li>
++  <li><strong>ExtensionPay</strong> (<a href="https://extensionpay.com/privacy">privacy</a>, only if you purchase a paid plan): license and login checks. Your email and plan status are sent, but never your spreadsheet data.</li>
++  <li><strong>Stripe</strong> (<a href="https://stripe.com/privacy">privacy</a>, only if you purchase a paid plan): payment processing, receipts and the subscription portal. Card numbers never reach SheetSpeed or ExtensionPay.</li>
+   <li><strong>Developer servers:</strong> none. <strong>AI providers:</strong> none. The Chrome Web Store version does not include an AI helper.</li>
+ </ul>
+ 
+ <h2>Permissions</h2>
++<p>Every version uses <code>storage</code> and <code>activeTab</code>. The others are present only in versions that include the matching feature; the Chrome Web Store shows the exact list for the version you install.</p>
+ <ul>
+   <li><code>storage</code>: settings, undo records and license cache, as described above.</li>
+   <li><code>activeTab</code>: interact with the Google document you are using when you invoke SheetSpeed.</li>
+-  <li><code>identity</code>: get a Google access token, with your consent, for the Pro tools.</li>
+-  <li>Host permission <code>https://sheets.googleapis.com/*</code>: call the Google Sheets API for Pro tools.</li>
+-  <li>Host permissions <code>https://slides.googleapis.com/*</code>, <code>https://www.googleapis.com/drive/v3/*</code> and <code>https://www.googleapis.com/upload/drive/v3/*</code>: Slides refresh only (read the slide, replace the image, and upload, share, unshare, find and delete the temporary image file).</li>
+-  <li>Content scripts on Google Sheets, Docs and Slides document pages (shortcuts, Alt key tips and panel; on Docs, local only with no API calls) and on <code>extensionpay.com</code> (license sign-in and payment confirmation). The early-access build does not include the <code>extensionpay.com</code> content script at all; it is added only once billing opens, and it never runs on other sites.</li>
++  <li>Content scripts on Google Sheets and Slides document pages (and Google Docs pages in versions that support Docs) for the shortcuts and panel. On Docs, processing is local only, with no API calls.</li>
++  <li>If present, <code>identity</code>: get a Google access token, with your consent, for features that require Google sign-in.</li>
++  <li>If present, host permission <code>https://sheets.googleapis.com/*</code>: call the Google Sheets API for those features.</li>
++  <li>If present, host permissions <code>https://slides.googleapis.com/*</code>, <code>https://www.googleapis.com/drive/v3/*</code> and <code>https://www.googleapis.com/upload/drive/v3/*</code>: Slides refresh only (read the slide, replace the image, and upload, share, unshare, find and delete the temporary image file).</li>
++  <li>If present, a content script on <code>extensionpay.com</code>: license sign-in and payment confirmation for paid plans. It never runs on other sites.</li>
+ </ul>
+ 
+ <h2>Retention and your rights</h2>
+-<p>Local data stays on your device until you clear it or uninstall SheetSpeed. Billing records are kept as long as tax law requires. To access or delete your account data, email us. California residents and others may have additional rights under applicable law; we honor verified requests.</p>
++<p>Local data stays on your device until you clear it or uninstall SheetSpeed. If you purchase a paid plan, billing records are kept as long as tax law requires. To access or delete your account data, email us. California residents and others may have additional rights under applicable law; we honor verified requests.</p>
+ 
+ <h2>Children</h2>
+ <p>SheetSpeed is not directed at children under 13.</p>
+diff --git a/refund/index.html b/refund/index.html
+index 4aef934..a4b58b5 100644
+--- a/refund/index.html
++++ b/refund/index.html
+@@ -26,12 +26,11 @@
+   <main>
+     <article class="legal-doc">
+ <h1>SheetSpeed Refund Policy</h1>
+-<h2>Early access</h2><p>Pro features are free during early access, so there is nothing to refund. We will give notice in the extension and on the SheetSpeed website before paid plans begin, and nobody is charged unless they start a subscription themselves. The terms below apply to paid plans once billing opens.</p>
+-<p><strong>Try first:</strong> once billing opens, Pro includes a 14-day free trial with no card required, so you can test every feature before you pay.</p>
+-<h2>Yearly plan ($69/yr)</h2><p>Full refund if you ask within 14 days of the first charge or of a renewal charge. Email us with the address you paid with, and we will refund through Stripe, normally within 5–10 business days.</p>
+-<h2>Monthly plan ($7.99/mo)</h2><p>Cancel at any time. You keep Pro until the end of the current billing period, and you won't be charged again. We don't refund partial months.</p>
+-<h2>Lifetime launch deal ($149)</h2><p>Full refund if you ask within 14 days of purchase.</p>
+-<h2>How to cancel or request a refund</h2><p>Open the SheetSpeed popup, go to Settings, then Manage subscription (the ExtensionPay/Stripe portal). Or email <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</p>
++<p>SheetSpeed is free on the Chrome Web Store and does not currently sell any paid plan, so there is nothing to refund today. The terms below apply only if you purchase a paid plan.</p>
++<h2>Yearly plans</h2><p>If you purchase a yearly plan: full refund if you ask within 14 days of the first charge or of a renewal charge. Email us with the address you paid with, and we will refund through Stripe, normally within 5–10 business days.</p>
++<h2>Monthly plans</h2><p>If you purchase a monthly plan: cancel at any time. You keep the paid features until the end of the current billing period, and you won't be charged again. We don't refund partial months.</p>
++<h2>One-time purchases</h2><p>If you make a one-time purchase: full refund if you ask within 14 days of purchase.</p>
++<h2>How to cancel or request a refund</h2><p>If you have a paid plan, open the SheetSpeed popup, go to Settings, then Manage subscription (the ExtensionPay/Stripe portal). Or email <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</p>
+ <p>Your legal rights in your country, such as EU/UK consumer rights, still apply.</p>
+ <p style="font-size:14px;color:#5a6472">Contact: <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a> · <a href="https://sheetspeed.agi-jarvis.com/">sheetspeed.agi-jarvis.com</a></p>
+     </article>
+diff --git a/terms/index.html b/terms/index.html
+index 86d6de5..6bcd011 100644
+--- a/terms/index.html
++++ b/terms/index.html
+@@ -26,15 +26,15 @@
+   <main>
+     <article class="legal-doc">
+ <h1>SheetSpeed Terms of Service</h1>
+-<p><em>Effective: October 17, 2026. Operator: Philip Dressler, California, USA.</em></p>
+-<h2>1. The service</h2><p>SheetSpeed is a Chrome extension that adds keyboard shortcuts and formula tools to Google Sheets and Slides. SheetSpeed Core is free. SheetSpeed Pro is a paid upgrade that is currently free during early access (section 3). SheetSpeed is not affiliated with Google, Microsoft, SheetWhiz, or Macabacus.</p>
+-<h2>2. License</h2><p>We give you a personal, non-exclusive, non-transferable license to use SheetSpeed. You may not resell it, reverse-engineer its paid features, or share license access beyond your plan.</p>
+-<h2>3. Early access</h2><p>During Pro Early Access, all Pro features are free for everyone. Before any paid plan begins, we will give notice in the extension and on the SheetSpeed website. Nobody is charged unless they start a subscription themselves; nothing converts to a paid plan automatically. If you don't subscribe when early access ends, Pro features stop and Core stays free.</p>
+-<h2>4. Accounts and payments</h2><p>When billing opens, Pro will be sold through ExtensionPay, which processes payments with Stripe. Plans: monthly ($7.99), yearly ($69), and a limited lifetime launch offer ($149, one-time). Subscriptions renew automatically until you cancel. Prices may change with 30 days' notice. The new price applies at your next renewal.</p>
+-<h2>5. Free trial</h2><p>Once billing opens, new users get a 14-day Pro trial. It does not apply during early access, when Pro is already free. No card is required. When the trial ends, Pro features stop unless you subscribe. Core features stay free.</p>
+-<h2>6. Cancellation and refunds</h2><p>See the <a href="/refund/">Refund Policy</a>. You can cancel at any time from the extension's “Manage subscription” link.</p>
++<p><em>Effective: October 18, 2026. Operator: Philip Dressler, California, USA.</em></p>
++<h2>1. The service</h2><p>SheetSpeed is a Chrome extension that adds keyboard shortcuts and formula tools to Google Sheets and Slides. The version on the Chrome Web Store is free. SheetSpeed is not affiliated with Google, Microsoft, SheetWhiz, or Macabacus.</p>
++<h2>2. License</h2><p>We give you a personal, non-exclusive, non-transferable license to use SheetSpeed. You may not resell it, reverse-engineer its paid features, or, if you purchase a paid plan, share license access beyond that plan.</p>
++<h2>3. Paid plans</h2><p>SheetSpeed does not currently sell any paid plan. If paid features are offered in the future, we will post the plans and prices on the SheetSpeed website before they begin. Nobody is charged unless they start a subscription or make a purchase themselves, and free features already in the version you installed are not taken away by that change.</p>
++<h2>4. Accounts and payments</h2><p>If you purchase a paid plan, it is sold through ExtensionPay, which processes payments with Stripe, at the price shown when you buy. Subscriptions renew automatically until you cancel. Prices may change with 30 days' notice, and a new price applies at your next renewal.</p>
++<h2>5. Free trials</h2><p>If a paid plan is offered with a free trial, the trial length is shown before you start it. When a trial ends, the paid features stop unless you subscribe; free features keep working.</p>
++<h2>6. Cancellation and refunds</h2><p>See the <a href="/refund/">Refund Policy</a>. If you purchase a subscription, you can cancel it at any time from the extension's “Manage subscription” link.</p>
+ <h2>7. Your data</h2><p>SheetSpeed runs in your browser. It does not upload the contents of your spreadsheets. See the <a href="/privacy/">Privacy Policy</a>.</p>
+-<h2>8. Disclaimer</h2><p>SheetSpeed is provided “as is”. Always check model outputs, including goal seek, data tables, and pasted formulas, before you rely on them. Google may change Sheets in ways that break some features temporarily.</p>
++<h2>8. Disclaimer</h2><p>SheetSpeed is provided “as is”. Always check your results, including formulas and anything a SheetSpeed tool changes in your sheet, before you rely on them. Google may change Sheets in ways that break some features temporarily.</p>
+ <h2>9. Limitation of liability</h2><p>To the extent the law allows, our total liability is limited to the amount you paid us in the 12 months before the claim. We are not liable for indirect or consequential losses.</p>
+ <h2>10. Termination</h2><p>We may suspend access if these terms are abused. You may stop using SheetSpeed at any time.</p>
+ <h2>11. Governing law</h2><p>These terms are governed by the laws of the State of California, USA, without regard to conflict-of-law rules.</p>

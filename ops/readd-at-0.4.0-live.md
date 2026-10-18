@@ -1,0 +1,217 @@
+# SheetSpeed site: what to re-add when 0.4.0 is LIVE in the Chrome Web Store
+
+Rebuilt 2026-10-18 from git history of jarvis-pd21/sheetspeed-website after a box reset wiped the original.
+
+## Rule
+Re-add a claim only after the Chrome Web Store serves 0.4.x and that build's capabilities.json/registry lists the feature as shipped (check the live CRX, not the repo). No "launching soon" / "coming later" labels. Check each feature individually: some removed text (e.g. goal seek, trace dependents, cycles, Paste Exact, Slides refresh, Docs, key tips) needs the 0.4.0 Pro/EARLY_ACCESS build; verify it is in the store build before restoring.
+
+## Restore points
+- Pre-36bb71d state: commit 98da29c. Pre-596c1dd state: a332383. Pre-c1d3221 state: de6f46a.
+- Pricing/legal Early Access versions (Biz MNGR owns these): branch `ea-restore` at 596c1dd; Biz's patch is de6f46a (included here as de6f46a.patch for reference).
+- Full diffs (whitespace-insensitive) are next to this file: 36bb71d.patch, 596c1dd.patch, c1d3221.patch, de6f46a.patch.
+- How: `git checkout <pre-state> -- <file>` on a scratch branch, diff against main, and re-apply only the removed claims that 0.4.0 ships; keep newer head/meta/schema and XLKeys-unavailable wording from main. Then validate JSON-LD, push, curl-check live, ping IndexNow.
+
+## Removed text, by commit and file (tags stripped; only lines with feature/plan keywords)
+
+### 36bb71d: GEO: dropped unshipped Paste Exact / Slides-refresh claims; XLKeys marked currently unavailable (pre-state 98da29c)
+- **about.html**
+  - Core is free via the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, c
+- **blog/best-excel-shortcut-add-ons-google-sheets/index.html**
+  - "text": "The main options are Chrome extensions: SheetSpeed (free Core), SheetWhiz (free plan, Pro $9.99/mo), ShortieCuts (14-day trial, then $7.99/mo), Spex and XLKeys. Google Sheets also has a free built-in toggle: Help → Keyboard shortcuts → Enable compatible spreadsheet shortcuts. Strictly, these are Chrome extensions rather than Google Workspace add-ons, because only an extension can capture 
+  - "description": "Analysts and modelers who want free formula tracing plus modeling tools (goal seek, what-if tables, Paste Exact, Slides image refresh)."
+  - The options menu SheetSpeed : Analysts and modelers who want free formula tracing plus modeling tools (goal seek, what-if tables, Paste Exact, Slides image refresh). SheetWhiz : Finance teams that want the most-installed option and a long track record (since 2023). ShortieCuts : People who want the widest Office Alt-key coverage with an on-screen Key Tips overlay, including Word shortcuts in Googl
+  - Price and free plan compared Option Free plan Paid Chrome Web Store (Oct 18, 2026) SheetSpeed Yes. Core is free forever: Excel-style shortcuts, Alt/Option sequences, trace precedents, command palette. Pro tools are free during early access (unlock in v0.4.0, the next store update). Listed prices once billing opens: $7.99/mo, $69/yr or $149 lifetime, with notice first. New listing (Oct 2026) SheetW
+  - Features compared Option Excel Alt sequences Key Tips overlay Trace precedents Goal seek Slides Docs SheetSpeed Yes No Free Pro (free in early access) Yes No SheetWhiz Yes Not advertised Pro Pro Yes Not advertised ShortieCuts Yes (233 Sheets, 148 Slides, 149 Docs) Yes Pro Yes Yes Yes Spex Yes Yes Not advertised Not advertised No No XLKeys Yes Not advertised Yes Yes No No Google Sheets built-in tog
+  - Each option in one paragraph 1. SheetSpeed Best for: Analysts and modelers who want free formula tracing plus modeling tools (goal seek, what-if tables, Paste Exact, Slides image refresh). We make SheetSpeed. Trace precedents (Ctrl+Shift+[) is free; trace dependents, goal seek (Alt A W G), what-if tables (Alt A W T), auto-color, Paste Exact and refresh of Sheets ranges pasted into Slides are Pro. 
+  - FAQ What add-in gives me Excel shortcuts in Google Sheets? The main options are Chrome extensions: SheetSpeed (free Core), SheetWhiz (free plan, Pro $9.99/mo), ShortieCuts (14-day trial, then $7.99/mo), Spex and XLKeys. Google Sheets also has a free built-in toggle: Help → Keyboard shortcuts → Enable compatible spreadsheet shortcuts. Strictly, these are Chrome extensions rather than Google Workspa
+- **blog/excel-shortcuts-google-sheets/index.html**
+  - Core is free on the Store and does not require Google API OAuth. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format
+- **blog/excel-shortcuts-in-google-sheets-guide/index.html**
+  - What SheetSpeed does, specifically SheetSpeed is a Chrome extension for Google Sheets (and Google Slides). Install it from the Chrome Web Store , open a spreadsheet, and Excel keys start working. Excel Alt sequences, tapped like Excel. Press and release Alt, then type the letters: Alt, E, S, V : paste values. Alt, E, S, F : paste formulas. Alt, E, S, T : paste formats. Alt, H, B plus a letter: bor
+- **blog/excel-shortcuts-list/index.html**
+  - "name": "Copy for Paste Exact: Ctrl+Alt+Shift+C (Pro)"
+  - "name": "Paste Exact: Ctrl+Alt+Shift+V (Pro)"
+  - "name": "Refresh linked Slides images: Ctrl+Alt+Shift+R (Pro)",
+  - Shortcuts Action Keys What it does Tier Trace precedents Ctrl+Shift+[ Panel on the active formula; ↑↓ to navigate, Enter to drill, F5 to return Core Trace dependents Ctrl+Shift+] Bounded, cancelable scan for cells that reference the selection Pro Paste values Alt, E, S, V Routes to native Paste special → values Core Paste formulas Alt, E, S, F Routes to native Paste special → formulas Core Paste f
+- **blog/faq/index.html**
+  - "text": "Yes. SheetSpeed (Store title: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides) provides Excel-shaped keyboard commands for insert/delete, borders, merge, filters, alignment, decimals, zoom, and visible-formula precedent tracing on Google Sheets, plus Slides order/align/group routes. The free Store package is Core. Pro tools are free during early access; prices ($7.99/mo, $69
+  - "text": "Core: native menu commands plus visible-formula precedent tools, no Google API OAuth, free on the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as
+  - Yes. If you are switching from Excel to Google Sheets and need an add-in for Excel shortcuts, SheetSpeed (Store title: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides) provides Excel-shaped keyboard commands (insert/delete, borders, merge, filters, alignment, decimals, zoom) plus visible-formula precedent tracing. The free Store package is Core. Pro tools are free during early access
+  - Core: native menu commands + visible-formula precedent tools, no Google API OAuth, free on the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font
+- **blog/google-sheets-shortcuts-list/index.html**
+  - Excel habits Google Sheets doesn't support natively, and how to get them Two free layers fill most gaps. First, open Help → Keyboard shortcuts and turn on Enable compatible spreadsheet shortcuts ( step-by-step guide ). Then, for press-and-release Alt sequences and formula tracing, add a Chrome extension. Here is what SheetSpeed covers: Excel habit Closest native Google Sheets option With SheetSpee
+- **blog/how-to-enable-excel-shortcuts-in-google-sheets/index.html**
+  - Step 3: Add an extension for the Excel-only habits Chrome extensions run in your browser and change how the Sheets page responds to keys. All of these are Chrome Web Store extensions, not Google Workspace add-ons, so they work only in Chrome-based browsers on desktop. Option Free tier Paid Stand-out Source SheetSpeed Core: Alt E S V/F/T paste special, Alt H B borders, Alt H A alignment, Alt H O au
+  - The Excel shortcuts switchers miss most, and how to get each one Excel habit Native Google Sheets With SheetSpeed Core (free) Paste values (Alt E S V) Ctrl+Shift+V Alt , E , S , V Paste formulas / formats (Alt E S F / T) Edit → Paste special menu Alt E S F / Alt E S T Bottom / all borders (Alt H B O / A) Toolbar, or held Alt with compatible shortcuts Alt H B O / Alt H B A Autofit column (Alt H O I
+- **blog/sheetspeed-vs-shortiecuts/index.html**
+  - Side by side SheetSpeed ShortieCuts Excel Alt sequences Core Alt paths (paste special, borders); goal seek and what-if in Pro; freeze panes in Pro; see the shortcut list 233 Excel Alt sequences listed, with an on-screen Key Tips overlay Google Slides / Docs PowerPoint-style Slides shortcuts 148 Slides + 149 Docs shortcuts Trace precedents / dependents Ctrl+Shift+[ / Ctrl+Shift+] (precedents free; 
+- **blog/sheetspeed-vs-spex/index.html**
+  - Side by side SheetSpeed Spex Approach Excel-style chords and Alt sequences routed to native Sheets actions, plus modeling tools On-screen KeyTips shown when you press Alt/Option; Excel paths and Sheets actions in one flow Trace precedents / dependents Yes Not provided (Spex says it does not analyze spreadsheets) Goal seek / what-if Yes (Pro) Not listed Quick Access pinning Command palette (Ctrl+Sh
+- **blog/sheetspeed-vs-xlkeys/index.html**
+  - Side by side SheetSpeed XLKeys Excel Alt sequences Core Alt paths; see shortcut list Alt+H, E, A, W chains; remappable Trace precedents / dependents Ctrl+Shift+[ (Core, free) / Ctrl+Shift+] (Pro) Ctrl+Shift+[ / ] (Pro) Auto-color Pro Yes, Ctrl+Shift+S (Pro) Goal seek / sensitivity tables Alt A W G / Alt A W T (Pro) Alt A W G / Alt A W T (Pro) Workbook audits No Cell capacity and performance audits
+- **features.html**
+  - Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear all, Paste E
+  - Paste Exact (Pro)
+  - Refresh linked Slides images (Pro)
+  - Press Ctrl+Alt+Shift+R to refresh Slides images exported from a Sheets range, so the deck matches the latest numbers.
+- **index.html**
+  - {"id":"paste-exact","label":"Real screen recording: SheetSpeed Paste Exact in Google Sheets","cap":" Ctrl Alt Shift V Paste Exact: references don\u2019t shift (Pro) "},
+  - Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear all, Paste E
+- **llms.txt**
+  - SheetSpeed also brings Excel-style keyboard shortcuts, formula tracing (trace precedents free; trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, and Paste Exact in Pro) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+  - 4. **XLKeys**: Alt chains, tracing, auto-color, workbook audits; free tier plus Pro. (On Oct 18, 2026 its website returned "deployment paused" and its store page did not load.) Compare: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-xlkeys/
+  - - Pricing: Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear a
+  - - Paste Exact: Ctrl+Alt+Shift+C to copy, Ctrl+Alt+Shift+V to paste; references don't shift (Pro)
+  - - Refresh linked Slides images: Ctrl+Alt+Shift+R (Pro)
+  - - Paste Exact: paste formulas without shifting references (Pro)
+  - - Refresh linked Slides images exported from Sheets (Ctrl+Alt+Shift+R) (Pro).
+- **pricing.html**
+  - Paste Exact: copy formulas with no reference shift (Ctrl+Alt+Shift+C / V)
+
+### 596c1dd: GEO: site describes live free Core only; dropped Pro/early-access claims sitewide except pricing/legal (pre-state a332383)
+- **about.html**
+  - SheetSpeed (Chrome Web Store title: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides ) is a Google Chrome extension that adds Excel-style keyboard shortcuts, formula tracing (trace precedents and dependents), goal seek and what-if tables (Pro) to Google Sheets , plus PowerPoint-shaped shortcuts for Google Slides .
+  - Core is free via the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters an
+- **blog/best-excel-shortcut-add-ons-google-sheets/index.html**
+  - Price and free plan compared Option Free plan Paid Chrome Web Store (Oct 18, 2026) SheetSpeed Yes. Core is free forever: Excel-style shortcuts, Alt/Option sequences, trace precedents, command palette. Pro tools are free during early access (unlock in v0.4.0, the next store update). Listed prices once billing opens: $7.99/mo, $69/yr or $149 lifetime, with notice first. New listing (Oct 2026) SheetW
+  - Features compared Option Excel Alt sequences Key Tips overlay Trace precedents Goal seek Slides Docs SheetSpeed Yes No Free Pro (free in early access) Yes No SheetWhiz Yes Not advertised Pro Pro Yes Not advertised ShortieCuts Yes (233 Sheets, 148 Slides, 149 Docs) Yes Pro Yes Yes Yes Spex Yes Yes Not advertised Not advertised No No XLKeys n/a n/a n/a n/a n/a n/a Google Sheets built-in toggle No No
+  - Each option in one paragraph 1. SheetSpeed Best for: Analysts and modelers who want free formula tracing plus Excel-style shortcuts in Google Sheets and Slides. We make SheetSpeed. Trace precedents (Ctrl+Shift+[) is free; trace dependents, goal seek (Alt A W G), what-if tables (Alt A W T) and auto-color are Pro. No ads or tracking inside the extension. Chrome Web Store page . 2. SheetWhiz Best for
+- **blog/compare-excel-shortcuts/index.html**
+  - If you want Excel-shaped keyboard commands, visible-formula trace precedents , and a clear free Core (no Google API OAuth) vs Pro split, start with SheetSpeed :
+- **blog/excel-alt-shortcuts-mac-google-sheets/index.html**
+  - Examples Action Windows Mac Paste values Alt, E, S, V Option, E, S, V Freeze panes Alt, W, F, F Option, W, F, F (Pro) Borders Alt, H, B + letter Option, H, B + letter Trace precedents Ctrl+Shift+[ ⌘+Shift+[ Insert rows Ctrl+Shift+= ⌘+Shift+=
+  - Tools marked Pro are free during early access. Pro unlocks free in v0.4.0, the next store update.
+- **blog/excel-formatting-shortcuts-google-sheets/index.html**
+  - The shortcuts Action Excel keys In Google Sheets with SheetSpeed (free Core) Borders Alt, H, B + letter Opens the native borders palette Freeze panes Alt, W, F, F Freezes rows above and columns left of the selection (Pro) Toggle filter Ctrl+Shift+L Creates or removes a filter Insert rows Ctrl+Shift+= Native Insert → Rows Delete rows Ctrl+Shift+- Native Edit → Delete → Rows
+  - Tools marked Pro are free during early access. Pro unlocks free in v0.4.0, the next store update.
+- **blog/excel-shortcuts-google-sheets/index.html**
+  - Core is free on the Store and does not require Google API OAuth. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format
+  - SheetSpeed default shortcut table (Core / Pro)
+  - Trace dependents Ctrl+Shift+] Pro: sheet scan
+  - Number / % / date / currency cycles Ctrl+Shift+1/5/3/4/2 Format cycles (Pro)
+  - Font / fill color cycle Ctrl+Shift+F / Ctrl+Shift+K Pro
+  - Export selection as image Ctrl+Shift+C PNG to clipboard when browser allows (Pro / Full build, not in free Core)
+  - Goal seek / What-if Alt+A W G / Alt+A W T Preview then apply (Pro)
+  - Freeze above+left Alt+W F F Freeze helpers (Pro / Full build, not in free Core)
+  - Core includes Slides order/align/group and Settings remaps; format cycles and freeze helpers are in the Full build (Pro). See Features and the Store listing — we do not invent review stars or usage counts here.
+  - Google Sheets already ships many Excel-like chords. SheetSpeed fills gaps Excel modelers miss (trace precedents panel, allowlisted Store install; font/fill color cycles in Pro). This table is about intent , not claiming identical Excel binary behavior.
+  - Trace Dependents Limited / manual Find Ctrl+Shift+] (Pro)
+  - Number / currency format cycles Menus / Format → Number One-key cycles ( Ctrl+Shift+1… , Pro / Full build, not in free Core)
+  - Goal Seek / Data Table No built-in Goal Seek Goal seek + what-if (Pro)
+  - Goal seek / what-if Yes (Pro) Varies — do not assume
+- **blog/excel-shortcuts-in-google-sheets-guide/index.html**
+  - Layer 3: Add a Chrome extension for the Excel-only habits This is where Alt sequences, trace precedents and modeling tools come from. Several Chrome extensions fill this gap, and they take different approaches. Chrome extensions run in your browser and change how the Sheets page responds to your keyboard. Google Workspace add-ons run in a sidebar inside the file. For keyboard shortcuts specificall
+  - What SheetSpeed does, specifically SheetSpeed is a Chrome extension for Google Sheets (and Google Slides). Install it from the Chrome Web Store , open a spreadsheet, and Excel keys start working. Excel Alt sequences, tapped like Excel. Press and release Alt, then type the letters: Alt, E, S, V : paste values. Alt, E, S, F : paste formulas. Alt, E, S, T : paste formats. Alt, H, B plus a letter: bor
+- **blog/excel-shortcuts-list/index.html**
+  - "name": "Freeze panes (above and left): Alt, W, F, F (Pro)"
+  - Shortcuts Action Keys What it does Tier Trace precedents Ctrl+Shift+[ Panel on the active formula; ↑↓ to navigate, Enter to drill, F5 to return Core Trace dependents Ctrl+Shift+] Bounded, cancelable scan for cells that reference the selection Pro Paste values Alt, E, S, V Routes to native Paste special → values Core Paste formulas Alt, E, S, F Routes to native Paste special → formulas Core Paste f
+- **blog/excel-to-google-sheets-switching-checklist/index.html**
+  - Day 1: an extension for Excel muscle memory Install one Excel-shortcut Chrome extension. Options: SheetSpeed (free Core), ShortieCuts, SheetWhiz, XLKeys, Spex. See the options menu . Practice your top five on a real model: paste values (Alt, E, S, V), insert/delete rows (Ctrl+Shift+= / -), borders (Alt, H, B), freeze panes (Alt, W, F, F, Pro), trace precedents (Ctrl+Shift+[).
+  - Week 1: auditing and modeling Get a precedent tracer. Sheets has none built in. How to trace precedents . Agree on a color convention with your team (blue inputs, black formulas, green cross-tab links). For goal seek, use Google's Marketplace add-on or an extension. SheetSpeed Pro adds Alt, A, W, G.
+- **blog/faq/index.html**
+  - "text": "Yes. SheetSpeed (Store title: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides) provides Excel-shaped keyboard commands for insert/delete, borders, merge, filters, alignment, decimals, zoom, and visible-formula precedent tracing on Google Sheets, plus Slides order/align/group routes. The free Store package is Core. Pro tools are free during early access; prices ($7.99/mo, $69
+  - "name": "What is the difference between SheetSpeed Core and Pro?",
+  - "text": "Core: native menu commands plus visible-formula precedent tools, no Google API OAuth, free on the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as
+  - "description": "SheetSpeed FAQ: install, Excel shortcuts on Google Sheets, SheetWhiz alternative, Macabacus vs Sheets, Chrome only, admin allowlist, Core vs Pro.",
+  - Yes. If you are switching from Excel to Google Sheets and need an add-in for Excel shortcuts, SheetSpeed (Store title: SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides) provides Excel-shaped keyboard commands (insert/delete, borders, merge, filters, alignment, decimals, zoom) plus visible-formula precedent tracing. The free Store package is Core. Pro tools are free during early access
+  - Core: native menu commands + visible-formula precedent tools, no Google API OAuth, free on the Chrome Web Store. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font
+- **blog/goal-seek-google-sheets/index.html**
+  - Option 2: Chrome extensions with Excel keys Several Excel-shortcut extensions add goal seek on Alt, A, W, G: SheetWhiz, XLKeys and ShortieCuts list goal seek on their sites. SheetSpeed Pro adds goal seek with a preview of the solved value before anything is written, plus one- and two-variable what-if tables on Alt, A, W, T. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lif
+- **blog/google-sheets-shortcuts-list/index.html**
+  - Excel habits Google Sheets doesn't support natively, and how to get them Two free layers fill most gaps. First, open Help → Keyboard shortcuts and turn on Enable compatible spreadsheet shortcuts ( step-by-step guide ). Then, for press-and-release Alt sequences and formula tracing, add a Chrome extension. Here is what SheetSpeed covers: Excel habit Closest native Google Sheets option With SheetSpee
+- **blog/how-to-enable-excel-shortcuts-in-google-sheets/index.html**
+  - Step 3: Add an extension for the Excel-only habits Chrome extensions run in your browser and change how the Sheets page responds to keys. All of these are Chrome Web Store extensions, not Google Workspace add-ons, so they work only in Chrome-based browsers on desktop. Option Free tier Paid Stand-out Source SheetSpeed Core: Alt E S V/F/T paste special, Alt H B borders, Alt H A alignment, Alt H O au
+  - How to choose in 30 seconds You only miss insert/delete rows and a few Ctrl shortcuts: Google's setting may be enough. You want Alt E S V, Alt H B borders and trace precedents without paying: SheetSpeed Core. You want the widest Alt-sequence coverage with an overlay, plus Docs: ShortieCuts. You need a full paid finance toolkit today (dependents, goal seek, cycles): SheetWhiz or XLKeys. SheetSpeed 
+  - The Excel shortcuts switchers miss most, and how to get each one Excel habit Native Google Sheets With SheetSpeed Core (free) Paste values (Alt E S V) Ctrl+Shift+V Alt , E , S , V Paste formulas / formats (Alt E S F / T) Edit → Paste special menu Alt E S F / Alt E S T Bottom / all borders (Alt H B O / A) Toolbar, or held Alt with compatible shortcuts Alt H B O / Alt H B A Autofit column (Alt H O I
+- **blog/sheetspeed-vs-shortiecuts/index.html**
+  - "text": "SheetSpeed Core is free on the Chrome Web Store; Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. ShortieCuts is free for the first 14 days and then costs $7.99/month or $69.99/year (per its site, Oct 2026)."
+  - Side by side SheetSpeed ShortieCuts Excel Alt sequences Core Alt paths (paste special, borders); goal seek and what-if in Pro; freeze panes in Pro; see the shortcut list 233 Excel Alt sequences listed, with an on-screen Key Tips overlay Google Slides / Docs PowerPoint-style Slides shortcuts 148 Slides + 149 Docs shortcuts Trace precedents / dependents Ctrl+Shift+[ / Ctrl+Shift+] (precedents free; 
+  - FAQ Is SheetSpeed free? SheetSpeed Core is free on the Chrome Web Store; Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. ShortieCuts is free for the first 14 days and then costs $7.99/month or $69.99/year (per its site, Oct 2026).
+- **blog/sheetspeed-vs-spex/index.html**
+  - Side by side SheetSpeed Spex Approach Excel-style chords and Alt sequences routed to native Sheets actions, plus modeling tools On-screen KeyTips shown when you press Alt/Option; Excel paths and Sheets actions in one flow Trace precedents / dependents Yes Not provided (Spex says it does not analyze spreadsheets) Goal seek / what-if Yes (Pro) Not listed Quick Access pinning Command palette (Ctrl+Sh
+- **blog/sheetspeed-vs-xlkeys/index.html**
+  - Side by side SheetSpeed XLKeys Excel Alt sequences Core Alt paths; see shortcut list Alt+H, E, A, W chains; remappable Trace precedents / dependents Ctrl+Shift+[ (Core, free) / Ctrl+Shift+] (Pro) Ctrl+Shift+[ / ] (Pro) Auto-color Pro Yes, Ctrl+Shift+S (Pro) Goal seek / sensitivity tables Alt A W G / Alt A W T (Pro) Alt A W G / Alt A W T (Pro) Workbook audits No Cell capacity and performance audits
+- **blog/trace-precedents-google-sheets/index.html**
+  - Trace dependents The reverse question, "what uses this cell?", is harder: answering it means scanning the workbook. SheetSpeed Pro adds Ctrl+Shift+] as a bounded, cancelable scan that tells you if it stopped before covering everything. Other extensions, including SheetWhiz, XLKeys and ShortieCuts, also offer trace dependents in paid tiers.
+- **changelog.html**
+  - SheetSpeed is a Chrome extension that brings Excel-style keyboard shortcuts, free trace precedents (trace dependents and goal seek in Pro) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+- **features.html**
+  - Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters and clear all. Futu
+  - Trace dependents (Pro)
+  - Goal seek (Pro)
+  - What-if analysis (Pro)
+  - Format cycles (Pro)
+  - Number, percent, date, currency, and more — cycle custom formats on the selection. Same idea for font and fill colors.
+  - Auto-color (Pro)
+  - Export selection as image (Pro)
+  - Render the selected range to PNG for Slides or Docs. Clipboard write when the browser allows; manual copy/download otherwise.
+- **index.html**
+  - Ctrl Shift ] Trace dependents (Pro)
+  - Pro tools are free during early access, unlocking in v0.4.0, the next store update.
+  - {"id":"trace-dependents","label":"Real screen recording: SheetSpeed trace dependents in Google Sheets","cap":" Ctrl Shift ] Trace dependents (Pro) "},
+  - {"id":"font-color-cycle","label":"Real screen recording: SheetSpeed font color cycle in Google Sheets","cap":" Ctrl Shift F Font color cycle (Pro) "},
+  - {"id":"number-format-cycle","label":"Real screen recording: SheetSpeed number format cycle in Google Sheets","cap":" Ctrl Shift 1 Number format cycle (Pro) "},
+  - Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters and clear all. Futu
+  - Chrome extension; Core free; Pro free during early access (unlocks in v0.4.0, the next store update)
+- **llms.txt**
+  - SheetSpeed also brings Excel-style keyboard shortcuts, formula tracing (trace precedents free; trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image and font/fill color cycles in Pro) to Google Sheets — plus PowerPoint-shaped shortcuts for Google Slides.
+  - - Pricing: Core is free forever. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro unlocks free in v0.4.0, the next store update. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters and clea
+  - - Trace precedents Ctrl+Shift+[ (Core) · Trace dependents Ctrl+Shift+] (Pro)
+  - - Borders Alt H B · Filter Ctrl+Shift+L (free) · Freeze panes Alt W F F (Pro)
+  - - Number cycles Ctrl+Shift+1–5 (Pro) · Font/fill color cycles Ctrl+Shift+F / K (Pro)
+  - - Goal seek Alt A W G · What-if table Alt A W T (Pro)
+  - - Trace dependents (Pro): scan for cells that reference the selection.
+  - - Goal seek and what-if scenario tables (Pro)
+  - - Number cycles (Pro); auto-color hardcodes / cross-tab links (Pro).
+  - - Export selection as image (PNG) for Slides or Docs (Pro).
+- **support/index.html**
+  - Pro tools ask me to connect Google. Pro tools read and write the open spreadsheet through Google's API, so Google shows its own consent screen first. You can disconnect in SheetSpeed's Settings or at myaccount.google.com/permissions .
+  - Pricing. Pro is free during early access. See pricing for what happens when billing opens.
+
+### c1d3221: Site: leftover Pro/early-access/Core-vs-Pro claims removed; shortcut list rebuilt from live Core registry (pre-state de6f46a)
+- **assets/demos/README.txt**
+  - On the home page: trace-dependents, paste-values-palette, font-color-cycle.
+  - Also available: number-format-cycle, paste-exact, static-image-to-slides (static image, not live/refreshable), slides-align-top.
+- **blog/best-excel-shortcut-add-ons-google-sheets/index.html**
+  - How to choose Only need common Ctrl shortcuts, or can't install extensions: turn on Google's compatible spreadsheet shortcuts first. How to enable it . Financial modeling on a budget (tracing, goal seek, what-if): SheetSpeed (tracing is free) or SheetWhiz Pro. The most-installed option: SheetWhiz. Widest Alt-key coverage with an on-screen overlay, plus Docs: ShortieCuts. Visual KeyTips in Sheets o
+- **blog/compare-excel-shortcuts/index.html**
+  - Free Core (no Google API OAuth) vs Pro split
+- **blog/excel-shortcuts-google-sheets/index.html**
+  - Defaults from the published command registry. On Mac, treat Ctrl as Control (not Command) unless noted; Alt is Option. Bindings are customizable in Settings. Core runs without Google API OAuth; commands marked Pro need a Pro plan; see Pricing.
+- **blog/excel-shortcuts-list/index.html**
+  - "description": "Full list of the Excel-style keyboard shortcuts SheetSpeed adds to Google Sheets: Alt sequences, paste special, trace precedents, goal seek and more.",
+  - "name": "Trace dependents: Ctrl+Shift+]"
+  - "name": "Number / currency / date / percent format cycles: Ctrl+Shift+1 / 2 / 3 / 4 / 5"
+  - "name": "Font color cycle: Ctrl+Shift+F"
+  - "name": "Fill color cycle: Ctrl+Shift+K"
+  - "name": "Export selection as image: Ctrl+Shift+C"
+  - "name": "Goal seek: Alt, A, W, G"
+  - "name": "What-if data table: Alt, A, W, T"
+  - "description": "Full list of the Excel-style keyboard shortcuts SheetSpeed adds to Google Sheets: Alt sequences, paste special, trace precedents, goal seek and more.",
+- **blog/excel-shortcuts-sheetspeed-chrome-extension.md**
+  - - A clear free Core (no Google API OAuth) vs Pro split
+- **blog/excel-shortcuts-sheetspeed-chrome-extension/index.html**
+  - Clear free Core (no Google API OAuth) vs Pro split
+- **blog/faq/index.html**
+  - Core vs Pro?
+- **blog/goal-seek-google-sheets/index.html**
+  - Option 2: Chrome extensions with Excel keys Several Excel-shortcut extensions add goal seek on Alt, A, W, G: SheetWhiz, XLKeys and ShortieCuts list goal seek on their sites.
+- **blog/how-to-enable-excel-shortcuts-in-google-sheets/index.html**
+  - The short answer Turn on Google's built-in setting (free, 30 seconds): Help → Keyboard shortcuts → Enable compatible spreadsheet shortcuts . Add one Chrome extension for what that setting can't do: press-and-release Alt sequences (Alt, E, S, V), trace precedents, goal seek. Use both together. The rest of this guide shows exactly what each layer covers, where it falls short, and how to choose an ex
+  - How to choose in 30 seconds You only miss insert/delete rows and a few Ctrl shortcuts: Google's setting may be enough. You want Alt E S V, Alt H B borders and trace precedents without paying: SheetSpeed Core. You want the widest Alt-sequence coverage with an overlay, plus Docs: ShortieCuts. You need a full paid finance toolkit today (dependents, goal seek, cycles): SheetWhiz or XLKeys. SheetSpeed 
+- **blog/index.html**
+  - Blog Guides, comparisons and shortcut references for Excel users moving to Google Sheets. How to Enable Excel Shortcuts in Google Sheets (2026) The built-in compatible-shortcuts setting step by step, its limits on Windows and Mac, and every extension option with prices. Google Sheets Shortcuts List (2026): Windows, Mac and Excel Equivalents Every built-in Google Sheets shortcut by task, with the M
+- **blog/sheetwhiz-alternative/index.html**
+  - Clear free Core (no Google API OAuth) vs Pro split
+  - You prefer Core without Google API OAuth, with a clear Pro upgrade path
+  - Format cycles: Ctrl+Shift+1/2/3/4/5 number/currency/date/% family (Pro / Full build, not in free Core)
+- **js/site.js**
+  - title: "Trace dependents",
+- **llms.txt**
+  - SheetWhiz is a well-known Chrome extension for Excel-like shortcuts in Google Sheets. SheetSpeed is an independently authored alternative focused on keyboard-first modeling, visible-formula precedent tracing, and a clear Core (Store / no Google API OAuth) vs Pro split. SheetSpeed does not claim feature-for-feature parity with SheetWhiz; compare current Store listings and the SheetSpeed features pa
+
+## Also on 0.4.0 live day
+- Add Docs support, Alt key tips overlay (F10), "500+ commands, 140+ Docs shortcuts" to the site and changelog.
+- Home demo loop: trace-dependents, font-color-cycle, number-format-cycle clips exist in /assets/demos/ (removed from the loop in 596c1dd).
+- js/site.js: a 'Trace dependents' scene was removed from the unused trace-stage animation in c1d3221.
+- Biz MNGR restores pricing/terms/refund/privacy from ea-restore.
