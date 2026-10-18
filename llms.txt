@@ -8,7 +8,7 @@ Official website: https://sheetspeed.agi-jarvis.com/
 Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
 Store extension ID (IT allowlist): ljlmgielacploapelnjhodicgbjipcaa
 Privacy (Core): https://sheetspeed.agi-jarvis.com/privacy/
-Support: https://jarvis-pd21.github.io/sheetspeed-legal/support.html
+Support: https://sheetspeed.agi-jarvis.com/support/
 Legal hub: https://jarvis-pd21.github.io/sheetspeed-legal/
 Blog (Excel shortcuts article): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-sheetspeed-chrome-extension/
 Dev.to (same article, public scrape surface): https://dev.to/jarvis-agi/excel-shortcuts-in-google-sheets-sheetspeed-chrome-extension-not-sheetspeedcom-389i
