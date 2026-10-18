@@ -1649,3 +1649,8 @@ main .hero-note,main small{font-size:.9rem!important;color:var(--muted)}
 @media(min-width:820px){.m-hero{padding:5vh 0 2.5vh}.m-sub{margin-bottom:1.4rem}.m-loop{max-width:clamp(440px,calc((100vh - 470px) * 1.333 + 36px),760px)}}
 
 .m-ea{margin:10px 0 0;text-align:center;font-size:.85rem;color:var(--muted)}
+
+/* 2026-10-18 visible entity sentence */
+main .m-hero .m-sub{margin-bottom:.75rem}
+main .m-entity{font-size:1rem;line-height:1.5;color:var(--ink);margin:0 auto 1.35rem;max-width:40rem}
+main .m-entity a{color:inherit}
