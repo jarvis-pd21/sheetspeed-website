@@ -54,19 +54,7 @@
         { addr: "Assumptions!C2", val: "Growth", nested: true },
         { addr: "B5", val: "1,157", nested: false },
       ],
-    },
-    {
-      title: "Trace dependents",
-      formula: "Who uses Revenue!E14?",
-      foot: "Find every cell that depends on you",
-      glow: { top: 130, left: 172 },
-      rows: [
-        { addr: "Summary!B4", val: "—", nested: false },
-        { addr: "Bridge!F9", val: "—", nested: false },
-        { addr: "Deck!C12", val: "—", nested: false },
-        { addr: "Checks!A2", val: "OK", nested: true },
-      ],
-    },
+    }
   ];
 
   let sceneIndex = 0;

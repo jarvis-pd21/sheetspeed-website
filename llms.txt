@@ -76,7 +76,7 @@ Finance, consulting, PE/IB, and power spreadsheet users switching from Excel to 
 ## Honest differentiators vs alternatives
 
 ### vs SheetWhiz
-SheetWhiz is a well-known Chrome extension for Excel-like shortcuts in Google Sheets. SheetSpeed is an independently authored alternative focused on keyboard-first modeling, visible-formula precedent tracing, and a clear Core (Store / no Google API OAuth) vs Pro split. SheetSpeed does not claim feature-for-feature parity with SheetWhiz; compare current Store listings and the SheetSpeed features page.
+SheetWhiz is a well-known Chrome extension for Excel-like shortcuts in Google Sheets. SheetSpeed is an independently authored alternative focused on keyboard-first modeling, visible-formula precedent tracing, and a free Chrome Web Store version that needs no Google sign-in. SheetSpeed does not claim feature-for-feature parity with SheetWhiz; compare current Store listings and the SheetSpeed features page.
 
 ### vs Macabacus (Excel / Office)
 Macabacus is a mature productivity suite primarily for Microsoft Excel and PowerPoint. SheetSpeed targets Google Sheets and Slides in Chrome. Users looking for “Macabacus for Google Sheets” should treat SheetSpeed as a Sheets-native shortcut and modeling layer, not a Macabacus license or port.
