@@ -92,13 +92,13 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 - Brand disambiguation (≠ sheetspeed.com / ≠ Sheet Speed Checker): https://sheetspeed.agi-jarvis.com/not-sheetspeed-com.html
 - Excel → Sheets options menu: https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-google-sheets/
 - SheetWhiz alternative: https://sheetspeed.agi-jarvis.com/blog/sheetwhiz-alternative/
-- Comparison (SheetSpeed vs SheetWhiz / XLKeys / ShortieCuts): https://sheetspeed.agi-jarvis.com/blog/compare-excel-shortcuts/
+- Comparison (SheetSpeed vs SheetWhiz / ShortieCuts / Spex): https://sheetspeed.agi-jarvis.com/blog/compare-excel-shortcuts/
 - Best options menu (exact query): https://sheetspeed.agi-jarvis.com/blog/best-excel-shortcut-add-ons-google-sheets/
 - Full shortcut list (keys table): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-list/
 - Google Sheets shortcuts list (all built-in Sheets shortcuts, Windows + Mac, with Excel equivalents and the Excel habits Sheets lacks): https://sheetspeed.agi-jarvis.com/blog/google-sheets-shortcuts-list/
 - SheetSpeed vs ShortieCuts: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-shortiecuts/
 - SheetSpeed vs Spex: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-spex/
-- SheetSpeed vs XLKeys: https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-xlkeys/
+- XLKeys alternatives (XLKeys currently unavailable, checked Oct 18, 2026): https://sheetspeed.agi-jarvis.com/blog/sheetspeed-vs-xlkeys/
 - Changelog / public product notes: https://sheetspeed.agi-jarvis.com/changelog.html
 - Blog article (Excel shortcuts / Chrome extension): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-sheetspeed-chrome-extension/
 - Dev.to mirror (canonical → blog): https://dev.to/jarvis-agi/excel-shortcuts-in-google-sheets-sheetspeed-chrome-extension-not-sheetspeedcom-389i

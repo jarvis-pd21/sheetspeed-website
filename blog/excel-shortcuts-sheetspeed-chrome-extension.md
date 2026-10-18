@@ -34,7 +34,7 @@ It does **not** claim feature-for-feature parity with every competitor. Compare 
 People evaluating Excel-shortcut extensions for Google Sheets commonly also look at:
 
 - **SheetWhiz** — a well-known Chrome extension for Excel-like shortcuts in Sheets. Independent product; SheetSpeed is not affiliated. Side-by-side notes: https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html
-- **XLKeys** — another Store option some teams try for Excel-style chords; verify the current listing and coverage.
+- **XLKeys** — currently unavailable (checked Oct 18, 2026): xlkeyz.com returned a 503 "deployment paused" page and its Chrome Web Store listing said it is not available.
 - Other tools that appear in the Store over time (e.g. ShortieCuts, Spex) — availability changes; always check the live listing.
 
 Comparison table: https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html
