@@ -10,7 +10,10 @@ Public marketing site for **SheetSpeed** — Excel-style shortcuts and formula t
 - Comparison: https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html
 - Changelog: https://sheetspeed.agi-jarvis.com/changelog.html
 - Excel → Sheets options: https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html
-- Privacy / support: https://jarvis-pd21.github.io/sheetspeed-legal/
+- Privacy: https://sheetspeed.agi-jarvis.com/privacy/
+- Enterprise review: https://sheetspeed.agi-jarvis.com/enterprise/
+- Security and private reporting: https://sheetspeed.agi-jarvis.com/security/
+- Support: https://sheetspeed.agi-jarvis.com/support/
 
 Entity name for citations: **SheetSpeed**. Chrome Web Store listing title: **SheetSpeed – Shortcuts & New Capabilities for Sheets + Slides**. Official URLs above — not unrelated sheetspeed.com properties.
 
