@@ -1,0 +1,5 @@
+Contact: mailto:jarvis@agi-jarvis.com
+Expires: 2027-04-19T00:00:00Z
+Preferred-Languages: en
+Canonical: https://sheetspeed.agi-jarvis.com/.well-known/security.txt
+Policy: https://sheetspeed.agi-jarvis.com/security/

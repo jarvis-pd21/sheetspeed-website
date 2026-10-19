@@ -2,8 +2,9 @@
  * Cloudflare Worker: sheetspeed-sitemap (classic service-worker format)
  *
  * Serves /sitemap.xml and /robots.txt at the Cloudflare edge with correct
- * Content-Type, but ALWAYS fetches the live body from GitHub so lastmod /
- * Allow lines cannot go stale when website/ is redeployed.
+ * Content-Type, reading the published GitHub origin (120-second edge cache).
+ * An unavailable sitemap origin returns
+ * a retryable 503 instead of a successful response containing obsolete URLs.
  *
  * Routes (zone agi-jarvis.com):
  *   sheetspeed.agi-jarvis.com/sitemap.xml
@@ -15,21 +16,6 @@ const ORIGIN_SITEMAP =
   "https://raw.githubusercontent.com/jarvis-pd21/sheetspeed-website/main/sitemap.xml";
 const ORIGIN_ROBOTS =
   "https://raw.githubusercontent.com/jarvis-pd21/sheetspeed-website/main/robots.txt";
-
-const FALLBACK_SITEMAP = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sheetspeed.agi-jarvis.com/</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/features.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/install.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/pricing.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/faq.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/about.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/excel-shortcuts-google-sheets.html</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/sheetwhiz-alternative.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/compare-excel-shortcuts.html</loc><lastmod>2026-10-15</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>
-  <url><loc>https://sheetspeed.agi-jarvis.com/changelog.html</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
-</urlset>
-`;
 
 const FALLBACK_ROBOTS = `# SheetSpeed — https://sheetspeed.agi-jarvis.com/
 User-agent: *
@@ -60,7 +46,13 @@ addEventListener("fetch", (event) => {
 async function handle(request) {
   const { pathname } = new URL(request.url);
   if (pathname === "/sitemap.xml") {
-    const body = await fetchText(ORIGIN_SITEMAP, FALLBACK_SITEMAP);
+    const body = await fetchText(ORIGIN_SITEMAP, null);
+    if (!body || !/<urlset\b[^>]*xmlns=["\']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["\']/.test(body) || !body.includes("</urlset>")) {
+      return new Response("Sitemap temporarily unavailable. Please retry.", {
+        status: 503,
+        headers: { "content-type": "text/plain; charset=UTF-8", "cache-control": "no-store", "retry-after": "60" },
+      });
+    }
     return new Response(body, {
       status: 200,
       headers: {

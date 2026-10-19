@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SheetSpeed Security — Design & Vulnerability Reporting</title>
+  <meta name="description" content="SheetSpeed security design, Chrome permissions, local data protection, Google access, limitations and the contact for private vulnerability reports." />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/security/" />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SheetSpeed" />
+  <meta property="og:title" content="SheetSpeed Security — Design & Vulnerability Reporting" />
+  <meta property="og:description" content="SheetSpeed security design, Chrome permissions, local data protection, Google access, limitations and the contact for private vulnerability reports." />
+  <meta property="og:url" content="https://sheetspeed.agi-jarvis.com/security/" />
+  <link rel="icon" href="/assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/site.css?v=20261015inter3" />
+  <style>.legal-doc{max-width:860px;margin:0 auto;padding:32px 20px 64px;line-height:1.65}.legal-doc h1{margin:0 0 8px}.legal-doc h2{margin:2rem 0 .6rem;font-size:1.25rem}.legal-doc ul,.legal-doc ol{padding-left:1.3rem}.legal-doc li{margin:.4rem 0}.legal-doc .meta{color:var(--muted);font-size:.92rem}.legal-doc .banner{border:1px solid #bad6cd;background:#f0f8f4;padding:16px;border-radius:10px}.legal-doc code{font-size:.9em;overflow-wrap:anywhere}.legal-doc table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}.legal-doc th,.legal-doc td{text-align:left;vertical-align:top;border-bottom:1px solid #ddd;padding:.7rem}.legal-doc .table-wrap{overflow-x:auto}.legal-doc .review-nav{display:flex;flex-wrap:wrap;gap:1rem;margin:1.3rem 0}@media(max-width:600px){.legal-doc th,.legal-doc td{padding:.45rem}.legal-doc{padding:25px 16px 45px}}</style>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "SheetSpeed Security — Design & Vulnerability Reporting", "description": "SheetSpeed security design, Chrome permissions, local data protection, Google access, limitations and the contact for private vulnerability reports.", "url": "https://sheetspeed.agi-jarvis.com/security/", "dateModified": "2026-10-19", "isPartOf": {"@id": "https://sheetspeed.agi-jarvis.com/#website"}, "publisher": {"@type": "Organization", "name": "SheetSpeed", "email": "jarvis@agi-jarvis.com"}}</script>
+</head>
+<body>
+  <header class="x-head"><div class="x-head-in"><a class="x-brand" href="/"><img src="/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="/blog/">Blog</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+
+  <main>
+    <article class="legal-doc">
+<h1>SheetSpeed security</h1>
+<p class="meta">Reviewed October 19, 2026 · Applies to published Core and the submitted 0.4 Store package, as distinguished below.</p>
+<p>SheetSpeed runs in Chrome. Native shortcuts act through Google's document controls. Connected tools in the 0.4 update call Google APIs directly. Workbook contents are not routed through a SheetSpeed-operated server or an AI provider in the inspected Store packages.</p>
+<h2>Implemented controls</h2>
+<ul><li><strong>Document-page scope:</strong> content scripts match Google document URLs rather than all websites. Published Core has no Google API authorization; 0.4 adds explicitly declared Google API hosts and account access.</li><li><strong>Request checks:</strong> connected commands validate the extension sender and originating document before targeting a workbook or presentation. These are application checks, not a file-level restriction in Google's account-wide Sheets or Slides scopes.</li><li><strong>Packaged code:</strong> Manifest V3 uses a content security policy of <code>script-src 'self'; object-src 'none'</code> for extension pages. The Store packaging removes the native-messaging permission used by the separate development AI helper.</li><li><strong>Recovery:</strong> connected mutations can keep local undo records and modeling recovery journals. Concurrent edits or an interrupted operation can require reconciliation; those records are not equivalent to a full workbook backup.</li><li><strong>Transport:</strong> connected Google requests use HTTPS. There is no additional SheetSpeed encryption layer over Chrome local storage.</li></ul>
+<h2>Review these boundaries</h2>
+<p>Core's lack of a Google API token does not mean it lacks document access: its content scripts can read page context and operate document controls. Connected Google permissions are broader than the file selected for a command. Chrome API host permissions are host-level permissions even when endpoint paths are listed in implementation documentation.</p>
+<p>Slides refresh in 0.4 temporarily link-shares a PNG in Google Drive and attempts to remove it afterwards. Browser termination or denied cleanup can leave it behind. Organizations that prohibit that sharing should leave the feature unused or block its authorization. See the <a href="/privacy/">privacy policy</a> and <a href="/enterprise/">deployment review</a>.</p>
+<h2>Report a vulnerability privately</h2>
+<p>Email <a href="mailto:jarvis@agi-jarvis.com?subject=SheetSpeed%20security%20report">jarvis@agi-jarvis.com</a> with “SheetSpeed security report” in the subject. Include the extension version, affected feature, reproduction steps and expected versus observed behavior using a synthetic document. Do not send live access tokens, passwords or confidential document contents.</p>
+<p>Security reports go to the product operator. There is no published bug bounty, guaranteed response time or contractual incident-notification deadline. Any organization-specific requirements must be agreed separately. Do not test against other users' data or systems without their authorization.</p>
+<h2>Stop access and remove local data</h2>
+<ol><li>Disable SheetSpeed in Chrome, then reload or close its open Google document tabs to remove already-injected page scripts.</li><li>For a connected build, revoke SheetSpeed at <a href="https://myaccount.google.com/permissions">Google account permissions</a>. Settings → Disconnect can clear cached tokens before you disable the extension.</li><li>For routine removal, resolve pending recovery and clear undo history before disabling. If you disabled first to stop access immediately, do not re-enable it just to clear history. Uninstalling removes local extension storage, including recovery records, but cannot undo document edits or erase exported images.</li><li>Inspect Drive for any interrupted temporary image, and clear separately copied files and clipboard contents according to your organization's policy.</li></ol>
+<h2>Assurance status</h2>
+<p>No SOC 2 report, ISO 27001 certificate or independent penetration-test report is represented as available. This page describes implementation controls; it is not a certification, compliance guarantee, or statement that an employer has approved SheetSpeed.</p>
+<nav class="review-nav" aria-label="Enterprise review"><a href="/enterprise/">Enterprise review</a><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/support/">Support</a></nav>
+</article>
+  </main>
+  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+</body>
+</html>

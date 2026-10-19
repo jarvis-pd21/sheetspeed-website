@@ -27,6 +27,12 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Check static SEO and sitemap behavior
+        run: |
+          python3 scripts/check_seo.py
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s test -p 'test_*.py'
+          node --test test/sitemap-worker.test.mjs
+
       - name: Stage static site
         run: |
           mkdir -p _site
@@ -35,6 +41,8 @@ jobs:
             --exclude '.git/' \
             --exclude '.github/' \
             --exclude 'workers/' \
+            --exclude 'scripts/' \
+            --exclude 'test/' \
             --exclude '_site/' \
             ./ _site/
           test -f _site/not-sheetspeed-com.html
