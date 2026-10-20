@@ -28,7 +28,7 @@
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
- <link rel="stylesheet" href="/css/site.css?v=20261017entity" />
+ <link rel="stylesheet" href="/css/site.css?v=20261019demo" />
  <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -162,15 +162,21 @@
  <div class="m-wrap">
  <figure class="m-demo m-loop" data-demo-loop>
  <div class="m-stage">
- <video class="is-on" muted playsinline preload="auto" poster="/assets/demos/paste-values-palette.jpg" width="1280" height="960" aria-label="Real screen recording: paste values from the SheetSpeed command palette"><source src="/assets/demos/paste-values-palette.webm" type="video/webm"><source src="/assets/demos/paste-values-palette.mp4" type="video/mp4"></video>
+ <video class="is-on" muted playsinline preload="auto" poster="/assets/demos/keyboard-toolbar.jpg?v=20261019" width="1280" height="800" aria-label="Real screen recording: navigating the Google Sheets toolbar with the keyboard using SheetSpeed"><source src="/assets/demos/keyboard-toolbar.webm?v=20261019" type="video/webm"><source src="/assets/demos/keyboard-toolbar.mp4?v=20261019" type="video/mp4"></video>
  </div>
- <figcaption class="m-cap" aria-live="polite"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Paste values from the command palette <small>(free)</small></figcaption>
+ <figcaption class="m-cap" aria-live="polite">Navigate the toolbar with your keyboard: <kbd>←</kbd><kbd>→</kbd> then <kbd>Enter</kbd> <small>(free)</small></figcaption>
  <div class="m-dots" role="tablist" aria-label="Choose a demo" hidden></div>
  <button class="m-next" type="button" hidden>Next demo →</button>
  </figure>
- <script type="application/json" id="demo-clips">[
- {"id":"paste-values-palette","label":"Real screen recording: paste values from the SheetSpeed command palette","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Paste values from the command palette <small>(free)</small>"},
- {"id":"slides-align-top","label":"Real screen recording: align objects top in Google Slides with SheetSpeed","cap":"<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Align objects top in Slides <small>(free)</small>"}
+ <script type="application/json" id="demo-clips" data-v="20261019">[
+ {"id": "keyboard-toolbar", "label": "Real screen recording: navigating the Google Sheets toolbar with the keyboard using SheetSpeed", "cap": "Navigate the toolbar with your keyboard: <kbd>←</kbd><kbd>→</kbd> then <kbd>Enter</kbd> <small>(free)</small>"},
+ {"id": "paste-values", "label": "Real screen recording: paste values from the SheetSpeed command palette", "cap": "<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Paste values from the command palette <small>(free)</small>"},
+ {"id": "font-color-cycle", "label": "Real screen recording: cycling font colors in Google Sheets with SheetSpeed", "cap": "<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd> Cycle font colors <small>(Pro, free during early access)</small>"},
+ {"id": "number-format-cycle", "label": "Real screen recording: cycling number formats in Google Sheets with SheetSpeed", "cap": "<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>1</kbd> Cycle number formats <small>(Pro, free during early access)</small>"},
+ {"id": "paste-exact", "label": "Real screen recording: SheetSpeed Paste Exact copies formulas without shifting references", "cap": "<kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>Shift</kbd><kbd>C</kbd> then <kbd>V</kbd> Paste Exact: references don’t shift <small>(Pro, free during early access)</small>"},
+ {"id": "trace-precedents", "label": "Real screen recording: tracing a result back to its inputs with SheetSpeed trace precedents", "cap": "<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>[</kbd> Trace precedents across your model <small>(free)</small>"},
+ {"id": "sheets-to-slides-refresh", "label": "Real screen recording: export a Sheets table to Google Slides, restyle it in Sheets, then Refresh from Sheets updates the slide in place", "cap": "<kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>Shift</kbd><kbd>R</kbd> Refresh a Sheets table in Slides: same place, new look <small>(Pro, free during early access)</small>"},
+ {"id": "slides-align", "label": "Real screen recording: align objects top in Google Slides with SheetSpeed", "cap": "<kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd> Align objects top in Slides <small>(free)</small>"}
 ]</script>
  </div>
  <p class="m-more"><a href="/blog/how-to-enable-excel-shortcuts-in-google-sheets/">How to enable Excel shortcuts</a> · <a href="/blog/google-sheets-shortcuts-list/">Google Sheets shortcuts list</a> · <a href="/features.html">All shortcuts</a> · <a href="/blog/compare-excel-shortcuts/">Compare</a> · <a href="/pricing.html">Pricing</a></p>
@@ -300,6 +306,6 @@
 
  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
  <script src="/js/site.js?v=20261015whynot"></script>
- <script src="/js/demo-loop.js?v=20261017a" defer></script>
+ <script src="/js/demo-loop.js?v=20261019a" defer></script>
 </body>
 </html>
