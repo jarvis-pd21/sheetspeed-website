@@ -5,17 +5,17 @@
   var clips;try{clips=JSON.parse(data.textContent)}catch(e){return}
   var stage=fig.querySelector('.m-stage'),cap=fig.querySelector('.m-cap'),dots=fig.querySelector('.m-dots'),next=fig.querySelector('.m-next');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var base='/assets/demos/',vids=[],cur=0;
+  var base='/assets/demos/',ver=data.getAttribute('data-v'),q=ver?'?v='+ver:'',vids=[],cur=0;
   function make(i){
     var c=clips[i],v=document.createElement('video');
     v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');v.playsInline=true;
-    v.preload='none';v.poster=base+c.id+'.jpg';v.width=1280;v.height=960;v.setAttribute('aria-label',c.label);
+    v.preload='none';v.poster=base+c.id+'.jpg'+q;v.width=1280;v.height=800;v.setAttribute('aria-label',c.label);
     v.dataset.i=i;return v;
   }
   function load(v){
     if(v.dataset.loaded)return;v.dataset.loaded='1';
     var c=clips[+v.dataset.i];
-    [['webm','video/webm'],['mp4','video/mp4']].forEach(function(t){var s=document.createElement('source');s.src=base+c.id+'.'+t[0];s.type=t[1];v.appendChild(s)});
+    [['webm','video/webm'],['mp4','video/mp4']].forEach(function(t){var s=document.createElement('source');s.src=base+c.id+'.'+t[0]+q;s.type=t[1];v.appendChild(s)});
     v.preload='auto';v.load();
   }
   // reuse the server-rendered first video
