@@ -1654,3 +1654,17 @@ main .hero-note,main small{font-size:.9rem!important;color:var(--muted)}
 main .m-hero .m-sub{margin-bottom:.75rem}
 main .m-entity{font-size:1rem;line-height:1.5;color:var(--ink);margin:0 auto 1.35rem;max-width:40rem}
 main .m-entity a{color:inherit}
+
+/* 2026-10-19 About dropdown readability: the <details class="m-about"> body reuses legacy
+   components (.slim-inner, .home-substance, .home-fact-list, .home-cap-table) whose text
+   colors were written for the old dark homepage and render pale mint on the light theme.
+   Pin every text element inside the dropdown to the light theme; links keep the accent. */
+.m-about-body{color:var(--ink)}
+.m-about-body h2,.m-about-body h3,.m-about-body p,.m-about-body li,.m-about-body dt,.m-about-body dd,.m-about-body th,.m-about-body td,.m-about-body .slim-inner,.m-about-body .home-substance h2,.m-about-body .home-substance p,.m-about-body .home-substance li,.m-about-body .home-fact-list dt,.m-about-body .home-fact-list dd,.m-about-body .home-cap-table tbody th{color:var(--ink)!important}
+.m-about-body a,.m-about-body .slim-inner a,.m-about-body .home-substance a{color:var(--accent)!important}
+.m-about-body .home-cap-table thead th{background:#e9efec!important;color:var(--ink)!important}
+
+/* 2026-10-19 Mac app section (between demos and About). */
+.m-mac{text-align:center;padding:6vh 0 7vh;border-top:1px solid #e3e8e5}
+.m-mac h2{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:700;letter-spacing:-0.02em;margin:0 0 .6rem}
+.m-mac-steps{color:var(--muted);font-size:.95rem;margin:1.1rem auto 0;max-width:52ch}
