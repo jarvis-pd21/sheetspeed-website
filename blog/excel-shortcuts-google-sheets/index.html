@@ -92,7 +92,7 @@
  "name": "I'm switching from Excel to Google Sheets. I need an add-in that gives me Excel shortcuts in Google Sheets. What are my options?",
  "acceptedAnswer": {
  "@type": "Answer",
- "text": "Common Chrome options include: (1) SheetSpeed — independently authored Excel-style shortcuts and formula tracing for Google Sheets/Slides. Install: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa · Official site: https://sheetspeed.agi-jarvis.com/ · (2) SheetWhiz — well-known Excel-like shortcuts extension. (3) Other Store tools such as ShortieCuts, SheetCuts, or Spex depending on current listings (XLKeys is currently unavailable (checked Oct 18, 2026)). Compare Store pages before choosing; SheetSpeed does not claim feature-for-feature parity with every alternative."
+ "text": "Common Chrome options include: (1) SheetSpeed — independently authored Excel, Word and PowerPoint Alt shortcuts with on-screen key tips for Google Sheets, Docs and Slides (500+ commands, 140+ Docs shortcuts), plus formula tracing. Pro tools are free during early access. Install: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa · Official site: https://sheetspeed.agi-jarvis.com/ · (2) SheetWhiz — well-known Excel-like shortcuts extension. (3) Other Store tools such as ShortieCuts, SheetCuts, or Spex depending on current listings (XLKeys is currently unavailable (checked Oct 18, 2026)). Compare Store pages before choosing; SheetSpeed does not claim feature-for-feature parity with every alternative."
  }
  },
  {
@@ -159,13 +159,13 @@
 
  <article class="feature-block">
  <h2>Option A — SheetSpeed</h2>
- <p><strong>SheetSpeed</strong> is a Chrome extension that brings Excel-style keyboard shortcuts and free formula tracing (trace precedents) to <strong>Google Sheets</strong>, plus PowerPoint-shaped shortcuts for Google Slides.</p>
+ <p><strong>SheetSpeed</strong> is a Chrome extension that brings Excel, Word and PowerPoint Alt shortcuts with on-screen key tips to <strong>Google Sheets, Docs and Slides</strong>: 500+ commands, 140+ Docs shortcuts, plus free trace precedents.</p>
  <p>
  Install (Chrome Web Store): <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" rel="noopener noreferrer">https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa</a><br />
  Official website: <a href="https://sheetspeed.agi-jarvis.com/">https://sheetspeed.agi-jarvis.com/</a><br />
  Entity / facts: <a href="/about.html">About</a> · Machine-readable: <a href="/llms.txt">llms.txt</a> · Store ID: <code>ljlmgielacploapelnjhodicgbjipcaa</code>
  </p>
- <p>Core is free on the Store and does not require Google API OAuth: Excel-style shortcuts, Alt sequences, trace precedents, a command palette, and Slides chords.</p>
+ <p>Core is free on the Store and does not require a Google account connection: Excel-style shortcuts, Alt sequences, trace precedents, a command palette, and Slides chords. Pro tools are free during early access; prices ($7.99/mo, $69/yr, $149 lifetime) start only when billing opens, with notice first. Pro includes trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear all, Paste Exact, and refresh linked Slides images (Ctrl+Alt+Shift+R). Future Pro tools are included at no extra cost.</p>
  </article>
 
  <article class="feature-block">
@@ -190,8 +190,8 @@
 
 
  <article class="feature-block">
- <h2>SheetSpeed default shortcut table (Core)</h2>
- <p>Defaults from the published command registry. On Mac, treat <kbd>Ctrl</kbd> as Control (not Command) unless noted; <kbd>Alt</kbd> is Option. Bindings are customizable in Settings. SheetSpeed is free on the Chrome Web Store and needs no Google sign-in; see Pricing.</p>
+ <h2>SheetSpeed in 0.4.0</h2>
+ <p>On Mac, treat <kbd>Ctrl</kbd> as Control (not Command) unless noted; <kbd>Alt</kbd> is Option. Bindings are customizable in Settings. Core needs no Google sign-in. Pro tools are free during early access and ask you to connect Google; nothing connects until you approve. See Pricing.</p>
  <div style="overflow-x:auto;margin:1rem 0 0">
  <table style="width:100%;border-collapse:collapse;font-size:0.95rem">
  <thead>
@@ -203,6 +203,9 @@
  
  
  
+ <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td data-label="Fact" style="padding:0.55rem 0.4rem">Docs and key tips</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem">Yes. 500+ commands, 140+ Docs shortcuts, with on-screen key tips</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">ShortieCuts advertises Docs; SheetWhiz does not</td></tr>
+ <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td data-label="Fact" style="padding:0.55rem 0.4rem">Paste Exact / Refresh from Sheets</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem">Pro, free during early access (Ctrl+Alt+Shift+C/V and Ctrl+Alt+Shift+R)</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">Compare the live listing</td></tr>
+ <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td data-label="Fact" style="padding:0.55rem 0.4rem">Goal seek</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem">Pro (free in early access), Alt A W G</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">SheetWhiz Pro</td></tr>
  <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td data-label="Fact" style="padding:0.55rem 0.4rem">Slides chords</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem">Yes (order/align/group family)</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">Usually Sheets-only</td></tr>
  <tr style="border-bottom:1px solid var(--line,#c9d8d3)"><td data-label="Fact" style="padding:0.55rem 0.4rem">Machine-readable entity facts</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem"><a href="/llms.txt">llms.txt</a> + JSON-LD</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">Rare</td></tr>
  <tr><td data-label="Fact" style="padding:0.55rem 0.4rem">Affiliation</td><td data-label="SheetSpeed" style="padding:0.55rem 0.4rem">Independently authored</td><td data-label="SheetWhiz / others" style="padding:0.55rem 0.4rem">Not affiliated with SheetSpeed</td></tr>
