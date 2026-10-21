@@ -1681,3 +1681,10 @@ main .m-entity a{color:inherit}
 /* 2026-10-21 minimalism: entity disambiguation text hidden from sighted users but
    kept in DOM for search engines and screen readers. */
 .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* 2026-10-21 bifurcating install button: one CTA splits into Sheets / Mac options. */
+.m-install{position:relative;display:inline-block}
+.m-install-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid #e6e6e3;border-radius:16px;box-shadow:0 16px 48px rgba(22,24,29,.16);padding:6px;min-width:230px;z-index:30;text-align:left}
+.m-install-menu a{display:block;padding:.7rem 1rem;border-radius:10px;color:var(--ink)!important;text-decoration:none;font-weight:600;font-size:.95rem}
+.m-install-menu a:hover{background:#f4f4f2}
+.m-install-menu a small{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:2px}

@@ -148,3 +148,29 @@
     }
   });
 })();
+
+// 2026-10-21 bifurcating install button: toggles the Sheets / Mac dropdown.
+(() => {
+  const btn = document.getElementById("installBtn");
+  const menu = document.getElementById("installMenu");
+  if (!btn || !menu) return;
+  const close = () => {
+    menu.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+    document.removeEventListener("click", onDoc);
+  };
+  const onDoc = (e) => {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) close();
+  };
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (menu.hidden) {
+      menu.hidden = false;
+      btn.setAttribute("aria-expanded", "true");
+      document.addEventListener("click", onDoc);
+    } else close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+})();
