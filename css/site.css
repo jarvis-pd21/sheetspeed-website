@@ -1668,3 +1668,12 @@ main .m-entity a{color:inherit}
 .m-mac{text-align:center;padding:6vh 0 7vh;border-top:1px solid #e3e8e5}
 .m-mac h2{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:700;letter-spacing:-0.02em;margin:0 0 .6rem}
 .m-mac-steps{color:var(--muted);font-size:.95rem;margin:1.1rem auto 0;max-width:52ch}
+
+/* 2026-10-21 iOS Safari header fix: brand + 2 links + CTA overflowed ~390px viewports
+   ("SheetSpeedCompare" collision, "Add to Chrome" cut off). Hide text links on phones;
+   they remain in the footer and the demos "more" row. */
+@media(max-width:600px){
+ .x-head-in{gap:12px;padding:10px 16px}
+ .x-head a.x-link{display:none}
+ .x-cta{padding:.5rem .9rem;font-size:.85rem}
+}
