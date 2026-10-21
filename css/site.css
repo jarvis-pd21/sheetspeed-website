@@ -1677,3 +1677,7 @@ main .m-entity a{color:inherit}
  .x-head a.x-link{display:none}
  .x-cta{padding:.5rem .9rem;font-size:.85rem}
 }
+
+/* 2026-10-21 minimalism: entity disambiguation text hidden from sighted users but
+   kept in DOM for search engines and screen readers. */
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
