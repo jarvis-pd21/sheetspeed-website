@@ -10,6 +10,7 @@
     var c=clips[i],v=document.createElement('video');
     v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');v.playsInline=true;
     v.preload='none';v.poster=base+c.id+'.jpg'+q;v.width=1280;v.height=800;v.setAttribute('aria-label',c.label);
+    v.playbackRate=1.5; // 2026-10-21: run demos through quicker
     v.dataset.i=i;return v;
   }
   function load(v){
@@ -20,6 +21,7 @@
   }
   // reuse the server-rendered first video
   var first=stage.querySelector('video');first.removeAttribute('loop');first.loop=false;first.dataset.i=0;first.dataset.loaded='1';
+  first.playbackRate=1.5; // 2026-10-21: run demos through quicker
   vids[0]=first;
   for(var i=1;i<clips.length;i++){vids[i]=make(i);stage.appendChild(vids[i])}
   clips.forEach(function(c,i){
@@ -33,6 +35,8 @@
     var old=vids[cur],v=vids[i];
     if(old!==v){old.pause();old.classList.remove('is-on')}
     cur=i;load(v);v.classList.add('is-on');
+    // 2026-10-21: per-clip zoom so the action fills the frame (toolbar clip stays 1x)
+    v.style.transform=clips[i].zoom?('scale('+clips[i].zoom+')'):'';
     cap.innerHTML=clips[i].cap;
     [].forEach.call(dots.children,function(d,k){d.setAttribute('aria-selected',k===i?'true':'false')});
     if(!reduce){try{v.currentTime=0}catch(e){}var p=v.play();if(p&&p.catch)p.catch(function(){})}
