@@ -4,6 +4,19 @@
   var selection = { row: 0, col: 0 };
   var selectionHandlers = [];
   var settings = {};
+  try {
+    settings = JSON.parse(sessionStorage.getItem("datasniper.harness.settings") || "{}") || {};
+  } catch (error) {
+    settings = {};
+  }
+
+  function rememberSettings() {
+    try {
+      sessionStorage.setItem("datasniper.harness.settings", JSON.stringify(settings));
+    } catch (error) {
+      /* The harness still keeps settings in memory for this page. */
+    }
+  }
   var top = window.parent === window;
 
   function key(row, col) {
@@ -236,8 +249,10 @@
           },
           set: function (name, value) {
             settings[name] = value;
+            rememberSettings();
           },
           saveAsync: function (callback) {
+            rememberSettings();
             if (callback) callback({ status: "succeeded" });
           },
         },

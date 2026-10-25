@@ -71,6 +71,13 @@ async function pageText(pdf, pageNumber) {
   return pages.get(pageNumber);
 }
 
+export async function pageGeometry(doc, pageNumber) {
+  if (!doc || doc.kind !== "pdf" || !doc.pdf) return null;
+  const page = pageNumber || 1;
+  if (page < 1 || page > doc.pageCount) return null;
+  return pageText(doc.pdf, page);
+}
+
 export async function renderPdfPage(pdf, pageNumber, canvas) {
   const page = await pdf.getPage(pageNumber);
   const base = page.getViewport({ scale: 1 });
