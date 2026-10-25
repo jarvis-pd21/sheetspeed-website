@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DataSniper for Excel — sideload</title>
+  <meta name="description" content="Sideload DataSniper, an Excel task pane that snips PDF regions into columns and exports one row per document." />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/" />
+  <link rel="icon" href="/datasniper/assets/icon-32.png" />
+  <link rel="stylesheet" href="/datasniper/css/install.css?v=1" />
+</head>
+<body>
+  <main>
+    <header class="top">
+      <img src="/datasniper/assets/icon-64.png" alt="" width="48" height="48" />
+      <div>
+        <h1>DataSniper for Excel</h1>
+        <p class="lede">Upload documents, snip fields on the first one, and export one row per file.</p>
+      </div>
+    </header>
+    <p><a href="/datasniper/manifest.xml" download="manifest.xml">Download manifest.xml</a> · <a href="/datasniper/taskpane.html?harness=1">Open the browser harness</a></p>
+    <p>DataSniper is a task pane add-in for Microsoft 365 Excel on Mac, Windows, and the web. It is not in AppSource and it is not deployed by an administrator from this page. You sideload the manifest yourself. The pages load from this site over HTTPS. The documents you upload stay in that Excel session’s browser storage on your machine.</p>
+
+    <h2 id="what-it-does">What it does</h2>
+    <ul>
+      <li>Upload many PDFs at once. PNG, JPEG, and WebP images can be uploaded and viewed too.</li>
+      <li>The files open inside the task pane. Drag a rectangle on document 1 and name it. That snip is a column.</li>
+      <li>Drag the snips in the list to set the column order.</li>
+      <li>Export writes an Excel table named <code>DataSniperExport</code> at cell A1 of the active sheet: a header row from the snip names, a Source document column, and one row per file.</li>
+      <li>The boxes are page-relative. The same rectangle is read on every file, using the PDF text layer inside the box. A narrow box clips text that extends past it.</li>
+      <li>Click an exported cell while the task pane is open. Excel opens a preview of that file with the snip highlighted. Drag or resize the box and the cell updates.</li>
+    </ul>
+
+    <h2 id="limits">Limits, stated plainly</h2>
+    <div class="note">
+      <ul>
+        <li>A snip is a rectangle on a page, not a detected label. Every file has to share the same layout. A capital call with the investor name in a different place will not line up.</li>
+        <li>Export replaces a previous <code>DataSniperExport</code> table and writes from A1. It will overwrite whatever is already in that range.</li>
+        <li>Click-to-preview runs only while the DataSniper task pane is open. Closing the pane removes the selection listener until you open it again.</li>
+        <li>Files are stored in IndexedDB for <code>sheetspeed.agi-jarvis.com</code> inside the Excel webview (desktop) or the browser (Excel on the web). Clearing site data removes the files. The cell text remains; the preview cannot reopen a deleted file.</li>
+        <li>Desktop Excel and Excel on the web do not share that storage. A file uploaded in one does not appear in the other.</li>
+        <li>Scanned pages and images have no text layer. DataSniper then runs <a href="https://github.com/naptha/tesseract.js">Tesseract.js</a> in the browser. The first OCR run downloads the library and English traineddata from a public CDN. The cropped image is processed locally and is not uploaded. If that download is blocked, the cell is left blank and the status line says why.</li>
+        <li>The add-in needs network access to this site and to <code>appsforoffice.microsoft.com</code> to load. That traffic is the add-in itself, not your documents.</li>
+        <li>The <a href="/datasniper/taskpane.html?harness=1">browser harness</a> is a fake workbook used for automated tests. It does not write an <code>.xlsx</code> file.</li>
+      </ul>
+    </div>
+
+    <h2 id="mac">Excel on Mac</h2>
+    <p>These steps match Microsoft’s sideload path for Microsoft 365 Excel on Mac: copy the manifest into the <code>wef</code> folder, then restart Excel. Quit Excel completely (Excel menu, Quit) before copying the file.</p>
+    <ol>
+      <li>Download <a href="/datasniper/manifest.xml" download="manifest.xml">manifest.xml</a>.</li>
+      <li>In Finder, choose Go &gt; Go to Folder and open <span class="path">~/Library/Containers/com.microsoft.Excel/Data/Documents/wef</span>.</li>
+      <li>If that folder does not exist, create it. The parent <span class="path">Documents</span> folder is there after Excel has been opened at least once.</li>
+      <li>Copy <code>manifest.xml</code> into <code>wef</code>. The file name can stay <code>manifest.xml</code>.</li>
+      <li>Open Excel. On the Home tab, use the DataSniper button. If the group is missing, look under Insert &gt; Add-ins &gt; My Add-ins.</li>
+    </ol>
+    <p>Recent Microsoft 365 builds of Excel on Mac also show Upload My Add-in under Insert &gt; Add-ins &gt; My Add-ins. If that command is present, you can select the manifest from there instead of using <code>wef</code>. If it is not present, use the folder above. Microsoft documents the folder method at <a href="https://learn.microsoft.com/en-us/office/dev/add-ins/testing/sideload-an-office-add-in-on-mac">Sideload an Office add-in on Mac</a>.</p>
+
+    <h2 id="windows">Excel on Windows</h2>
+    <p>Two sideload methods work. Use whichever your Excel shows.</p>
+    <div class="card">
+      <h3>Upload My Add-in</h3>
+      <ol>
+        <li>Download <a href="/datasniper/manifest.xml" download="manifest.xml">manifest.xml</a>.</li>
+        <li>In Excel, choose Insert &gt; Add-ins &gt; My Add-ins.</li>
+        <li>Choose Upload My Add-in and select the manifest.</li>
+      </ol>
+      <p>An organization can hide Upload My Add-in. If you do not see it, use a shared-folder catalog.</p>
+    </div>
+    <div class="card">
+      <h3>Shared-folder catalog</h3>
+      <ol>
+        <li>Create a folder, for example <span class="path">C:\DataSniper</span>, and put <code>manifest.xml</code> in it.</li>
+        <li>Share the folder with yourself. Excel wants a UNC path, not a drive letter. A share named DataSniper is typically <span class="path">\\localhost\DataSniper</span>.</li>
+        <li>In Excel, choose File &gt; Options &gt; Trust Center &gt; Trust Center Settings &gt; Trusted Add-in Catalogs.</li>
+        <li>Enter the UNC path as the catalog URL, check Show in Menu, and choose OK.</li>
+        <li>Restart Excel. Choose Insert &gt; My Add-ins &gt; Shared Folder, then DataSniper.</li>
+      </ol>
+      <p>Microsoft’s steps are at <a href="https://learn.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">Create a network shared folder catalog</a>.</p>
+    </div>
+
+    <h2 id="web">Excel on the web</h2>
+    <ol>
+      <li>Open a workbook at <a href="https://www.office.com/launch/excel">Excel on the web</a>.</li>
+      <li>Choose Insert &gt; Add-ins &gt; More Add-ins, then My Add-ins.</li>
+      <li>Choose Upload My Add-in and select <a href="/datasniper/manifest.xml">manifest.xml</a>.</li>
+      <li>The DataSniper task pane opens. The Home tab also has a DataSniper button.</li>
+    </ol>
+    <p>Upload My Add-in on the web is for your own account. It is not an organization-wide deployment. If the command is missing, an admin has turned sideloading off and this page cannot override that. The manifest’s pages must stay reachable at <code>https://sheetspeed.agi-jarvis.com/datasniper/</code>, which is where this file is hosted.</p>
+
+    <h2 id="samples">Sample capital call notices</h2>
+    <p>Five synthetic notices share one template. The investor on notice 04 is longer than the others, so a snip sized to the shorter names clips it. Widen that box in the preview and the cell updates. These are not real demands for payment.</p>
+    <table>
+      <thead>
+        <tr><th>File</th><th>Fund</th><th>Investor</th><th>Amount called</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="/datasniper/samples/capital-call-01.pdf">capital-call-01.pdf</a></td>
+          <td>Northwind Growth Fund III, L.P.</td>
+          <td>Harborview Pension Trust</td>
+          <td>$1,250,000.00</td>
+        </tr>
+        <tr>
+          <td><a href="/datasniper/samples/capital-call-02.pdf">capital-call-02.pdf</a></td>
+          <td>Northwind Growth Fund III, L.P.</td>
+          <td>Cedar &amp; Pine Family Office LLC</td>
+          <td>$875,400.50</td>
+        </tr>
+        <tr>
+          <td><a href="/datasniper/samples/capital-call-03.pdf">capital-call-03.pdf</a></td>
+          <td>Blackpine Opportunistic Credit Fund II</td>
+          <td>Meridian University Endowment</td>
+          <td>$2,100,000.00</td>
+        </tr>
+        <tr>
+          <td><a href="/datasniper/samples/capital-call-04.pdf">capital-call-04.pdf</a></td>
+          <td>Blackpine Opportunistic Credit Fund II</td>
+          <td>The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998</td>
+          <td>$640,250.75</td>
+        </tr>
+        <tr>
+          <td><a href="/datasniper/samples/capital-call-05.pdf">capital-call-05.pdf</a></td>
+          <td>Sable Ridge Venture Partners IV, L.P.</td>
+          <td>Oak Street Capital Advisors</td>
+          <td>$3,450,000.00</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>An image-only twin of the first notice is at <a href="/datasniper/samples/capital-call-image.png">capital-call-image.png</a>. Coordinates for the text-layer samples are in <a href="/datasniper/samples/layout.json">layout.json</a>.</p>
+
+    <h2 id="privacy">Privacy</h2>
+    <p>Uploaded documents are not sent to a DataSniper server. There is no account and no backend. PDF.js runs locally from files hosted with this add-in (Mozilla, Apache-2.0). Office.js is loaded from Microsoft when the page is opened inside Excel. OCR, only when a page has no text layer, loads Tesseract.js and English traineddata from jsDelivr. The page you are reading is hosted on the SheetSpeed site and is not linked from the SheetSpeed homepage.</p>
+  </main>
+</body>
+</html>

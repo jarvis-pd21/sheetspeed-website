@@ -1,0 +1,5 @@
+node_modules/
+test/datasniper/node_modules/
+test/datasniper/test-results/
+test/datasniper/playwright-report/
+test/datasniper/blob-report/

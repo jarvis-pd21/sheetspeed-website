@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DataSniper preview</title>
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/dialog.html" />
+  <link rel="icon" href="assets/icon-32.png" />
+  <link rel="stylesheet" href="css/app.css?v=1" />
+  <script src="js/boot.js?v=1"></script>
+</head>
+<body class="preview-dialog">
+  <div id="app">
+    <header>
+      <div class="brand">
+        <img src="assets/icon-32.png" alt="" width="28" height="28" />
+        <div>
+          <h1 id="doc-title">Document preview</h1>
+          <p id="snip-title">Snip</p>
+        </div>
+      </div>
+    </header>
+    <div class="dialog-readout">
+      <div>
+        <div class="hint">Extracted text</div>
+        <strong id="live-text">Reading…</strong>
+      </div>
+      <div class="hint" id="source-label"></div>
+    </div>
+    <p class="hint" style="padding: 6px 14px;">Drag the box or a handle. The Excel cell updates when the text changes.</p>
+    <div id="viewer-scroll">
+      <p id="empty-state" hidden>Opening the document…</p>
+      <div id="viewer" hidden>
+        <canvas id="page-canvas"></canvas>
+        <div id="overlay"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/dialog.js?v=1"></script>
+</body>
+</html>
