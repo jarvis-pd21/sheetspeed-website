@@ -977,6 +977,7 @@ async function clearAllDocuments(deleteTable) {
   pageTextGeometry = null;
   reattachQueue = [];
   showReattach();
+  await clearStoredFiles();
   await persist();
   await renderAll();
   if (deleteTable && meta) {
@@ -1160,6 +1161,12 @@ async function start() {
     }
   }
   await renderAll();
+  const starterLink = document.querySelector("#starter-link");
+  if (starterLink && location.hostname.endsWith("github.io")) {
+    starterLink.href = "DataSniper-Starter-alt.xlsx";
+    starterLink.setAttribute("download", "DataSniper-Starter-alt.xlsx");
+  }
+  document.documentElement.dataset.datasniperReady = "1";
 }
 
 if (document.documentElement.dataset.harness === "1" && window.__datasniper) {

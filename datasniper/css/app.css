@@ -105,6 +105,16 @@ header {
   border-bottom: 1px solid #f0d7c2;
 }
 
+.mac-tip {
+  margin: 0;
+  padding: 6px 16px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
 #reattach strong {
   font-weight: 650;
 }

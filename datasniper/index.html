@@ -231,7 +231,7 @@
     <section id="install">
       <h2>Add DataSniper to Excel</h2>
       <p>Sideload the manifest yourself. The task pane then loads from <code>https://sheetspeed.agi-jarvis.com/datasniper/</code>. Quit Excel completely before you copy a manifest into a folder. After it is installed, the Home tab shows a DataSniper button. If the group is missing, look under Insert, Add-ins, My Add-ins.</p>
-      <p>Network blocks sheetspeed.agi-jarvis.com? Use this <a href="/datasniper/manifest-alt.xml" download="manifest-alt.xml">alternate manifest</a>.</p>
+      <p>Network blocks sheetspeed.agi-jarvis.com? Use this <a href="/datasniper/manifest-alt.xml" download="manifest-alt.xml">alternate manifest</a> and <a href="/datasniper/DataSniper-Starter-alt.xlsx" download="DataSniper-Starter-alt.xlsx">its starter workbook</a>.</p>
 
       <h3 id="mac">Excel on Mac</h3>
       <p>These steps follow Microsoft’s sideload path for Microsoft 365 Excel on Mac. Quit Excel from the Excel menu before copying the file.</p>
@@ -241,6 +241,7 @@
         <li>If <code>wef</code> is missing, create it. The parent Documents folder is there after Excel has been opened at least once.</li>
         <li>Copy <code>manifest.xml</code> into <code>wef</code>. The file name can stay <code>manifest.xml</code>.</li>
         <li>Open Excel and use the DataSniper button on the Home tab.</li>
+        <li><a href="/datasniper/DataSniper-Starter.xlsx" download="DataSniper-Starter.xlsx">Download the starter workbook</a> and open it. The pane is saved visible in that file, and Excel for Mac keeps it visible on later saves.</li>
       </ol>
       <p>Recent Microsoft 365 builds also show Upload My Add-in under Insert, Add-ins, My Add-ins. When that command is present, select the manifest from there. When it is absent, use the <code>wef</code> folder. Microsoft’s folder method is documented in <a href="https://learn.microsoft.com/en-us/office/dev/add-ins/testing/sideload-an-office-add-in-on-mac">Sideload an Office add-in on Mac</a>.</p>
 

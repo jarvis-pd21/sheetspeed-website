@@ -22,6 +22,8 @@ async function draw(page, overlay, rect) {
 test("a 240px task pane keeps a compact list and snips in the large viewer", async ({ page }) => {
   await page.setViewportSize({ width: 240, height: 800 });
   await page.goto("/datasniper/taskpane.html?harness=1");
+  await expect(page.locator("#mac-tip")).toContainText("Excel for Mac");
+  await expect(page.locator("#starter-link")).toHaveAttribute("href", "DataSniper-Starter.xlsx");
   await expect(page.locator("#empty-state")).toContainText("in the order of the snip list");
   await expect(page.locator("#empty-state")).not.toContainText("at the right");
   await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples", layout.documents[0].file));
@@ -63,7 +65,9 @@ test("the public pages link DataSniper and the install note is one line", async 
   await expect(page.locator("section[aria-label='DataSniper for Excel']")).toContainText("DataSniper runs in Excel on Mac, Windows, and the web.");
   await page.goto("/datasniper/");
   await expect(page.locator("meta[name='robots']")).toHaveAttribute("content", /index/);
-  await expect(page.locator("#install")).toContainText("Network blocks sheetspeed.agi-jarvis.com? Use this alternate manifest.");
+  await expect(page.locator("#install")).toContainText("Network blocks sheetspeed.agi-jarvis.com? Use this alternate manifest and its starter workbook.");
   await expect(page.locator("#install a[href='/datasniper/manifest-alt.xml']")).toHaveText("alternate manifest");
+  await expect(page.locator("#install a[href='/datasniper/DataSniper-Starter.xlsx']")).toHaveText("Download the starter workbook");
+  await expect(page.locator("#install a[href='/datasniper/DataSniper-Starter-alt.xlsx']")).toHaveText("its starter workbook");
   await expect(page.locator("body")).toContainText("DataSniper runs in Excel on Mac, Windows, and the web. DataSnipper’s desktop add-in runs in Excel on Windows, and DataSnipper also offers a separate Excel Online add-in.");
 });
