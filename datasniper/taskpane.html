@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DataSniper</title>
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/taskpane.html" />
+  <link rel="icon" href="assets/icon-32.png" />
+  <link rel="stylesheet" href="css/app.css?v=1" />
+  <script src="js/boot.js?v=1"></script>
+</head>
+<body class="taskpane">
+  <div id="app">
+    <header>
+      <div class="brand">
+        <img src="assets/icon-32.png" alt="" width="28" height="28" />
+        <div>
+          <h1>DataSniper</h1>
+          <p>Snip a field once. The same box is read on every document.</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button id="upload-btn" type="button">Upload documents</button>
+        <button id="load-samples" class="secondary" type="button">Load sample notices</button>
+        <input id="file-input" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp" multiple />
+      </div>
+    </header>
+    <p id="host-banner" hidden>This page is not inside Excel. You can still snip documents and preview the table here. Export writes into a workbook only when the task pane is opened from Excel. Add <code>?harness=1</code> for the test workbook.</p>
+    <div class="workspace">
+      <section class="viewer-pane">
+        <div class="viewer-bar">
+          <label>Document
+            <select id="doc-select" aria-label="Document"></select>
+          </label>
+          <div class="pager">
+            <button id="prev-page" type="button">Previous</button>
+            <span id="page-label">No document</span>
+            <button id="next-page" type="button">Next</button>
+          </div>
+        </div>
+        <div id="viewer-scroll">
+          <p id="empty-state">Upload PDFs or images. Drag a rectangle on the first document. Each snip becomes a column, in the order shown at the right.</p>
+          <div id="viewer" hidden>
+            <canvas id="page-canvas"></canvas>
+            <div id="overlay"></div>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <h2>Documents</h2>
+        <ul id="doc-list"></ul>
+        <h2>Snips <span>Drag the handle to set column order.</span></h2>
+        <ul id="snip-list"></ul>
+        <button id="export-btn" type="button" disabled>Export to Excel</button>
+        <div id="preview-wrap" hidden>
+          <h2>Last export</h2>
+          <div id="preview"></div>
+        </div>
+      </aside>
+    </div>
+    <footer>
+      <p id="status" aria-live="polite"></p>
+    </footer>
+  </div>
+  <div id="mock-workbook" hidden>
+    <div class="mock-title">Excel workbook · harness</div>
+    <div id="mock-grid"></div>
+  </div>
+  <script type="module" src="js/taskpane.js?v=1"></script>
+</body>
+</html>

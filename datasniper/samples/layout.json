@@ -1,0 +1,71 @@
+{
+  "page": {
+    "width": 612,
+    "height": 792
+  },
+  "documents": [
+    {
+      "file": "capital-call-01.pdf",
+      "fund": "Northwind Growth Fund III, L.P.",
+      "investor": "Harborview Pension Trust",
+      "amount": "$1,250,000.00"
+    },
+    {
+      "file": "capital-call-02.pdf",
+      "fund": "Northwind Growth Fund III, L.P.",
+      "investor": "Cedar & Pine Family Office LLC",
+      "amount": "$875,400.50"
+    },
+    {
+      "file": "capital-call-03.pdf",
+      "fund": "Blackpine Opportunistic Credit Fund II",
+      "investor": "Meridian University Endowment",
+      "amount": "$2,100,000.00"
+    },
+    {
+      "file": "capital-call-04.pdf",
+      "fund": "Blackpine Opportunistic Credit Fund II",
+      "investor": "The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998",
+      "amount": "$640,250.75"
+    },
+    {
+      "file": "capital-call-05.pdf",
+      "fund": "Sable Ridge Venture Partners IV, L.P.",
+      "investor": "Oak Street Capital Advisors",
+      "amount": "$3,450,000.00"
+    }
+  ],
+  "snips": {
+    "fund": {
+      "page": 1,
+      "x": 0.25163398692810457,
+      "y": 0.21060606060606055,
+      "w": 0.3783290363562091,
+      "h": 0.025252525252525252
+    },
+    "investorNarrow": {
+      "page": 1,
+      "x": 0.25163398692810457,
+      "y": 0.2459595959595959,
+      "w": 0.29890434076797395,
+      "h": 0.025252525252525252
+    },
+    "investorFull": {
+      "page": 1,
+      "x": 0.25163398692810457,
+      "y": 0.2459595959595959,
+      "w": 0.6930861633169936,
+      "h": 0.025252525252525252
+    },
+    "amount": {
+      "page": 1,
+      "x": 0.25163398692810457,
+      "y": 0.38737373737373737,
+      "w": 0.13319108700980392,
+      "h": 0.025252525252525252
+    }
+  },
+  "longDocument": "capital-call-04.pdf",
+  "truncatedInvestor": "The Johnathan Q. Abernathy Rev",
+  "fullInvestor": "The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998"
+}
