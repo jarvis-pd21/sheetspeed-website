@@ -1,9 +1,10 @@
-import { clampRect } from "./extract.js";
+import { clampRect, normalizeDrag } from "./extract.js";
 import { extractFromDocument, loadDocument, renderImage, renderPdfPage } from "./pdf-engine.js";
 import { getDocument, loadSession } from "./store.js";
 
 const COLORS = ["#0f6e6b", "#b45309", "#9f1239", "#1d4ed8", "#6d28d9", "#3f6212"];
 const params = new URLSearchParams(window.location.search);
+const viewerMode = params.get("mode") === "viewer";
 
 const title = document.querySelector("#doc-title");
 const snipTitle = document.querySelector("#snip-title");
@@ -13,13 +14,23 @@ const canvas = document.querySelector("#page-canvas");
 const overlay = document.querySelector("#overlay");
 const viewer = document.querySelector("#viewer");
 const emptyState = document.querySelector("#empty-state");
+const viewerBar = document.querySelector("#viewer-bar");
+const viewerHint = document.querySelector("#viewer-hint");
+const previewHint = document.querySelector("#preview-hint");
+const readout = document.querySelector("#dialog-readout");
+const pageLabel = document.querySelector("#page-label");
+const prevPage = document.querySelector("#prev-page");
+const nextPage = document.querySelector("#next-page");
 
 let session = { snips: [], overrides: {} };
 let opened = null;
 let docId = params.get("doc");
 let snipId = params.get("snip");
+let viewerPage = Number(params.get("page")) || 1;
+if (!Number.isFinite(viewerPage) || viewerPage < 1) viewerPage = 1;
 let activeRect = null;
 let drag = null;
+let drawing = null;
 let extractTimer = 0;
 let revision = 0;
 
@@ -37,6 +48,11 @@ function currentSnip() {
   return session.snips.find((snip) => snip.id === snipId) || null;
 }
 
+function currentPage() {
+  if (viewerMode) return viewerPage;
+  return activeRect?.page || currentSnip()?.page || 1;
+}
+
 function rectFor(id) {
   const snip = session.snips.find((item) => item.id === id);
   if (!snip) return null;
@@ -47,21 +63,37 @@ function post(message) {
   Office.context.ui.messageParent(JSON.stringify(message));
 }
 
+function placeLabel(label, rect) {
+  const bounds = overlay.getBoundingClientRect();
+  const pixelHeight = bounds.height * (Number(rect?.h) || 0);
+  if (bounds.height > 0 && pixelHeight < 16) label.classList.add("below");
+}
+
 function visibleSnips() {
-  const page = activeRect?.page || currentSnip()?.page || 1;
-  if (snipId) {
+  const page = currentPage();
+  if (!viewerMode && snipId) {
     const snip = currentSnip();
     return snip ? [snip] : [];
   }
   return session.snips.filter((snip) => (snip.page || 1) === page);
 }
 
+function updatePager() {
+  if (!viewerMode) return;
+  const count = opened?.pageCount || 1;
+  if (viewerPage > count) viewerPage = count;
+  if (viewerPage < 1) viewerPage = 1;
+  pageLabel.textContent = opened ? `Page ${viewerPage} of ${count}` : "No document";
+  prevPage.disabled = !opened || viewerPage <= 1;
+  nextPage.disabled = !opened || viewerPage >= count;
+}
+
 function paint() {
   overlay.replaceChildren();
-  const page = activeRect?.page || 1;
+  const page = currentPage();
   visibleSnips().forEach((snip) => {
     const index = session.snips.findIndex((item) => item.id === snip.id);
-    const rect = snip.id === snipId && activeRect ? activeRect : rectFor(snip.id);
+    const rect = !viewerMode && snip.id === snipId && activeRect ? activeRect : rectFor(snip.id);
     if (!rect || (rect.page || 1) !== page) return;
     const color = colorFor(Math.max(0, index));
     const box = document.createElement("div");
@@ -75,9 +107,10 @@ function paint() {
     box.style.background = rgba(color, 0.2);
     const label = document.createElement("span");
     label.textContent = snip.name || "Snip";
-    label.style.background = color;
+    label.style.background = rgba(color, 0.55);
+    placeLabel(label, rect);
     box.append(label);
-    if (!snipId || snip.id === snipId) {
+    if (!viewerMode && (!snipId || snip.id === snipId)) {
       for (const handle of ["nw", "n", "ne", "e", "se", "s", "sw", "w"]) {
         const node = document.createElement("i");
         node.className = `handle handle-${handle}`;
@@ -87,11 +120,21 @@ function paint() {
     }
     overlay.append(box);
   });
+  if (drawing) {
+    const rect = normalizeDrag(drawing.start, drawing.current);
+    const box = document.createElement("div");
+    box.className = "draw-rect";
+    box.style.left = `${rect.x * 100}%`;
+    box.style.top = `${rect.y * 100}%`;
+    box.style.width = `${rect.w * 100}%`;
+    box.style.height = `${rect.h * 100}%`;
+    overlay.append(box);
+  }
 }
 
 async function render() {
   if (!opened) return;
-  const page = activeRect?.page || currentSnip()?.page || 1;
+  const page = currentPage();
   if (opened.kind === "pdf") {
     if (page <= opened.pageCount) await renderPdfPage(opened.pdf, page, canvas);
   } else {
@@ -99,6 +142,7 @@ async function render() {
   }
   viewer.hidden = false;
   emptyState.hidden = true;
+  updatePager();
   paint();
 }
 
@@ -172,7 +216,25 @@ function resized(origin, start, point, mode) {
   return clampRect(rect);
 }
 
+function changeViewerPage(next) {
+  if (!viewerMode || !opened) return;
+  const count = opened.pageCount || 1;
+  const page = Math.min(Math.max(1, next), count);
+  if (page === viewerPage) return;
+  viewerPage = page;
+  render().then(() => post({ type: "viewer-page", docId, page: viewerPage }));
+}
+
 overlay.addEventListener("pointerdown", (event) => {
+  if (viewerMode) {
+    if (event.button !== 0 || !opened) return;
+    event.preventDefault();
+    overlay.setPointerCapture(event.pointerId);
+    const point = pointerNorm(event);
+    drawing = { start: point, current: point };
+    paint();
+    return;
+  }
   const handle = event.target.closest(".handle");
   const box = event.target.closest(".snip-box");
   if (!box) return;
@@ -189,6 +251,11 @@ overlay.addEventListener("pointerdown", (event) => {
 });
 
 overlay.addEventListener("pointermove", (event) => {
+  if (drawing) {
+    drawing.current = pointerNorm(event);
+    paint();
+    return;
+  }
   if (!drag) return;
   activeRect = resized(drag.origin, drag.start, pointerNorm(event), drag.mode);
   activeRect.page = drag.origin.page || 1;
@@ -196,11 +263,35 @@ overlay.addEventListener("pointermove", (event) => {
   scheduleExtract(false);
 });
 
-overlay.addEventListener("pointerup", () => {
+overlay.addEventListener("pointerup", (event) => {
+  if (drawing) {
+    const rect = normalizeDrag(drawing.start, pointerNorm(event));
+    drawing = null;
+    paint();
+    if (rect.w < 0.008 || rect.h < 0.008) return;
+    post({
+      type: "create-snip",
+      page: viewerPage,
+      x: rect.x,
+      y: rect.y,
+      w: rect.w,
+      h: rect.h,
+    });
+    return;
+  }
   if (!drag) return;
   drag = null;
   scheduleExtract(true);
 });
+
+overlay.addEventListener("pointercancel", () => {
+  if (!drawing) return;
+  drawing = null;
+  paint();
+});
+
+prevPage?.addEventListener("click", () => changeViewerPage(viewerPage - 1));
+nextPage?.addEventListener("click", () => changeViewerPage(viewerPage + 1));
 
 async function openRecord(record, nextSession) {
   if (nextSession) session = nextSession;
@@ -211,9 +302,14 @@ async function openRecord(record, nextSession) {
   const snip = currentSnip();
   const rect = snip ? rectFor(snip.id) : null;
   activeRect = rect ? { ...rect, page: rect.page || snip.page || 1 } : null;
-  snipTitle.textContent = snip ? snip.name : "All snips";
+  if (viewerMode) {
+    snipTitle.textContent = "Drag a rectangle to add a snip";
+    if (!params.get("page") && activeRect?.page) viewerPage = activeRect.page;
+  } else {
+    snipTitle.textContent = snip ? snip.name : "All snips";
+  }
   await render();
-  if (snip) await showText();
+  if (!viewerMode && snip) await showText();
 }
 
 function base64ToBytes(value) {
@@ -227,6 +323,17 @@ const incoming = { chunks: [] };
 
 function onParentMessage(raw) {
   const message = JSON.parse(raw);
+  if (message.type === "session") {
+    session = { snips: message.snips || [], overrides: message.overrides || {} };
+    if (message.page) viewerPage = message.page;
+    if (message.docId && opened && message.docId !== opened.id) {
+      docId = message.docId;
+      post({ type: "need-document", docId, snipId: null, page: viewerPage });
+      return;
+    }
+    if (opened) render();
+    return;
+  }
   if (message.type === "show") {
     docId = message.docId;
     snipId = message.snipId || null;
@@ -259,11 +366,23 @@ function onParentMessage(raw) {
     };
     docId = record.id;
     snipId = incoming.meta.snipId || null;
+    if (incoming.meta.page) viewerPage = incoming.meta.page;
     session = { snips: incoming.meta.snips || [], overrides: incoming.meta.overrides || {} };
     openRecord(record, session).catch((error) => {
       liveText.textContent = error.message || "Could not open that document.";
     });
   }
+}
+
+function showViewerChrome() {
+  document.body.classList.add("viewer-mode");
+  viewerBar.hidden = false;
+  viewerHint.hidden = false;
+  readout.hidden = true;
+  previewHint.hidden = true;
+  title.textContent = "Large viewer";
+  snipTitle.textContent = "Drag a rectangle to add a snip";
+  updatePager();
 }
 
 async function start() {
@@ -272,6 +391,18 @@ async function start() {
     Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, (arg) => {
       onParentMessage(arg.message);
     });
+  }
+  if (viewerMode) {
+    showViewerChrome();
+    if (!docId) {
+      emptyState.hidden = false;
+      emptyState.textContent = "Upload a document in the task pane, then open the large viewer.";
+      return;
+    }
+    emptyState.hidden = false;
+    emptyState.textContent = "Opening the document…";
+    post({ type: "need-document", docId, snipId: null, page: viewerPage });
+    return;
   }
   if (!docId) {
     emptyState.hidden = false;

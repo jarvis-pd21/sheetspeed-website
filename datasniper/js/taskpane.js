@@ -16,6 +16,8 @@ const model = {
 
 let meta = null;
 let dialog = null;
+let dialogMode = null;
+let dialogToken = 0;
 let watching = false;
 const latestUpdate = new Map();
 let updateChain = Promise.resolve();
@@ -40,6 +42,7 @@ const statusLine = document.querySelector("#status");
 const previewWrap = document.querySelector("#preview-wrap");
 const preview = document.querySelector("#preview");
 const hostBanner = document.querySelector("#host-banner");
+const openViewerButton = document.querySelector("#open-viewer");
 
 function setStatus(message) {
   statusLine.textContent = message || "";
@@ -146,6 +149,7 @@ function renderDocs() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "doc-button";
+    button.title = doc.name;
     button.textContent = `${index + 1}. ${doc.name}`;
     button.addEventListener("click", () => {
       model.activeId = doc.id;
@@ -169,6 +173,7 @@ function renderDocs() {
   pageLabel.textContent = doc ? `Page ${model.page} of ${pages}` : "No document";
   prevPage.disabled = !doc || model.page <= 1;
   nextPage.disabled = !doc || model.page >= pages;
+  openViewerButton.disabled = !doc;
   emptyState.hidden = Boolean(doc);
   viewer.hidden = !doc;
   exportButton.disabled = !model.docs.length || !model.snips.length;
@@ -203,7 +208,8 @@ function paintBoxes() {
     box.style.background = rgba(color, 0.18);
     const label = document.createElement("span");
     label.textContent = snip.name || "Snip";
-    label.style.background = color;
+    label.style.background = rgba(color, 0.55);
+    placeLabel(label, snip);
     box.append(label);
     overlay.append(box);
   });
@@ -271,10 +277,17 @@ function renderPreview(headers, matrix) {
   preview.replaceChildren(table);
 }
 
+function placeLabel(label, rect) {
+  const bounds = overlay.getBoundingClientRect();
+  const pixelHeight = bounds.height * (Number(rect?.h) || 0);
+  if (bounds.height > 0 && pixelHeight < 16) label.classList.add("below");
+}
+
 async function renderAll() {
   renderDocs();
   renderSnips();
   await renderPage();
+  pushViewerState();
 }
 
 function pointerNorm(event) {
@@ -285,7 +298,7 @@ function pointerNorm(event) {
   };
 }
 
-function addSnip(rect) {
+function addSnip(rect, options = {}) {
   const snip = {
     id: createId(),
     name: `Field ${model.snips.length + 1}`,
@@ -299,9 +312,12 @@ function addSnip(rect) {
   persist();
   renderSnips();
   paintBoxes();
+  pushViewerState();
+  if (options.silent) return snip;
   const input = snipList.querySelector(`[data-snip-id="${snip.id}"] .snip-name`);
   input?.focus();
   input?.select();
+  return snip;
 }
 
 overlay.addEventListener("pointerdown", (event) => {
@@ -344,6 +360,7 @@ snipList.addEventListener("input", (event) => {
   if (remove) remove.setAttribute("aria-label", `Remove ${snip.name || "snip"}`);
   persist();
   paintBoxes();
+  pushViewerState();
 });
 
 snipList.addEventListener("click", (event) => {
@@ -354,6 +371,7 @@ snipList.addEventListener("click", (event) => {
   persist();
   renderSnips();
   paintBoxes();
+  pushViewerState();
 });
 
 snipList.addEventListener("mousedown", (event) => {
@@ -382,6 +400,7 @@ snipList.addEventListener("mousedown", (event) => {
     persist();
     renderSnips();
     paintBoxes();
+    pushViewerState();
   };
   document.addEventListener("mousemove", move);
   document.addEventListener("mouseup", up);
@@ -453,38 +472,134 @@ function dialogUrl(docId, snipId) {
   return url.href;
 }
 
-async function openPreview(docId, snipId) {
-  if (dialog) {
-    try {
-      dialog.messageChild(JSON.stringify({ type: "show", docId, snipId }));
-      return;
-    } catch (error) {
+function viewerUrl(docId) {
+  const url = new URL("dialog.html", window.location.href);
+  if (document.documentElement.dataset.harness === "1") url.searchParams.set("harness", "1");
+  url.searchParams.set("mode", "viewer");
+  url.searchParams.set("doc", docId);
+  url.searchParams.set("page", String(model.page));
+  return url.href;
+}
+
+function bindDialog(value, mode) {
+  const token = ++dialogToken;
+  dialog = value;
+  dialogMode = mode;
+  value.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+    Promise.resolve(onDialogMessage(arg)).catch((error) => setStatus(error.message || "Could not update the cell."));
+  });
+  value.addEventHandler(Office.EventType.DialogEventReceived, () => {
+    if (token === dialogToken && dialog === value) {
       dialog = null;
+      dialogMode = null;
     }
-  }
-  const url = dialogUrl(docId, snipId);
+  });
+}
+
+async function closeDialog() {
+  if (!dialog) return;
+  const closing = dialog;
+  dialogToken += 1;
+  dialog = null;
+  dialogMode = null;
   await new Promise((resolve) => {
-    Office.context.ui.displayDialogAsync(url, { height: 72, width: 55, displayInIframe: true }, (result) => {
+    try {
+      closing.close();
+    } catch (error) {
+      /* The host may already have closed it. */
+    }
+    const delay = document.documentElement.dataset.harness === "1" ? 0 : 250;
+    setTimeout(resolve, delay);
+  });
+}
+
+function openOfficeDialog(url, options, mode) {
+  return new Promise((resolve) => {
+    Office.context.ui.displayDialogAsync(url, options, (result) => {
       if (result.status !== Office.AsyncResultStatus.Succeeded) {
-        setStatus(result.error?.message || "Excel could not open the preview.");
+        setStatus(result.error?.message || "Excel could not open the dialog.");
         resolve();
         return;
       }
-      dialog = result.value;
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
-        Promise.resolve(onDialogMessage(arg)).catch((error) => setStatus(error.message || "Could not update the cell."));
-      });
-      dialog.addEventHandler(Office.EventType.DialogEventReceived, () => {
-        dialog = null;
-      });
+      bindDialog(result.value, mode);
       resolve();
     });
   });
 }
 
+function pushViewerState() {
+  if (!dialog || dialogMode !== "viewer") return;
+  const doc = activeDoc();
+  try {
+    dialog.messageChild(JSON.stringify({
+      type: "session",
+      docId: doc ? doc.id : null,
+      page: model.page,
+      snips: model.snips,
+      overrides: model.overrides,
+    }));
+  } catch (error) {
+    dialog = null;
+    dialogMode = null;
+  }
+}
+
+async function openPreview(docId, snipId) {
+  if (dialog && dialogMode === "preview") {
+    try {
+      dialog.messageChild(JSON.stringify({ type: "show", docId, snipId }));
+      return;
+    } catch (error) {
+      dialog = null;
+      dialogMode = null;
+    }
+  }
+  await closeDialog();
+  await openOfficeDialog(dialogUrl(docId, snipId), { height: 80, width: 70, displayInIframe: true }, "preview");
+}
+
+async function openLargeViewer() {
+  const doc = activeDoc();
+  if (!doc) {
+    setStatus("Upload a document before opening the large viewer.");
+    return;
+  }
+  if (dialog && dialogMode === "viewer") {
+    pushViewerState();
+    return;
+  }
+  await closeDialog();
+  await openOfficeDialog(viewerUrl(doc.id), { height: 80, width: 80, displayInIframe: true }, "viewer");
+}
+
 function onDialogMessage(arg) {
   const message = JSON.parse(arg.message);
-  if (message.type === "need-document") return sendDocument(message.docId, message.snipId);
+  if (message.type === "need-document" || message.type === "viewer-ready") {
+    return sendDocument(message.docId || model.activeId, message.snipId || null);
+  }
+  if (message.type === "create-snip") {
+    const doc = activeDoc();
+    if (!doc) return null;
+    model.page = Math.min(Math.max(1, message.page || model.page), doc.pageCount || 1);
+    const rect = clampRect({
+      x: message.x,
+      y: message.y,
+      w: message.w,
+      h: message.h,
+      page: model.page,
+    });
+    if (rect.w < 0.008 || rect.h < 0.008) return null;
+    addSnip(rect, { silent: true });
+    renderDocs();
+    return renderPage();
+  }
+  if (message.type === "viewer-page") {
+    const doc = activeDoc();
+    if (!doc) return null;
+    model.page = Math.min(Math.max(1, message.page || 1), doc.pageCount || 1);
+    persist();
+    return renderAll();
+  }
   if (message.type !== "update") return null;
   const token = `${message.docId}:${message.snipId}`;
   const revision = message.revision || 0;
@@ -533,6 +648,7 @@ async function sendDocument(docId, snipId) {
     name: record.name,
     mime: record.mime,
     snipId: snipId || null,
+    page: model.page,
     snips: model.snips,
     overrides: model.overrides,
   };
@@ -559,6 +675,7 @@ fileInput.addEventListener("change", () => {
 });
 samplesButton.addEventListener("click", () => loadSamples());
 exportButton.addEventListener("click", () => exportAll());
+openViewerButton.addEventListener("click", () => openLargeViewer());
 docSelect.addEventListener("change", () => {
   model.activeId = docSelect.value;
   model.page = 1;

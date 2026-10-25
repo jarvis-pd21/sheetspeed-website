@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/dialog.html" />
   <link rel="icon" href="assets/icon-32.png" />
-  <link rel="stylesheet" href="css/app.css?v=1" />
-  <script src="js/boot.js?v=1"></script>
+  <link rel="stylesheet" href="css/app.css?v=2" />
+  <script src="js/boot.js?v=2"></script>
 </head>
 <body class="preview-dialog">
   <div id="app">
@@ -21,14 +21,22 @@
         </div>
       </div>
     </header>
-    <div class="dialog-readout">
+    <div class="viewer-bar" id="viewer-bar" hidden>
+      <div class="pager">
+        <button id="prev-page" type="button">Previous</button>
+        <span id="page-label">No document</span>
+        <button id="next-page" type="button">Next</button>
+      </div>
+    </div>
+    <div class="dialog-readout" id="dialog-readout">
       <div>
         <div class="hint">Extracted text</div>
         <strong id="live-text">Reading…</strong>
       </div>
       <div class="hint" id="source-label"></div>
     </div>
-    <p class="hint" style="padding: 6px 14px;">Drag the box or a handle. The Excel cell updates when the text changes.</p>
+    <p class="hint" id="preview-hint">Drag the box or a handle. The Excel cell updates when the text changes.</p>
+    <p class="hint" id="viewer-hint" hidden>Drag a rectangle on the page. Each snip becomes the next column.</p>
     <div id="viewer-scroll">
       <p id="empty-state" hidden>Opening the document…</p>
       <div id="viewer" hidden>
@@ -37,6 +45,6 @@
       </div>
     </div>
   </div>
-  <script type="module" src="js/dialog.js?v=1"></script>
+  <script type="module" src="js/dialog.js?v=2"></script>
 </body>
 </html>

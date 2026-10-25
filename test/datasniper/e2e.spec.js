@@ -38,6 +38,14 @@ test("snips three fields, reorders columns, extracts five notices, and widens a 
   await page.locator(".snip-name").nth(1).fill("Investor");
   await page.locator(".snip-name").nth(2).fill("Amount called");
   await expect(page.locator(".snip-box")).toHaveCount(3);
+  const labelsInside = await page.locator(".snip-box").evaluateAll((boxes) => boxes.map((box) => {
+    const label = box.querySelector("span");
+    const boxBounds = box.getBoundingClientRect();
+    const labelBounds = label.getBoundingClientRect();
+    const fontSize = Number.parseFloat(getComputedStyle(label).fontSize);
+    return labelBounds.top >= boxBounds.top - 1 && fontSize <= 10;
+  }));
+  expect(labelsInside).toEqual([true, true, true]);
   await page.screenshot({ path: path.join(shots, "02-snips-named.png") });
 
   const handle = page.locator(".snip-row").nth(2).locator(".drag-handle");
@@ -73,6 +81,8 @@ test("snips three fields, reorders columns, extracts five notices, and widens a 
   const rowIndex = values.findIndex((line) => line[0] === layout.longDocument);
   await page.evaluate((hit) => window.__datasniper.select(hit.row, hit.col), { row: rowIndex, col: 3 });
   const preview = page.frameLocator("#ds-harness-dialog");
+  await expect(page.locator("#ds-harness-dialog")).toHaveAttribute("data-dialog-width", "70");
+  await expect(page.locator("#ds-harness-dialog")).toHaveAttribute("data-dialog-height", "80");
   await expect(preview.locator("#doc-title")).toHaveText(layout.longDocument);
   await expect(preview.locator(".snip-box")).toBeVisible();
   await expect(preview.locator("#live-text")).toHaveText(layout.truncatedInvestor);
