@@ -28,7 +28,7 @@
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
- <link rel="stylesheet" href="/css/site.css?v=20261021c" />
+ <link rel="stylesheet" href="/css/site.css?v=20261025install" />
  <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -154,10 +154,11 @@
  <h1>Excel shortcuts, everywhere.</h1>
  <p class="m-sub">One add-on for Google Sheets, Docs &amp; Slides. One app for Excel on Mac.</p>
  <div class="m-install">
-  <button class="m-btn" id="installBtn" type="button" aria-haspopup="true" aria-expanded="false">Install now</button>
-  <div class="m-install-menu" id="installMenu" hidden>
-   <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>For Google Sheets<small>Chrome add-on — free</small></a>
-   <a href="/downloads/SheetSpeed-Mac.zip" download>For Excel on Mac<small>macOS app — free</small></a>
+  <button class="m-btn" id="installBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="installMenu">Install now</button>
+  <div class="m-install-menu" id="installMenu" role="menu" hidden>
+   <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" role="menuitem" data-store-cta rel="noopener">For Google Sheets<small>Chrome add-on — free</small></a>
+   <a href="/downloads/SheetSpeed-Mac.zip" role="menuitem" download>For Excel on Mac<small>macOS app — free</small></a>
+   <a href="/datasniper/" role="menuitem">DataSniper<small>Excel add-in — free</small></a>
   </div>
  </div>
  </div>
@@ -167,7 +168,8 @@
  <div class="m-wrap">
  <figure class="m-demo m-loop" data-demo-loop>
  <div class="m-stage">
- <video class="is-on" muted playsinline preload="auto" poster="/assets/demos/keyboard-toolbar.jpg?v=20261019" width="1280" height="800" aria-label="Real screen recording: navigating the Google Sheets toolbar with the keyboard using SheetSpeed"><source src="/assets/demos/keyboard-toolbar.webm?v=20261019" type="video/webm"><source src="/assets/demos/keyboard-toolbar.mp4?v=20261019" type="video/mp4"></video>
+ <img class="m-poster" src="/assets/demos/keyboard-toolbar.jpg?v=20261025" alt="" width="1280" height="800" />
+ <video class="is-on" muted playsinline preload="auto" poster="/assets/demos/keyboard-toolbar.jpg?v=20261025" width="1280" height="800" aria-label="Real screen recording: navigating the Google Sheets toolbar with the keyboard using SheetSpeed"><source src="/assets/demos/keyboard-toolbar.webm?v=20261019" type="video/webm"><source src="/assets/demos/keyboard-toolbar.mp4?v=20261019" type="video/mp4"></video>
  </div>
  <figcaption class="m-cap" aria-live="polite">Navigate the toolbar with your keyboard: <kbd>←</kbd><kbd>→</kbd> then <kbd>Enter</kbd> <small>(free)</small></figcaption>
  <div class="m-dots" role="tablist" aria-label="Choose a demo" hidden></div>
@@ -330,7 +332,7 @@
  </main>
 
  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
- <script src="/js/site.js?v=20261021install"></script>
- <script src="/js/demo-loop.js?v=20261021b" defer></script>
+ <script src="/js/site.js?v=20261025install"></script>
+ <script src="/js/demo-loop.js?v=20261025poster" defer></script>
 </body>
 </html>

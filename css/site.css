@@ -1635,8 +1635,10 @@ main .hero-note,main small{font-size:.9rem!important;color:var(--muted)}
 @media(max-width:600px){.m-hero{padding:4.5vh 0 2vh}.m-sub{margin-bottom:1.2rem}}
 .m-loop{max-width:760px;margin:0 auto!important;animation:none}
 .m-stage{position:relative;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#f6f6f4;cursor:default}
-.m-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;border-radius:12px}
+.m-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s ease;border-radius:12px;z-index:1}
 .m-stage video.is-on{opacity:1}
+.m-stage .m-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;z-index:2;background:#f6f6f4}
+.m-stage.is-playing .m-poster{opacity:0;pointer-events:none;transition:opacity .2s ease}
 .m-cap{min-height:1.6em}
 .m-dots{display:flex;justify-content:center;gap:8px;margin-top:12px}
 .m-dots[hidden]{display:none}
@@ -1684,7 +1686,11 @@ main .m-entity a{color:inherit}
 
 /* 2026-10-21 bifurcating install button: one CTA splits into Sheets / Mac options. */
 .m-install{position:relative;display:inline-block}
-.m-install-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid #e6e6e3;border-radius:16px;box-shadow:0 16px 48px rgba(22,24,29,.16);padding:6px;min-width:230px;z-index:30;text-align:left}
+.m-install--header{flex-shrink:0}
+button.x-cta{border:0;font:inherit;cursor:pointer;line-height:1.2}
+.m-install-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid #e6e6e3;border-radius:16px;box-shadow:0 16px 48px rgba(22,24,29,.16);padding:6px;min-width:min(260px,calc(100vw - 24px));max-width:calc(100vw - 24px);z-index:30;text-align:left}
 .m-install-menu a{display:block;padding:.7rem 1rem;border-radius:10px;color:var(--ink)!important;text-decoration:none;font-weight:600;font-size:.95rem}
-.m-install-menu a:hover{background:#f4f4f2}
+.m-install-menu a:hover,.m-install-menu a:focus-visible{background:#f4f4f2}
+.m-install-menu a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .m-install-menu a small{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:2px}
+.x-head{overflow:visible}
