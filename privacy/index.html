@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>SheetSpeed Privacy Policy — Data, Permissions & Retention</title>
-  <meta name="description" content="How SheetSpeed handles document data, Google permissions, local storage, website analytics and deletion. Current Core and optional connected features explained." />
+  <meta name="description" content="How SheetSpeed 0.4.0 handles document data, Sheets, Slides and drive.file access, local Docs processing, and ExtensionPay once billing opens." />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/privacy/" />
   <meta name="robots" content="index,follow" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="SheetSpeed" />
   <meta property="og:title" content="SheetSpeed Privacy Policy — Data, Permissions & Retention" />
-  <meta property="og:description" content="How SheetSpeed handles document data, Google permissions, local storage, website analytics and deletion. Current Core and optional connected features explained." />
+  <meta property="og:description" content="How SheetSpeed 0.4.0 handles document data, Sheets, Slides and drive.file access, local Docs processing, and ExtensionPay once billing opens." />
   <meta property="og:url" content="https://sheetspeed.agi-jarvis.com/privacy/" />
   <link rel="icon" href="/assets/icon-128.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/site.css?v=20261015inter3" />
   <style>.legal-doc{max-width:860px;margin:0 auto;padding:32px 20px 64px;line-height:1.65}.legal-doc h1{margin:0 0 8px}.legal-doc h2{margin:2rem 0 .6rem;font-size:1.25rem}.legal-doc ul,.legal-doc ol{padding-left:1.3rem}.legal-doc li{margin:.4rem 0}.legal-doc .meta{color:var(--muted);font-size:.92rem}.legal-doc .banner{border:1px solid #bad6cd;background:#f0f8f4;padding:16px;border-radius:10px}.legal-doc code{font-size:.9em;overflow-wrap:anywhere}.legal-doc table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}.legal-doc th,.legal-doc td{text-align:left;vertical-align:top;border-bottom:1px solid #ddd;padding:.7rem}.legal-doc .table-wrap{overflow-x:auto}.legal-doc .review-nav{display:flex;flex-wrap:wrap;gap:1rem;margin:1.3rem 0}@media(max-width:600px){.legal-doc th,.legal-doc td{padding:.45rem}.legal-doc{padding:25px 16px 45px}}</style>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "SheetSpeed Privacy Policy — Data, Permissions & Retention", "description": "How SheetSpeed handles document data, Google permissions, local storage, website analytics and deletion. Current Core and optional connected features explained.", "url": "https://sheetspeed.agi-jarvis.com/privacy/", "dateModified": "2026-10-19", "isPartOf": {"@id": "https://sheetspeed.agi-jarvis.com/#website"}, "publisher": {"@type": "Organization", "name": "SheetSpeed", "email": "jarvis@agi-jarvis.com"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "SheetSpeed Privacy Policy — Data, Permissions & Retention", "description": "How SheetSpeed 0.4.0 handles document data, Sheets, Slides and drive.file access, local Docs processing, and ExtensionPay once billing opens.", "url": "https://sheetspeed.agi-jarvis.com/privacy/", "dateModified": "2026-10-25", "isPartOf": {"@id": "https://sheetspeed.agi-jarvis.com/#website"}, "publisher": {"@type": "Organization", "name": "SheetSpeed", "email": "jarvis@agi-jarvis.com"}}</script>
 </head>
 <body>
   <header class="x-head"><div class="x-head-in"><a class="x-brand" href="/"><img src="/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="/blog/">Blog</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
@@ -26,50 +26,85 @@
   <main>
     <article class="legal-doc">
 <h1>SheetSpeed Privacy Policy</h1>
-<p class="meta">Updated and effective October 19, 2026 · Operator: Philip Dressler, California, USA · Contact: <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a></p>
-<p>SheetSpeed adds keyboard shortcuts and formula tools to Google documents. This policy covers the extension, this website and support communications. You retain ownership of your documents. We do not sell personal data, use document contents for advertising, or use them to train AI models.</p>
-<p class="banner"><strong>Know which version you are reviewing.</strong> As of this review, the published Core release uses local document controls and needs no Google account connection. The submitted 0.4.0 update adds optional connected tools; 0.4.1 is a prepared follow-up. The additional data flows below apply only to versions that include those features. Check the installed version and permissions in Chrome. <a href="/enterprise/">See the version and permission comparison.</a></p>
-<h2>1. Local document and keyboard access</h2>
-<p>The extension runs on matching Google Sheets and Slides document pages; the 0.4 update also supports Docs. It reads document identifiers, selection and native menu/control state to invoke commands. Formula inspection reads formula text exposed by the open Sheets page. These content scripts run on the matching pages, not solely when you click the extension button.</p>
-<p>SheetSpeed matches keyboard events to shortcuts; it does not record ordinary typing as a keystroke log. Local diagnostics can retain the latest modifier event and control/menu metadata. The Docs command adapter operates native controls and does not send document text to a SheetSpeed service.</p>
-<h2>2. Optional Google-connected tools</h2>
-<p>In a version with connected tools, you authorize Google access before using them. Requests go directly from the browser to Google. Spreadsheet tools can read values, formulas, formatting and workbook metadata; dependent tracing can inspect multiple tabs in the selected workbook. Commands that edit a file write to Google. Interrupted modeling operations retain recovery information locally. When the extension next checks its status, it can resume restoration of inputs in previously affected spreadsheets, even if those spreadsheets are not currently open.</p>
-<div class="table-wrap"><table><thead><tr><th>Google permission</th><th>Permission breadth and SheetSpeed use</th></tr></thead><tbody>
-<tr><td><code>spreadsheets</code></td><td>Google grants read/write access to spreadsheets the account can access. SheetSpeed's command handling checks the originating Sheets document and targets that workbook, or the source workbook linked to an image being refreshed. This application check is narrower than the permission itself.</td></tr>
-<tr><td><code>presentations</code></td><td>Google grants read/write access to presentations the account can access. The refresh implementation targets the open presentation and the selected slide's SheetSpeed-linked images.</td></tr>
-<tr><td><code>drive.file</code></td><td>Google permits access to files created by the app or explicitly opened/shared with it. SheetSpeed's refresh implementation uses this for temporary PNG files it creates. It is not unrestricted access to every Drive file, and it is not technically limited to temporary files by Google.</td></tr>
-</tbody></table></div>
-<p>The spreadsheet tools request the Sheets scope. Slides refresh additionally requests Slides and Drive-file access. The extension manifest declares the supported permissions; Chrome's installation warning and Google's account-consent screen are separate. Google or your administrator can deny access.</p>
-<p>Chrome manages the Google access token. The extension uses it for Google API requests and does not send it to a SheetSpeed-operated backend. Disconnect clears Chrome's cached authorization tokens; to revoke the underlying grant, remove SheetSpeed at <a href="https://myaccount.google.com/permissions">Google account permissions</a>. Revocation does not delete your Google documents.</p>
-<p>SheetSpeed's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including Limited Use. Google user data is not used for advertising, sold, or used to train generalized AI models.</p>
-<h2>3. Refreshing a Sheets image in Slides</h2>
-<p>This optional feature re-reads the range linked to a SheetSpeed image, renders a PNG in the browser, and replaces the image in the current presentation. Refresh occurs when you invoke it, not continuously in the background. The source spreadsheet, tab and range are recorded in the image's link and alternative text and can be visible to people who can access the presentation.</p>
-<p>To let Google Slides fetch the PNG, SheetSpeed uploads it to your Google Drive and creates an <strong>“anyone with the link can view”</strong> permission with discovery disabled. Anyone who obtains that URL while the permission remains active can view the image. Discovery being disabled does not make the link private. Organizations that prohibit this sharing can block the feature; use native shortcuts without enabling it.</p>
-<p>The implementation attempts to remove the link permission and delete the temporary file after the update, including handled failures. Cleanup is not guaranteed if the browser closes, the worker stops, the network fails, or Google rejects a request. The next refresh attempts to find and remove leftover temporary files; there is no fixed maximum lifetime. Reported cleanup errors identify files to remove manually. Look for <strong>SheetSpeed refresh (temporary).png</strong> in Drive if an operation was interrupted. Do not use this flow for data your organization prohibits from link sharing.</p>
-<h2>4. Data stored on your device</h2>
+  <p class="meta">Product: <strong>SheetSpeed</strong> (Chrome Web Store version 0.4.0) · Updated: October 25, 2026</p>
+
+<p>Official website: <a href="https://sheetspeed.agi-jarvis.com/">https://sheetspeed.agi-jarvis.com/</a> · Chrome Web Store: <a href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa">Store listing</a> · Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</p>
+
+<p class="banner"><strong>Published privacy policy</strong> for the SheetSpeed Chrome extension on the Chrome Web Store (0.4.0). Pro tools are free during early access. Contact <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a> or <a href="/support/">Support</a>.</p>
+
+<p><em>Effective October 25, 2026. Operator: Philip Dressler, California, USA.</em></p>
+<p>SheetSpeed is a Chrome extension that adds keyboard shortcuts, formula tracing and modeling tools to Google Sheets, Google Docs and Google Slides. <strong>SheetSpeed Core</strong> (free) works entirely inside the open document. <strong>SheetSpeed Pro</strong> (free for everyone during early access; paid plans later) adds tools that read and write your spreadsheet through the Google Sheets API, but only after you connect your Google account. We do not sell personal data, use it for advertising, or use it to train AI models.</p>
+<p><strong>Early access:</strong> while Pro is in early access, SheetSpeed collects no license, account or payment data and does not contact ExtensionPay or Stripe. The sections below that mention ExtensionPay, Stripe, licenses or trials apply only once billing opens, and we will give notice in the extension and on our website before then.</p>
+
+<h2>Data SheetSpeed accesses</h2>
 <ul>
-<li><strong>Settings:</strong> shortcut bindings, enabled state and timeouts use Chrome local storage. Connected builds can optionally sync settings through Chrome sync storage. Published Core keeps its settings local.</li>
-<li><strong>Undo and recovery:</strong> connected edits can store original cell values, formulas, formatting, file identifiers and recovery journals locally. The implementation caps ordinary undo history by count and size and applies age pruning during history processing; uncertain or interrupted recovery records are retained until resolved. These are not server backups or a guaranteed timed deletion service. Clear undo history in Settings after resolving pending recovery.</li>
-<li><strong>Copy operations:</strong> Google/native copy commands can place data on the operating system clipboard. In connected builds, Paste Exact and format-copy buffers use Chrome session storage; session data is cleared when Chrome restarts or the extension reloads. A tab closing does not guarantee every buffer is erased. Replace or clear the system clipboard separately.</li>
-<li><strong>Protection:</strong> browser-profile and operating-system protections apply. SheetSpeed does not add its own encryption layer to local records. Removing the extension clears its local extension storage; it does not remove exports, your Google documents, support emails or files already copied elsewhere. Chrome sync data follows Google's sync controls.</li>
+  <li><strong>Document context (Core and Pro).</strong> On Google Sheets and Slides document pages, SheetSpeed reads the visible formula text, document and tab identifiers, the selected range, and native menu/control state so it can run the command you choose.</li>
+  <li><strong>Google Docs (Core and Pro).</strong> On Google Docs document pages, SheetSpeed reads only the native menu, toolbar and key-tip state it needs to run the Alt shortcut you press. Docs are processed locally on the page only: SheetSpeed makes no API calls for Docs, requests no Docs permission from your Google account, and does not read, store or send your document text.</li>
+  <li><strong>Keyboard events.</strong> SheetSpeed checks key presses against your configured shortcuts. It does not log ordinary typing or cell contents. Local diagnostics may keep the latest modifier event and element/menu metadata on your device.</li>
+  <li><strong>Spreadsheet data (Pro, after you connect).</strong> When you run a Pro tool (trace dependents, goal seek, what-if tables, freeze panes, auto-color, font and fill color cycles, number format cycles, format painter, clear filters, clear all, Paste Exact, or image export), SheetSpeed calls the Google Sheets API for <em>the spreadsheet you are working in</em> to read the cells, formulas and formatting that tool needs, and, for tools that change the sheet, to write the result you confirm.</li>
+  <li><strong>Slides images (Pro, only when you use Refresh from Sheets).</strong> When you press <kbd>Ctrl+Alt+Shift+R</kbd> (or click “Refresh from Sheets”) on a Google Slides slide, SheetSpeed reads that slide to find images previously exported by SheetSpeed (identified by the source spreadsheet link stored in the image’s link and alt text), re-reads that source range through the Google Sheets API, renders a new PNG in your browser, and replaces the image in place. It only touches the slide and presentation you are editing. Refresh runs when you invoke it. It does not run by itself, and it does not refresh charts, Google Docs, images that no longer carry the SheetSpeed source, or other slides.</li>
+  <li><strong>Account and license (Pro, once billing opens; not collected during early access).</strong> Your email address and plan status (trial start, paid or not) through ExtensionPay.</li>
 </ul>
-<h2>5. Services and network destinations</h2>
-<div class="table-wrap"><table><thead><tr><th>Service</th><th>Purpose and data</th></tr></thead><tbody>
-<tr><td>Google Workspace and Chrome</td><td>Your documents remain in your Google environment. Optional API requests use <code>sheets.googleapis.com</code>, <code>slides.googleapis.com</code> and <code>www.googleapis.com</code> for Drive. Chrome host grants apply at host level; the code uses the listed services' endpoints. Chrome sync, if enabled, handles settings.</td></tr>
-<tr><td>GitHub Pages and Cloudflare</td><td>Host and deliver this public website. Website requests expose ordinary network/browser metadata such as IP address, URL and user agent to these providers. Cloudflare Web Analytics is present on the deployed website. This website traffic is separate from spreadsheet content processed by the extension. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub privacy</a> and <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare privacy</a>.</td></tr>
-<tr><td>Google Fonts</td><td>The website loads its typeface from Google Fonts, which receives the associated web request. See <a href="https://fonts.google.com/faq">Google Fonts information</a>.</td></tr>
-<tr><td>Google Workspace email</td><td>Our support mailbox receives your email address and anything you choose to send. Use a synthetic example or redacted screenshot, not confidential workbook contents.</td></tr>
-<tr><td>ExtensionPay and Stripe</td><td>Reserved for future paid plans. No paid plan is currently sold. In the inspected 0.4 early-access package, ExtensionPay is not initialized and its website content script is removed. If payments are introduced, the checkout will identify billing providers and the policy will describe the active flow before purchase. See <a href="https://extensionpay.com/privacy">ExtensionPay privacy</a> and <a href="https://stripe.com/privacy">Stripe privacy</a>.</td></tr>
-</tbody></table></div>
-<p>The inspected Store packages do not route workbook contents through a SheetSpeed-operated server or an AI provider. The development repository contains a separate AI-helper path; native messaging is removed from the Store package. It is not part of this public extension offering.</p>
-<h2>6. Support, retention and requests</h2>
-<p>If you contact us, we use the information you provide to answer the request, investigate the issue and maintain necessary business or legal records. Support email is retained for those purposes; a fixed automatic deletion period is not currently implemented. Hosting providers apply their own retention rules. We do not promise that uninstalling the extension deletes records held by those providers.</p>
-<p>For access, correction or deletion requests, contact <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>. We may verify the requester's identity and retain information required by law or needed for unresolved disputes. Rights depend on applicable law. We cannot delete your Google documents or data stored only on your device from our support mailbox; use the controls described above.</p>
-<p>The operator is in the United States and the listed providers may process website/support information in other countries. SheetSpeed offers no separate data-residency guarantee. Enterprise contract or data-processing requirements should be agreed before deployment; this policy is not a signed data processing agreement.</p>
-<h2>7. Children, updates and contact</h2>
-<p>SheetSpeed is not directed at children under 13. Changes will be posted here with a revised date; changes to extension access must also be reflected in the relevant Store disclosures and permission requests. Security reports and vendor questionnaires can be sent to <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>. See the <a href="/security/">security page</a> for reporting guidance.</p>
+
+<h2>Google account connection (Pro)</h2>
+<ul>
+  <li>SheetSpeed uses Chrome's <code>identity</code> permission to ask Google for an access token. Google shows you a consent screen first, and nothing is connected unless you approve. Scopes are requested in two steps:
+   <ul>
+    <li>When you connect for Pro tools: <code>https://www.googleapis.com/auth/spreadsheets</code>, to read and write the spreadsheet you run a Pro tool on. Google’s grant can cover spreadsheets the account can access. SheetSpeed’s commands target the open spreadsheet, or the source spreadsheet linked from an image being refreshed.</li>
+    <li>Only the first time you use Refresh from Sheets in Google Slides: additionally <code>https://www.googleapis.com/auth/presentations</code>, to read the current slide and replace SheetSpeed images on it, and <code>https://www.googleapis.com/auth/drive.file</code>, which lets SheetSpeed create and manage files it created (and files you open with it). SheetSpeed uses that scope for the temporary PNG described below. It does not request full Drive access, and it does not list the rest of your Drive.</li>
+   </ul></li>
+  <li>The token is managed by Chrome. It is used only from your browser, only to call the Google APIs listed under Permissions, and only for the spreadsheet or presentation open in your tab (plus, for Slides refresh, the source spreadsheet of each SheetSpeed image on that slide). SheetSpeed has no server that receives your token or your spreadsheet data.</li>
+  <li>The app may show Google's “unverified app” notice while Google's verification is pending.</li>
+  <li>You can disconnect from SheetSpeed's panel or Settings at any time, and revoke access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+  <li>SheetSpeed's use of information received from Google APIs follows the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</li>
+</ul>
+
+<h2>Refreshing Sheets images in Slides (Pro)</h2>
+<ul>
+  <li>Google Slides can only replace an image from a web address, so for each image being refreshed SheetSpeed uploads the new PNG to your own Google Drive as a temporary file (“SheetSpeed refresh (temporary).png”) and gives it a temporary “anyone with the link can view” share with discovery turned off, so it cannot be found by search. Anyone who obtains that link while the share is active can view the image.</li>
+  <li>The link is used only by Google Slides to fetch the image. Immediately afterwards, whether the update succeeded or failed, SheetSpeed removes the link share and deletes the temporary file. If removal fails, SheetSpeed tells you so you can delete the file yourself. If the browser closes before cleanup finishes, or an upload succeeded but its confirmation was lost, the next refresh finds that leftover temporary file (by its name or a SheetSpeed tag; <code>drive.file</code> shows files SheetSpeed created) and deletes it.</li>
+  <li>The image contains only the cells of the original exported range. The refreshed image keeps its size and position, and its link and alt text record the source spreadsheet, tab and range so it can be refreshed again. Nothing else is stored, and nothing is sent to a SheetSpeed server.</li>
+</ul>
+
+<h2>Storage</h2>
+<ul>
+  <li>Shortcut settings, enabled state and timeouts are stored in Chrome local storage on your device. If you turn on settings sync, they are also stored in Chrome sync storage under your Chrome profile.</li>
+  <li>When a Pro tool changes your sheet, SheetSpeed keeps a local undo record (the original values and formatting of the affected cells) on your device so you can reverse the change. Undo records are bounded in size and you can clear them in Settings.</li>
+  <li>Once billing opens, the cached license status (paid / trial / none) is stored locally. ExtensionPay keeps a login token in Chrome storage.</li>
+</ul>
+
+<h2>Transmission and processors</h2>
+<ul>
+  <li><strong>Google (Pro only):</strong> Sheets API requests go directly from your browser to <code>sheets.googleapis.com</code>. Slides refresh requests go directly to <code>slides.googleapis.com</code> and the Google Drive API at <code>www.googleapis.com/drive/v3</code> and <code>www.googleapis.com/upload/drive/v3</code>.</li>
+  <li><strong>ExtensionPay</strong> (<a href="https://extensionpay.com/privacy">privacy</a>, once billing opens; not contacted during early access): license and login checks. Your email and plan status are sent, but never your spreadsheet data. The early-access build does not include the <code>extensionpay.com</code> content script and does not call ExtensionPay.</li>
+  <li><strong>Stripe</strong> (<a href="https://stripe.com/privacy">privacy</a>, once billing opens): payment processing, receipts and the subscription portal. Card numbers never reach SheetSpeed or ExtensionPay. Stripe is not used during early access.</li>
+  <li><strong>Developer servers:</strong> none. <strong>AI providers:</strong> none. The Chrome Web Store version does not include an AI helper.</li>
+  <li><strong>This website:</strong> GitHub Pages and Cloudflare host the site, and the pages load a typeface from Google Fonts. Those requests are separate from spreadsheet content in the extension. Support email goes to <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a>.</li>
+</ul>
+
+<h2>Permissions</h2>
+<ul>
+  <li><code>storage</code>: settings, undo records and, once billing opens, the license cache, as described above.</li>
+  <li><code>activeTab</code>: interact with the Google document you are using when you invoke SheetSpeed.</li>
+  <li><code>identity</code>: get a Google access token, with your consent, for the Pro tools.</li>
+  <li>Host permission <code>https://sheets.googleapis.com/*</code>: call the Google Sheets API for Pro tools.</li>
+  <li>Host permissions <code>https://slides.googleapis.com/*</code>, <code>https://www.googleapis.com/drive/v3/*</code> and <code>https://www.googleapis.com/upload/drive/v3/*</code>: Slides refresh only (read the slide, replace the image, and upload, share, unshare, find and delete the temporary image file).</li>
+  <li>Content scripts on Google Sheets, Docs and Slides document pages (shortcuts, Alt key tips and panel; on Docs, local only with no API calls). The early-access build does not include the <code>extensionpay.com</code> content script at all; it is added only once billing opens, and it never runs on other sites.</li>
+</ul>
+
+<h2>Retention and your rights</h2>
+<p>Local data stays on your device until you clear it or uninstall SheetSpeed. Billing records, once billing opens, are kept as long as tax law requires. To access or delete your account data, email us. California residents and others may have additional rights under applicable law; we honor verified requests.</p>
+
+<h2>Children</h2>
+<p>SheetSpeed is not directed at children under 13.</p>
+
+<h2>Changes</h2>
+<p>We will post changes on this page and update the effective date. Material changes will also be reflected in Chrome Web Store disclosures.</p>
+
+<h2>Contact</h2>
+<p class="meta">Publisher contact: <a href="mailto:jarvis@agi-jarvis.com">jarvis@agi-jarvis.com</a> · <a href="/support/">Support</a> · <a href="/security/">Security</a> · <a href="/enterprise/">Enterprise review</a></p>
 <nav class="review-nav" aria-label="Enterprise review"><a href="/enterprise/">Enterprise review</a><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/support/">Support</a></nav>
-</article>
+    </article>
   </main>
   <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
 </body>
