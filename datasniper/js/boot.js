@@ -14,7 +14,7 @@
     /* The tip stays visible when storage is blocked. */
   }
   var src = harness
-    ? "js/office-mock.js?v=8"
+    ? "js/office-mock.js?v=9"
     : "https://appsforoffice.microsoft.com/lib/1/hosted/office.js";
   document.write('<script src="' + src + '"><\/script>');
 })();

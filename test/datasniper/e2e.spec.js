@@ -490,6 +490,61 @@ test("a preview asked for a missing file says so instead of waiting", async ({ p
   await expect(preview.locator("#empty-state")).not.toContainText("Asking Excel");
 });
 
+test("reopening a marked workbook writes nothing", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples", layout.shiftedDocument),
+  ]);
+  await draw(page, layout.snips.fund);
+  await page.locator(".snip-name").fill("Fund");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  const before = await page.evaluate(() => window.__datasniper.marks());
+  expect(before.comments.filter((comment) => comment.content === "DataSniper: matched by label").length).toBeGreaterThan(0);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  expect(await page.evaluate(() => window.__datasniper.writes())).toBe(0);
+  const after = await page.evaluate(() => window.__datasniper.marks());
+  expect(after.comments).toEqual(before.comments);
+  expect(after.fills).toEqual(before.fills);
+});
+
+test("re-attach takes every matching file in one drop", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples/capital-call-02.pdf"),
+  ]);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  await page.evaluate(() => window.__datasniper.clearStoredFiles());
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  await expect(page.locator("#reattach")).toBeVisible();
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-02.pdf"),
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+  ]);
+  await expect(page.locator("#status")).toContainText("Re-attached 2 documents.");
+  await expect(page.locator("#reattach")).toBeHidden();
+  await expect(page.locator("#doc-list li")).toHaveCount(2);
+  await page.evaluate(async () => {
+    await window.__datasniper.clearStoredFiles();
+    await window.__datasniper.dropDocument("capital-call-01.pdf");
+    await window.__datasniper.dropDocument("capital-call-02.pdf");
+  });
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-02.pdf"));
+  await expect(page.locator("#status")).toContainText("Re-attached 1 document.");
+  await expect(page.locator("#status")).toContainText("Still missing capital-call-01.pdf");
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-01.pdf");
+  await expect(page.locator("#doc-list li")).toHaveCount(1);
+});
+
 test("comments.add rejects an options object", async ({ page }) => {
   await page.goto("/datasniper/taskpane.html?harness=1");
   const rejected = await page.evaluate(async () => {
