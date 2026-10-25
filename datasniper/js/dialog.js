@@ -364,8 +364,20 @@ function base64ToBytes(value) {
 
 const incoming = { chunks: [] };
 
+function showMissingFile(name) {
+  const label = name || "That file";
+  emptyState.hidden = false;
+  viewer.hidden = true;
+  emptyState.textContent = `${label} is not stored in this browser. Choose that same filename in the task pane.`;
+  liveText.textContent = emptyState.textContent;
+}
+
 function onParentMessage(raw) {
   const message = JSON.parse(raw);
+  if (message.type === "missing") {
+    showMissingFile(message.name);
+    return;
+  }
   if (message.type === "session") {
     session = { snips: message.snips || [], overrides: message.overrides || {} };
     if (message.page) viewerPage = message.page;

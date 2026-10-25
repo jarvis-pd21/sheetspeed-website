@@ -105,6 +105,26 @@ function showReattach() {
   reattachBanner.hidden = false;
 }
 
+function focusReattach(docId, name) {
+  reattachQueue = [{ docId, name: name || "document" }, ...reattachQueue.filter((item) => item.docId !== docId)];
+  showReattach();
+}
+
+function linkedName(docId) {
+  const index = meta?.rows?.indexOf(docId) ?? -1;
+  if (index >= 0 && meta.names?.[index]) return meta.names[index];
+  return model.docs.find((doc) => doc.id === docId)?.name || "";
+}
+
+async function documentAvailable(docId) {
+  if (model.docs.some((doc) => doc.id === docId)) return true;
+  try {
+    return Boolean(await getDocument(docId));
+  } catch (error) {
+    return false;
+  }
+}
+
 async function addFiles(fileList) {
   const files = [...fileList];
   if (!files.length) return;
@@ -474,9 +494,14 @@ function amountFormat(raw) {
 async function saveWorkbookSettings() {
   if (!excelReady || !meta) return;
   const hasLinks = Boolean(meta.links && Object.keys(meta.links).length);
-  Office.context.document.settings.set(SETTINGS_KEY, JSON.stringify(meta));
-  Office.context.document.settings.set("Office.AutoShowTaskpaneWithDocument", hasLinks);
-  await new Promise((resolve) => Office.context.document.settings.saveAsync(resolve));
+  const settings = Office.context.document.settings;
+  const record = JSON.stringify(meta);
+  const currentShow = settings.get("Office.AutoShowTaskpaneWithDocument");
+  const showMatches = currentShow === hasLinks || currentShow === String(hasLinks);
+  if (settings.get(SETTINGS_KEY) === record && showMatches) return;
+  settings.set(SETTINGS_KEY, record);
+  settings.set("Office.AutoShowTaskpaneWithDocument", hasLinks);
+  await new Promise((resolve) => settings.saveAsync(resolve));
   if (hasLinks && Office.addin && Office.StartupBehavior && typeof Office.addin.setStartupBehavior === "function") {
     try {
       await Office.addin.setStartupBehavior(Office.StartupBehavior.load);
@@ -659,6 +684,11 @@ async function ensureSelection() {
     const docId = meta.rows[hit.row];
     const column = meta.columns[hit.col];
     if (!docId || !column) return;
+    if (!(await documentAvailable(docId))) {
+      focusReattach(docId, linkedName(docId));
+      await closeDialog();
+      return;
+    }
     await openPreview(docId, column === "__source__" ? null : column);
   });
 }
@@ -1030,10 +1060,34 @@ function bytesToBase64(bytes) {
   return btoa(binary);
 }
 
+function tellDialogMissing(docId) {
+  if (!dialog) return;
+  try {
+    dialog.messageChild(JSON.stringify({
+      type: "missing",
+      docId,
+      name: linkedName(docId),
+    }));
+  } catch (error) {
+    dialog = null;
+    dialogMode = null;
+  }
+}
+
 async function sendDocument(docId, snipId) {
   const doc = model.docs.find((item) => item.id === docId) || null;
-  const record = doc || await getDocument(docId);
-  if (!record || !dialog) return;
+  let record = doc;
+  if (!record) {
+    try {
+      record = await getDocument(docId);
+    } catch (error) {
+      record = null;
+    }
+  }
+  if (!record || !dialog) {
+    tellDialogMissing(docId);
+    return;
+  }
   const payload = {
     type: "doc-begin",
     id: record.id,
@@ -1067,6 +1121,16 @@ fileInput.addEventListener("change", () => {
   addFiles(files);
 });
 samplesButton.addEventListener("click", () => loadSamples());
+document.querySelector("#mac-tip-dismiss")?.addEventListener("click", () => {
+  try {
+    localStorage.setItem("datasniper.readyTipDismissed", "1");
+  } catch (error) {
+    /* The tip still hides for this page. */
+  }
+  document.documentElement.dataset.readyTip = "dismissed";
+  const tip = document.querySelector("#mac-tip");
+  if (tip) tip.hidden = true;
+});
 document.querySelector("#clear-docs").addEventListener("click", () => {
   requestClearAll().catch((error) => setStatus(error.message || "Could not clear the documents."));
 });

@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/taskpane.html" />
   <link rel="icon" href="assets/icon-32.png" />
-  <link rel="stylesheet" href="css/app.css?v=7" />
-  <script src="js/boot.js?v=7"></script>
+  <link rel="stylesheet" href="css/app.css?v=8" />
+  <script src="js/boot.js?v=8"></script>
 </head>
 <body class="taskpane">
   <div id="app">
@@ -28,7 +28,7 @@
     </header>
     <p id="host-banner" hidden>This page is not inside Excel. You can still snip documents and preview the table here. Export writes into a workbook only when the task pane is opened from Excel. Add <code>?harness=1</code> for the test workbook.</p>
     <p id="reattach" hidden>This workbook points at <strong id="reattach-name"></strong>. That file is not stored in this browser. Choose the same filename to open it again.</p>
-    <p id="mac-tip" class="mac-tip">On Excel for Mac, open the <a id="starter-link" href="DataSniper-Starter.xlsx" download="DataSniper-Starter.xlsx">starter workbook</a>. That file is saved with this pane visible, and Excel keeps it visible when you save.</p>
+    <p id="mac-tip" class="mac-tip"><span>DataSniper is ready. On Excel for Mac, open the <a id="starter-link" href="DataSniper-Starter.xlsx" download="DataSniper-Starter.xlsx">starter workbook</a>. That file is saved with this pane visible, and Excel keeps it visible when you save.</span><button id="mac-tip-dismiss" type="button">Dismiss</button></p>
     <div class="workspace">
       <section class="viewer-pane">
         <div class="viewer-bar">
@@ -85,6 +85,6 @@
     <div class="mock-title">Excel workbook · harness</div>
     <div id="mock-grid"></div>
   </div>
-  <script type="module" src="js/taskpane.js?v=7"></script>
+  <script type="module" src="js/taskpane.js?v=8"></script>
 </body>
 </html>

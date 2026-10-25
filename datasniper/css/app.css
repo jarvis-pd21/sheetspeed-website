@@ -105,7 +105,15 @@ header {
   border-bottom: 1px solid #f0d7c2;
 }
 
+html[data-ready-tip="dismissed"] #mac-tip {
+  display: none !important;
+}
+
 .mac-tip {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
   margin: 0;
   padding: 6px 16px;
   font-size: 12px;
@@ -113,6 +121,15 @@ header {
   color: var(--muted);
   background: var(--panel);
   border-bottom: 1px solid var(--line);
+}
+
+.mac-tip button {
+  flex: none;
+  background: transparent;
+  color: var(--teal-dark);
+  border: 1px solid #c9d6d3;
+  padding: 2px 8px;
+  font-size: 12px;
 }
 
 #reattach strong {

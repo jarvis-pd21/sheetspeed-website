@@ -7,10 +7,13 @@
   var selection = { row: 0, col: 0 };
   var selectionHandlers = [];
   var settings = {};
+  var settingsSaves = 0;
   try {
     settings = JSON.parse(sessionStorage.getItem("datasniper.harness.settings") || "{}") || {};
+    settingsSaves = Number(sessionStorage.getItem("datasniper.harness.settingsSaves") || "0") || 0;
   } catch (error) {
     settings = {};
+    settingsSaves = 0;
   }
 
   function rememberSettings() {
@@ -336,6 +339,12 @@
           },
           saveAsync: function (callback) {
             rememberSettings();
+            settingsSaves += 1;
+            try {
+              sessionStorage.setItem("datasniper.harness.settingsSaves", String(settingsSaves));
+            } catch (error) {
+              /* The count still advances in memory for this page. */
+            }
             if (callback) callback({ status: "succeeded" });
           },
         },
@@ -437,6 +446,7 @@
         }, Promise.resolve());
       },
       settings: function () { return settings; },
+      settingsSaves: function () { return settingsSaves; },
       startupBehavior: null,
       marks: function () {
         return {

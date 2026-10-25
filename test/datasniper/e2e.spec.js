@@ -442,6 +442,54 @@ test("remove and clear all drop documents and their sheet rows", async ({ page }
   await expect(page.locator("#doc-list li")).toHaveCount(0);
 });
 
+test("a missing linked cell names that file and does not open a preview", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples/capital-call-02.pdf"),
+  ]);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  const saves = await page.evaluate(() => window.__datasniper.settingsSaves());
+  expect(saves).toBeGreaterThan(0);
+  await page.locator("#clear-docs").click();
+  await page.locator("#clear-keep").click();
+  await expect(page.locator("#doc-list li")).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.settingsSaves())).toBe(saves);
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-01.pdf");
+  await page.evaluate(() => window.__datasniper.select(2, 1));
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-02.pdf");
+  await expect(page.locator("#ds-harness-dialog")).toHaveCount(0);
+  await page.evaluate(() => window.__datasniper.select(1, 1));
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-01.pdf");
+  await expect(page.locator("#ds-harness-dialog")).toHaveCount(0);
+});
+
+test("a preview asked for a missing file says so instead of waiting", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  await page.evaluate(() => window.__datasniper.select(1, 1));
+  const preview = page.frameLocator("#ds-harness-dialog");
+  await expect(preview.locator("#live-text")).toHaveText("$1,250,000.00");
+  await page.evaluate(async () => {
+    await window.__datasniper.clearStoredFiles();
+    await window.__datasniper.dropDocument("capital-call-01.pdf");
+  });
+  await page.locator("#ds-harness-dialog").evaluate((frame) => {
+    frame.src = frame.src;
+  });
+  await expect(preview.locator("#empty-state")).toContainText("capital-call-01.pdf is not stored in this browser");
+  await expect(preview.locator("#empty-state")).not.toContainText("Asking Excel");
+});
+
 test("comments.add rejects an options object", async ({ page }) => {
   await page.goto("/datasniper/taskpane.html?harness=1");
   const rejected = await page.evaluate(async () => {
