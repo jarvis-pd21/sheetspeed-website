@@ -37,6 +37,26 @@ class StarterWorkbookTest(unittest.TestCase):
         ]
         self.assertEqual([item.get("value") for item in shown], ["true"])
         self.assertNotIn(other_id, webextension)
+        package_rels = read(path, "_rels/.rels").decode("utf-8")
+        rel_ns = {"pr": "http://schemas.openxmlformats.org/package/2006/relationships"}
+        relationships = ET.fromstring(package_rels).findall("pr:Relationship", rel_ns)
+        ids = [item.get("Id") for item in relationships]
+        self.assertEqual(len(ids), len(set(ids)))
+        taskpane_links = [
+            item for item in relationships
+            if item.get("Type") == "http://schemas.microsoft.com/office/2011/relationships/webextensiontaskpanes"
+            and item.get("Target") == "xl/webextensions/taskpanes.xml"
+        ]
+        self.assertEqual(len(taskpane_links), 1)
+        self.assertEqual(taskpane_links[0].get("Id"), "rId4")
+        data_sheet = read(path, "xl/worksheets/sheet1.xml").decode("utf-8")
+        note_sheet = read(path, "xl/worksheets/sheet2.xml").decode("utf-8")
+        workbook = read(path, "xl/workbook.xml").decode("utf-8")
+        self.assertNotIn("customWidth", data_sheet)
+        self.assertNotIn("DataSniper is ready", data_sheet)
+        self.assertIn("DataSniper is ready", note_sheet)
+        self.assertIn("Export onto the DataSniper sheet", note_sheet)
+        self.assertLess(workbook.index('name="DataSniper"'), workbook.index('name="Start here"'))
 
     def test_main_starter_points_at_the_hosted_addin(self):
         self.assert_visible("DataSniper-Starter.xlsx", MAIN_ID, ALT_ID)

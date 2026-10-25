@@ -58,6 +58,16 @@ test("a 240px task pane keeps a compact list and snips in the large viewer", asy
   expect(placement.coversText).toBe(false);
 });
 
+test("the ready tip stays dismissed", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await expect(page.locator("#mac-tip")).toBeVisible();
+  await expect(page.locator("#mac-tip")).toContainText("DataSniper is ready");
+  await page.locator("#mac-tip-dismiss").click();
+  await expect(page.locator("#mac-tip")).toBeHidden();
+  await page.reload();
+  await expect(page.locator("#mac-tip")).toBeHidden();
+});
+
 test("the public pages link DataSniper and the install note is one line", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("header a.x-link[href='/datasniper/']")).toHaveText("DataSniper");
