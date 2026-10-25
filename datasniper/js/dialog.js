@@ -1,6 +1,6 @@
-import { clampRect, normalizeDrag } from "./extract.js";
+import { clampRect, highlightRectForValue, normalizeDrag, textRectsForItems } from "./extract.js";
 import { finishLabels } from "./labels.js";
-import { extractFromDocument, loadDocument, renderImage, renderPdfPage } from "./pdf-engine.js";
+import { extractFromDocument, loadDocument, pageGeometry, renderImage, renderPdfPage } from "./pdf-engine.js";
 import { getDocument, loadSession } from "./store.js";
 
 const COLORS = ["#0f6e6b", "#b45309", "#9f1239", "#1d4ed8", "#6d28d9", "#3f6212"];
@@ -38,6 +38,7 @@ let drawing = null;
 let extractTimer = 0;
 let revision = 0;
 let displayTicket = 0;
+let geometry = null;
 
 function colorFor(index) {
   return COLORS[index % COLORS.length];
@@ -103,8 +104,11 @@ function paint() {
   const page = currentPage();
   visibleSnips().forEach((snip) => {
     const index = session.snips.findIndex((item) => item.id === snip.id);
-    const rect = !viewerMode && snip.id === snipId && activeRect ? activeRect : rectFor(snip.id);
-    if (!rect || (rect.page || 1) !== page) return;
+    const raw = !viewerMode && snip.id === snipId && activeRect ? activeRect : rectFor(snip.id);
+    if (!raw || (raw.page || 1) !== page) return;
+    const rect = drag || !geometry
+      ? raw
+      : highlightRectForValue(geometry.items, geometry.pageWidth, geometry.pageHeight, raw);
     const color = colorFor(Math.max(0, index));
     const box = document.createElement("div");
     box.className = "snip-box";
@@ -129,7 +133,9 @@ function paint() {
     }
     overlay.append(box);
   });
-  finishLabels(overlay);
+  finishLabels(overlay, {
+    textRects: geometry ? textRectsForItems(geometry.items, geometry.pageWidth, geometry.pageHeight) : [],
+  });
   if (drawing) {
     const rect = normalizeDrag(drawing.start, drawing.current);
     const box = document.createElement("div");
@@ -147,8 +153,10 @@ async function render() {
   const page = currentPage();
   if (opened.kind === "pdf") {
     if (page <= opened.pageCount) await renderPdfPage(opened.pdf, page, canvas);
+    geometry = await pageGeometry(opened, page);
   } else {
     renderImage(opened.image, canvas);
+    geometry = null;
   }
   viewer.hidden = false;
   emptyState.hidden = true;
@@ -379,6 +387,7 @@ function onParentMessage(raw) {
     if (message.snipId && snipId && message.snipId !== snipId) return;
     if (message.rect) activeRect = { ...message.rect, page: message.rect.page || activeRect?.page || 1 };
     if (message.text != null) liveText.textContent = message.text || "(empty)";
+    if (applyAll) applyAll.hidden = true;
     paint();
     showConfidence();
     return;

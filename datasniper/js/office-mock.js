@@ -2,6 +2,7 @@
   var grid = {};
   var fills = {};
   var comments = [];
+  var notes = [];
   var tables = [];
   var selection = { row: 0, col: 0 };
   var selectionHandlers = [];
@@ -90,6 +91,10 @@
     comments = comments.filter(function (comment) {
       return comment.row < this.rowIndex || comment.row >= this.rowIndex + this.rowCount
         || comment.col < this.columnIndex || comment.col >= this.columnIndex + this.columnCount;
+    }, this);
+    notes = notes.filter(function (note) {
+      return note.row < this.rowIndex || note.row >= this.rowIndex + this.rowCount
+        || note.col < this.columnIndex || note.col >= this.columnIndex + this.columnCount;
     }, this);
     renderGrid();
   };
@@ -185,12 +190,15 @@
         },
       },
       comments: {
-        add: function (range, content) {
-          var text = typeof content === "string" ? content : content.content;
+        add: function (cellAddress, content, contentType) {
+          if (typeof cellAddress !== "string" || typeof content !== "string" || contentType !== Excel.ContentType.plain) {
+            throw new Error("comments.add expects a cell address, the note text, and Excel.ContentType.plain.");
+          }
+          var parsed = parseAddress(cellAddress);
           var comment = {
-            row: range.rowIndex,
-            col: range.columnIndex,
-            content: text,
+            row: parsed.rowIndex,
+            col: parsed.columnIndex,
+            content: content,
             load: function () {},
             delete: function () {
               comments = comments.filter(function (item) { return item !== comment; });
@@ -201,6 +209,27 @@
         },
         load: function () {},
         get items() { return comments.slice(); },
+      },
+      notes: {
+        add: function (cellAddress, content) {
+          if (typeof cellAddress !== "string" || typeof content !== "string") {
+            throw new Error("notes.add expects a cell address and the note text.");
+          }
+          var parsed = parseAddress(cellAddress);
+          var note = {
+            row: parsed.rowIndex,
+            col: parsed.columnIndex,
+            content: content,
+            load: function () {},
+            delete: function () {
+              notes = notes.filter(function (item) { return item !== note; });
+            },
+          };
+          notes.push(note);
+          return note;
+        },
+        load: function () {},
+        get items() { return notes.slice(); },
       },
     };
   }
@@ -312,7 +341,12 @@
         },
       },
       requirements: {
-        isSetSupported: function () { return true; },
+        isSetSupported: function (setName, version) {
+          if (setName !== "ExcelApi" || !top || !window.__datasniper) return true;
+          if (String(version) === "1.10" && window.__datasniper.allowComments === false) return false;
+          if (String(version) === "1.18" && window.__datasniper.allowNotes === false) return false;
+          return true;
+        },
       },
       ui: {
         displayDialogAsync: function (url, options, callback) {
@@ -385,6 +419,7 @@
 
   window.Office = Office;
   window.Excel = {
+    ContentType: { plain: "Plain", mention: "Mention" },
     run: function (batch) {
       return Promise.resolve(batch(context()));
     },
@@ -408,6 +443,9 @@
           fills: Object.assign({}, fills),
           comments: comments.map(function (comment) {
             return { row: comment.row, col: comment.col, content: comment.content };
+          }),
+          notes: notes.map(function (note) {
+            return { row: note.row, col: note.col, content: note.content };
           }),
         };
       },

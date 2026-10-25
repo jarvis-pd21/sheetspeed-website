@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { fieldRectForDocument, parseAmount } from "../../datasniper/js/extract.js";
-import { chooseLabelPlace } from "../../datasniper/js/labels.js";
+import { fieldRectForDocument, highlightRectForValue, parseAmount } from "../../datasniper/js/extract.js";
+import { chooseChipCorner, chooseLabelPlace } from "../../datasniper/js/labels.js";
 import { buildWorkbookRecord, clashesWithAnotherField, replaceWorkbookRecord } from "../../datasniper/js/workbook.js";
 
 test("five unambiguous amount formats become numbers and the rest stay text", () => {
@@ -65,6 +65,46 @@ test("labels move above the box, then into the margin, then into a chip", () => 
   assert.equal(chooseLabelPlace(box, label, overlay, [crowdedAbove, crowdedSide, crowdedRight]), "chip");
   const nearTop = { left: 100, top: 4, right: 220, bottom: 30 };
   assert.equal(chooseLabelPlace(nearTop, label, overlay, []), "side");
+});
+
+test("a complete line grows the highlight and a clipped line stays in the snip", () => {
+  const width = 612;
+  const height = 792;
+  const baseline = 500;
+  const text = "Harborview Pension Trust";
+  const glyph = item(text, 160, baseline, 140);
+  const fontSize = 11;
+  const top = baseline + fontSize * 0.92;
+  const bottom = baseline - fontSize * 0.28;
+  const snipLeft = 161;
+  const snipRight = 299;
+  const rect = {
+    x: snipLeft / width,
+    y: (height - (top + 1)) / height,
+    w: (snipRight - snipLeft) / width,
+    h: (top + 1 - (bottom - 1)) / height,
+    page: 1,
+  };
+  const shown = highlightRectForValue([glyph], width, height, rect);
+  assert.ok(shown.x < rect.x);
+  assert.ok(shown.x + shown.w > rect.x + rect.w);
+  const clipped = { ...rect, w: ((160 + (140 / text.length) * 8) - snipLeft) / width };
+  const same = highlightRectForValue([glyph], width, height, clipped);
+  assert.equal(same.x, clipped.x);
+  assert.equal(same.w, clipped.w);
+});
+
+test("labels avoid page text and a chip uses a free corner", () => {
+  const overlay = { left: 0, top: 0, right: 400, bottom: 600 };
+  const box = { left: 100, top: 200, right: 220, bottom: 230 };
+  const label = { width: 80, height: 14 };
+  const textAbove = { left: 90, top: 170, right: 210, bottom: 198 };
+  assert.equal(chooseLabelPlace(box, label, overlay, [textAbove]), "side");
+  const open = chooseChipCorner(box, overlay, [textAbove]);
+  assert.ok(open.left >= box.right);
+  const textRight = { left: 218, top: 190, right: 280, bottom: 230 };
+  const shifted = chooseChipCorner(box, overlay, [textRight]);
+  assert.ok(shifted.right <= box.left);
 });
 
 test("a label-matched nudge that reads another field is rejected", () => {

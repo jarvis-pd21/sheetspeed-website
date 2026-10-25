@@ -1,4 +1,4 @@
-import { clampRect, fieldRectForDocument, normalizeDrag, pageHasTextLayer, parseAmount } from "./extract.js";
+import { clampRect, fieldRectForDocument, highlightRectForValue, normalizeDrag, pageHasTextLayer, parseAmount, textRectsForItems } from "./extract.js";
 import { finishLabels } from "./labels.js";
 import { extractFromDocument, loadDocument, pageGeometry, renderImage, renderPdfPage } from "./pdf-engine.js";
 import { applyLowConfidenceMarks, clearTable, tableExists, updateCell, watchSelection, writeTable } from "./excel-bridge.js";
@@ -25,6 +25,7 @@ const latestUpdate = new Map();
 let updateChain = Promise.resolve();
 let excelReady = false;
 let drawing = null;
+let pageTextGeometry = null;
 
 const fileInput = document.querySelector("#file-input");
 const uploadButton = document.querySelector("#upload-btn");
@@ -236,23 +237,32 @@ async function renderPage() {
     canvas.height = 0;
     return;
   }
-  if (doc.kind === "pdf") await renderPdfPage(doc.pdf, model.page, canvas);
-  else renderImage(doc.image, canvas);
+  if (doc.kind === "pdf") {
+    await renderPdfPage(doc.pdf, model.page, canvas);
+    pageTextGeometry = await pageGeometry(doc, model.page);
+  } else {
+    renderImage(doc.image, canvas);
+    pageTextGeometry = null;
+  }
   paintBoxes();
 }
 
 function paintBoxes() {
   overlay.querySelectorAll(".snip-box, .draw-rect").forEach((node) => node.remove());
+  const geometry = pageTextGeometry;
   model.snips.forEach((snip, index) => {
     if ((snip.page || 1) !== model.page) return;
+    const shown = geometry
+      ? highlightRectForValue(geometry.items, geometry.pageWidth, geometry.pageHeight, snip)
+      : snip;
     const box = document.createElement("div");
     box.className = "snip-box";
     box.dataset.snipId = snip.id;
     const color = colorFor(index);
-    box.style.left = `${snip.x * 100}%`;
-    box.style.top = `${snip.y * 100}%`;
-    box.style.width = `${snip.w * 100}%`;
-    box.style.height = `${snip.h * 100}%`;
+    box.style.left = `${shown.x * 100}%`;
+    box.style.top = `${shown.y * 100}%`;
+    box.style.width = `${shown.w * 100}%`;
+    box.style.height = `${shown.h * 100}%`;
     box.style.borderColor = color;
     box.style.background = rgba(color, 0.18);
     const label = document.createElement("span");
@@ -261,7 +271,10 @@ function paintBoxes() {
     box.append(label);
     overlay.append(box);
   });
-  finishLabels(overlay);
+  finishLabels(overlay, {
+    chipsOnly: true,
+    textRects: geometry ? textRectsForItems(geometry.items, geometry.pageWidth, geometry.pageHeight) : [],
+  });
   if (drawing) {
     const rect = normalizeDrag(drawing.start, drawing.current);
     const box = document.createElement("div");
@@ -496,15 +509,16 @@ function resolvedPayload(docId, snipId) {
 async function syncLowMarks() {
   const enabled = document.querySelector("#mark-low")?.checked !== false;
   if (meta) meta.markLowConfidence = enabled;
-  if (!excelReady || !meta?.links) return;
+  if (!excelReady || !meta?.links) return "";
   const entries = Object.entries(meta.links).flatMap(([key, link]) => {
     if (!link || link.confidence !== "low") return [];
     const [row, col] = key.split(":").map(Number);
     if (!Number.isInteger(row) || !Number.isInteger(col)) return [];
     return [{ row, col }];
   });
-  await applyLowConfidenceMarks(entries, enabled);
+  const warning = await applyLowConfidenceMarks(entries, enabled);
   await saveWorkbookSettings();
+  return warning || "";
 }
 
 async function readCell(doc, snip, template) {
@@ -618,7 +632,8 @@ async function exportAll() {
     }
     renderPreview(headers, matrix, bodyCells);
     try {
-      await syncLowMarks();
+      const markWarning = await syncLowMarks();
+      if (markWarning) notes.push(markWarning);
     } catch (error) {
       notes.push(error.message || "Could not mark the low-confidence cells.");
     }
@@ -930,7 +945,8 @@ async function restoreWorkbook() {
   const markBox = document.querySelector("#mark-low");
   if (markBox) markBox.checked = meta.markLowConfidence !== false;
   try {
-    await syncLowMarks();
+    const markWarning = await syncLowMarks();
+    if (markWarning) setStatus(markWarning);
   } catch (error) {
     setStatus(error.message || "Could not restore the low-confidence marks.");
   }
@@ -953,17 +969,35 @@ async function removeDocument(id) {
   setStatus(doc ? `Removed ${doc.name}.` : "Removed that document.");
 }
 
-async function clearAllDocuments() {
+async function clearAllDocuments(deleteTable) {
   model.docs = [];
   model.overrides = {};
   model.activeId = null;
   model.page = 1;
+  pageTextGeometry = null;
   reattachQueue = [];
   showReattach();
   await persist();
   await renderAll();
-  if (meta) await clearSheetExport();
-  setStatus("Cleared every document.");
+  if (deleteTable && meta) {
+    await clearSheetExport();
+    setStatus("Cleared every document and the Excel table.");
+    return;
+  }
+  const kept = !deleteTable && excelReady && meta && await tableExists();
+  setStatus(kept
+    ? "Cleared every document. The Excel table is still on the sheet."
+    : "Cleared every document.");
+}
+
+async function requestClearAll() {
+  const hasTable = Boolean(excelReady && meta && await tableExists());
+  const confirm = document.querySelector("#clear-confirm");
+  if (!hasTable || !confirm) {
+    await clearAllDocuments(false);
+    return;
+  }
+  confirm.hidden = false;
 }
 
 async function clearSheetExport() {
@@ -1033,10 +1067,23 @@ fileInput.addEventListener("change", () => {
 });
 samplesButton.addEventListener("click", () => loadSamples());
 document.querySelector("#clear-docs").addEventListener("click", () => {
-  clearAllDocuments().catch((error) => setStatus(error.message || "Could not clear the documents."));
+  requestClearAll().catch((error) => setStatus(error.message || "Could not clear the documents."));
+});
+document.querySelector("#clear-cancel").addEventListener("click", () => {
+  document.querySelector("#clear-confirm").hidden = true;
+});
+document.querySelector("#clear-keep").addEventListener("click", () => {
+  document.querySelector("#clear-confirm").hidden = true;
+  clearAllDocuments(false).catch((error) => setStatus(error.message || "Could not clear the documents."));
+});
+document.querySelector("#clear-delete").addEventListener("click", () => {
+  document.querySelector("#clear-confirm").hidden = true;
+  clearAllDocuments(true).catch((error) => setStatus(error.message || "Could not clear the documents."));
 });
 document.querySelector("#mark-low").addEventListener("change", () => {
-  syncLowMarks().catch((error) => setStatus(error.message || "Could not update the low-confidence marks."));
+  syncLowMarks().then((warning) => {
+    if (warning) setStatus(warning);
+  }).catch((error) => setStatus(error.message || "Could not update the low-confidence marks."));
 });
 docList.addEventListener("click", (event) => {
   const button = event.target.closest(".remove-doc");

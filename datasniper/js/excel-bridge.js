@@ -100,26 +100,94 @@ async function dataCells(context, entries) {
   const table = sheet.tables.getItemOrNullObject(TABLE);
   table.load("isNullObject");
   await context.sync();
-  if (table.isNullObject) return { sheet, cells: [] };
+  if (table.isNullObject) return { sheet, cells: [], addresses: [] };
   const body = table.getDataBodyRange();
   body.load("rowIndex, columnIndex");
   await context.sync();
-  const cells = entries.map((entry) => sheet.getRange(address(body.rowIndex + entry.row, body.columnIndex + entry.col)));
-  return { sheet, cells };
+  const addresses = entries.map((entry) => address(body.rowIndex + entry.row, body.columnIndex + entry.col));
+  const cells = addresses.map((cellAddress) => sheet.getRange(cellAddress));
+  return { sheet, cells, addresses };
 }
 
-async function stripLowNotes(context, sheet) {
-  if (!sheet.comments || typeof sheet.comments.load !== "function") return;
-  const comments = sheet.comments;
-  comments.load("items");
+function requirementSupported(version) {
+  try {
+    if (typeof Office === "undefined" || !Office.context?.requirements?.isSetSupported) return true;
+    return Office.context.requirements.isSetSupported("ExcelApi", version);
+  } catch (error) {
+    return false;
+  }
+}
+
+async function stripCollection(context, collection) {
+  if (!collection || typeof collection.load !== "function") return;
+  collection.load("items");
   await context.sync();
-  const items = comments.items || [];
+  const items = collection.items || [];
   items.forEach((item) => item.load && item.load("content"));
   await context.sync();
   items.forEach((item) => {
     if (item.content === LOW_CONFIDENCE_NOTE && typeof item.delete === "function") item.delete();
   });
   await context.sync();
+}
+
+async function writeCommentsOrNotes(entries, enabled) {
+  try {
+    await enqueue(async (context) => {
+      const sheet = context.workbook.worksheets.getActiveWorksheet();
+      try {
+        await stripCollection(context, sheet.comments);
+      } catch (error) {
+        /* This Excel has no comment collection. */
+      }
+      try {
+        await stripCollection(context, sheet.notes);
+      } catch (error) {
+        /* This Excel has no note collection. */
+      }
+    });
+  } catch (error) {
+    /* A host without comments or notes still keeps the fill. */
+  }
+  if (!enabled) return "";
+  let commentProblem = "";
+  if (!requirementSupported("1.10")) {
+    commentProblem = "This Excel can't add comments.";
+  } else {
+    try {
+      await enqueue(async (context) => {
+        const sheet = context.workbook.worksheets.getActiveWorksheet();
+        const { addresses } = await dataCells(context, entries);
+        addresses.forEach((cellAddress) => {
+          sheet.comments.add(cellAddress, LOW_CONFIDENCE_NOTE, Excel.ContentType.plain);
+        });
+        await context.sync();
+      });
+    } catch (error) {
+      commentProblem = error.message || "Excel could not add the low-confidence comment.";
+    }
+  }
+  if (!commentProblem) return "";
+  if (!requirementSupported("1.18")) {
+    return `${commentProblem} This Excel can't add notes either. Low-confidence cells keep the amber fill only.`;
+  }
+  try {
+    await enqueue(async (context) => {
+      const sheet = context.workbook.worksheets.getActiveWorksheet();
+      if (!sheet.notes || typeof sheet.notes.add !== "function") {
+        throw new Error("This Excel can't add notes.");
+      }
+      const { addresses } = await dataCells(context, entries);
+      addresses.forEach((cellAddress) => {
+        sheet.notes.add(cellAddress, LOW_CONFIDENCE_NOTE);
+      });
+      await context.sync();
+    });
+  } catch (error) {
+    const noteProblem = error.message || "Excel could not add a note.";
+    return `${commentProblem} ${noteProblem} Low-confidence cells keep the amber fill only.`;
+  }
+  return `${commentProblem} Low-confidence cells have a note instead.`;
 }
 
 export function applyLowConfidenceMarks(entries, enabled) {
@@ -131,16 +199,7 @@ export function applyLowConfidenceMarks(entries, enabled) {
     });
     await context.sync();
   });
-  return paint.then(() => enqueue(async (context) => {
-    const sheet = context.workbook.worksheets.getActiveWorksheet();
-    await stripLowNotes(context, sheet);
-    if (!enabled || !sheet.comments || typeof sheet.comments.add !== "function") return;
-    const { cells } = await dataCells(context, entries);
-    cells.forEach((cell) => {
-      sheet.comments.add(cell, { content: LOW_CONFIDENCE_NOTE, contentType: "Plain" });
-    });
-    await context.sync();
-  }).catch(() => {}));
+  return paint.then(() => writeCommentsOrNotes(entries, enabled));
 }
 
 export function watchSelection(handler) {
