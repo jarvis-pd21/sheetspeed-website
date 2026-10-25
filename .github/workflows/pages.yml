@@ -31,7 +31,7 @@ jobs:
         run: |
           python3 scripts/check_seo.py
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s test -p 'test_*.py'
-          node --test test/sitemap-worker.test.mjs
+          node --test test/sitemap-worker.test.mjs test/datasniper/engine.test.mjs
 
       - name: Stage static site
         run: |

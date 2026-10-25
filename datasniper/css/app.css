@@ -98,11 +98,23 @@ header {
   pointer-events: none;
 }
 
-#host-banner {
+#host-banner, #reattach {
   padding: 8px 16px;
   background: #fff4e8;
   color: #6d3b12;
   border-bottom: 1px solid #f0d7c2;
+}
+
+#reattach strong {
+  font-weight: 650;
+}
+
+#preview tr.low td {
+  background: #fff4e8;
+}
+
+#apply-all {
+  margin: 0 0 8px;
 }
 
 .workspace {

@@ -17,6 +17,7 @@ const emptyState = document.querySelector("#empty-state");
 const viewerBar = document.querySelector("#viewer-bar");
 const viewerHint = document.querySelector("#viewer-hint");
 const previewHint = document.querySelector("#preview-hint");
+const applyAll = document.querySelector("#apply-all");
 const readout = document.querySelector("#dialog-readout");
 const pageLabel = document.querySelector("#page-label");
 const prevPage = document.querySelector("#prev-page");
@@ -281,6 +282,7 @@ overlay.addEventListener("pointerup", (event) => {
   }
   if (!drag) return;
   drag = null;
+  if (applyAll) applyAll.hidden = false;
   scheduleExtract(true);
 });
 
@@ -288,6 +290,12 @@ overlay.addEventListener("pointercancel", () => {
   if (!drawing) return;
   drawing = null;
   paint();
+});
+
+applyAll?.addEventListener("click", () => {
+  if (!activeRect || !snipId) return;
+  post({ type: "apply-all", docId, snipId, rect: { ...activeRect } });
+  applyAll.hidden = true;
 });
 
 prevPage?.addEventListener("click", () => changeViewerPage(viewerPage - 1));
@@ -335,6 +343,7 @@ function onParentMessage(raw) {
     return;
   }
   if (message.type === "show") {
+    if (applyAll) applyAll.hidden = true;
     docId = message.docId;
     snipId = message.snipId || null;
     getDocument(docId).then((record) => {
@@ -380,6 +389,7 @@ function showViewerChrome() {
   viewerHint.hidden = false;
   readout.hidden = true;
   previewHint.hidden = true;
+  if (applyAll) applyAll.hidden = true;
   title.textContent = "Large viewer";
   snipTitle.textContent = "Drag a rectangle to add a snip";
   updatePager();

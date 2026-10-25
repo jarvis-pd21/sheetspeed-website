@@ -198,25 +198,25 @@
         <details class="faq-item">
           <summary>Do I snip every document?</summary>
           <div class="answer">
-            <p>You snip the first one. Those rectangles become the template for the rest of the batch, provided each file places the fields in the same place on the page. You can still adjust one document’s box from its preview without redrawing the others.</p>
+            <p>You snip the first one. Those rectangles become the template for the rest of the batch. When a later notice inserts a line and a field moves, DataSniper follows the label beside the first snip, such as Investor or Amount called, and marks that row so you can check the shift. You can still adjust one document’s box from its preview, or apply that box to every document.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>What lands in Excel?</summary>
           <div class="answer">
-            <p>A table named DataSniperExport at cell A1 of the active sheet. The header row is Source document plus your snip names, in list order. Each uploaded document is one body row. Export replaces an earlier DataSniperExport table and overwrites that range.</p>
+            <p>A table named DataSniperExport at cell A1 of the active sheet. The header row is Source document plus your snip names, in list order. Each uploaded document is one body row. An amount that is clearly currency, with a symbol, a thousands comma, parentheses, or a K, M, or B suffix, is stored as a number. The text from the page stays with the cell. The workbook also keeps the template and each value’s document, page, and region, so preview and a later export still work after you reopen the file. Export replaces an earlier DataSniperExport table and overwrites that range, including source links from the previous grid.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>How does the preview open?</summary>
           <div class="answer">
-            <p>Click a result cell while the DataSniper task pane is open. Excel opens a dialog on that document with the snip highlighted. Closing the pane stops the selection listener until you open DataSniper again.</p>
+            <p>Click a result cell while the DataSniper task pane is open. Excel opens a dialog on that document with the snip highlighted. After you move the box, Apply this box to all documents copies that rectangle onto the template and reads every loaded row again. If the file is no longer stored in this browser, DataSniper asks you to choose that same filename. Closing the pane stops the selection listener until you open DataSniper again.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>Where do Excel for Mac, Windows, and the web get the add-in?</summary>
           <div class="answer">
-            <p>You sideload <a href="/datasniper/manifest.xml">manifest.xml</a>. The steps for the Mac wef folder, a Windows shared-folder catalog or Upload My Add-in, and Upload My Add-in on Excel for the web are below. DataSniper is distributed as this manifest. It is not an AppSource listing, and this page does not deploy it from an admin center.</p>
+            <p>DataSniper runs in Excel on Mac, Windows, and the web. DataSnipper’s desktop add-in runs in Excel on Windows, and DataSnipper also offers a separate Excel Online add-in. You sideload <a href="/datasniper/manifest.xml">manifest.xml</a>. The steps for the Mac wef folder, a Windows shared-folder catalog or Upload My Add-in, and Upload My Add-in on Excel for the web are below. DataSniper is distributed as this manifest. It is not an AppSource listing, and this page does not deploy it from an admin center.</p>
           </div>
         </details>
         <details class="faq-item">

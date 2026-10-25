@@ -1,7 +1,8 @@
-import { clampRect, normalizeDrag } from "./extract.js";
-import { extractFromDocument, loadDocument, renderImage, renderPdfPage } from "./pdf-engine.js";
-import { updateCell, watchSelection, writeTable } from "./excel-bridge.js";
-import { createId, getDocument, loadSession, saveDocument, saveSession } from "./store.js";
+import { clampRect, fieldRectForDocument, normalizeDrag, pageHasTextLayer, parseAmount } from "./extract.js";
+import { extractFromDocument, loadDocument, pageGeometry, renderImage, renderPdfPage } from "./pdf-engine.js";
+import { tableExists, updateCell, watchSelection, writeTable } from "./excel-bridge.js";
+import { buildWorkbookRecord, replaceWorkbookRecord } from "./workbook.js";
+import { clearStoredFiles, createId, getDocument, loadSession, saveDocument, saveSession } from "./store.js";
 
 const SETTINGS_KEY = "datasniper.v1";
 const COLORS = ["#0f6e6b", "#b45309", "#9f1239", "#1d4ed8", "#6d28d9", "#3f6212"];
@@ -43,6 +44,9 @@ const previewWrap = document.querySelector("#preview-wrap");
 const preview = document.querySelector("#preview");
 const hostBanner = document.querySelector("#host-banner");
 const openViewerButton = document.querySelector("#open-viewer");
+const reattachBanner = document.querySelector("#reattach");
+const reattachName = document.querySelector("#reattach-name");
+let reattachQueue = [];
 
 function setStatus(message) {
   statusLine.textContent = message || "";
@@ -71,10 +75,6 @@ function persist() {
   }).catch((error) => setStatus(error.message || "Could not store the session."));
 }
 
-function rectFor(docId, snip) {
-  return model.overrides[docId]?.[snip.id] || snip;
-}
-
 async function hydrateRecord(record) {
   const opened = await loadDocument(record.bytes, record.mime);
   const doc = {
@@ -91,9 +91,48 @@ async function hydrateRecord(record) {
   return doc;
 }
 
+function showReattach() {
+  const current = reattachQueue[0];
+  if (!reattachBanner || !reattachName) return;
+  if (!current) {
+    reattachBanner.hidden = true;
+    reattachName.textContent = "";
+    return;
+  }
+  reattachName.textContent = current.name;
+  reattachBanner.hidden = false;
+}
+
 async function addFiles(fileList) {
   const files = [...fileList];
   if (!files.length) return;
+  if (reattachQueue.length) {
+    const wanted = reattachQueue[0];
+    const file = files.find((item) => item.name === wanted.name);
+    if (!file) {
+      setStatus(`Choose ${wanted.name} to open that row again.`);
+      return;
+    }
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const mime = file.type || (file.name.toLowerCase().endsWith(".pdf") ? "application/pdf" : "application/octet-stream");
+      await saveDocument({ id: wanted.docId, name: file.name, mime, bytes });
+      await hydrateRecord({ id: wanted.docId, name: file.name, mime, bytes });
+      reattachQueue = reattachQueue.filter((item) => item.docId !== wanted.docId);
+      if (!model.activeId) {
+        model.activeId = wanted.docId;
+        model.page = 1;
+      }
+      await persist();
+      showReattach();
+      await renderAll();
+      const rest = reattachQueue.map((item) => item.name).join(", ");
+      setStatus(rest ? `Re-attached ${file.name}. Still missing ${rest}.` : `Re-attached ${file.name}.`);
+    } catch (error) {
+      setStatus(`${file.name}: ${error.message || "Could not open that file."}`);
+    }
+    return;
+  }
   setStatus(`Reading ${files.length} document${files.length === 1 ? "" : "s"}…`);
   let added = 0;
   for (const file of files) {
@@ -253,7 +292,7 @@ function renderSnips() {
   exportButton.disabled = !model.docs.length || !model.snips.length;
 }
 
-function renderPreview(headers, matrix) {
+function renderPreview(headers, matrix, cells) {
   previewWrap.hidden = false;
   const table = document.createElement("table");
   const head = document.createElement("tr");
@@ -265,11 +304,16 @@ function renderPreview(headers, matrix) {
   table.append(head);
   matrix.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
+    const low = (cells?.[rowIndex] || []).some((detail) => detail?.confidence === "low");
+    if (low) tr.className = "low";
     row.forEach((value, colIndex) => {
       const cell = document.createElement("td");
-      cell.textContent = value;
+      cell.textContent = value == null ? "" : String(value);
       cell.dataset.previewRow = String(rowIndex);
       cell.dataset.previewCol = String(colIndex);
+      const detail = cells?.[rowIndex]?.[colIndex];
+      if (detail?.raw != null && detail.raw !== "" && String(detail.raw) !== String(value)) cell.title = detail.raw;
+      if (detail?.confidence === "low") cell.dataset.confidence = "low";
       tr.append(cell);
     });
     table.append(tr);
@@ -406,47 +450,135 @@ snipList.addEventListener("mousedown", (event) => {
   document.addEventListener("mouseup", up);
 });
 
+function amountFormat(raw) {
+  return /[$€£]|\b(USD|EUR|GBP|CAD|AUD)\b/i.test(raw || "") ? "$#,##0.00" : "#,##0.00";
+}
+
+async function saveWorkbookSettings() {
+  if (!excelReady || !meta) return;
+  Office.context.document.settings.set(SETTINGS_KEY, JSON.stringify(meta));
+  await new Promise((resolve) => Office.context.document.settings.saveAsync(resolve));
+}
+
+async function readCell(doc, snip, template) {
+  const override = model.overrides[doc.id]?.[snip.id];
+  const base = override || snip;
+  let placed = {
+    rect: { x: base.x, y: base.y, w: base.w, h: base.h, page: base.page || snip.page || 1 },
+    confidence: "high",
+    reason: override ? "override" : "template",
+    label: "",
+  };
+  const page = placed.rect.page;
+  if (!override && template && doc.id !== template.id && doc.kind === "pdf" && template.kind === "pdf") {
+    const templateGeometry = await pageGeometry(template, page);
+    const targetGeometry = await pageGeometry(doc, page);
+    if (templateGeometry && targetGeometry && pageHasTextLayer(templateGeometry.items) && pageHasTextLayer(targetGeometry.items)) {
+      placed = fieldRectForDocument(
+        templateGeometry.items,
+        { width: templateGeometry.pageWidth, height: templateGeometry.pageHeight },
+        targetGeometry.items,
+        { width: targetGeometry.pageWidth, height: targetGeometry.pageHeight },
+        placed.rect,
+      );
+    }
+  }
+  try {
+    const result = await extractFromDocument(doc, placed.rect);
+    const text = result.text || "";
+    const amount = parseAmount(text);
+    return {
+      value: amount ? amount.value : text,
+      raw: text,
+      number: amount ? amount.value : null,
+      page: placed.rect.page || page,
+      rect: placed.rect,
+      confidence: placed.confidence,
+      reason: placed.reason,
+      label: placed.label || "",
+      source: result.source,
+      format: amount ? amountFormat(text) : "General",
+      error: "",
+    };
+  } catch (error) {
+    return {
+      value: "",
+      raw: "",
+      number: null,
+      page,
+      rect: placed.rect,
+      confidence: "low",
+      reason: "error",
+      label: placed.label || "",
+      source: "error",
+      format: "General",
+      error: error.message || "Extraction failed.",
+    };
+  }
+}
+
 async function exportAll() {
-  if (!model.docs.length || !model.snips.length) return;
+  if (!model.docs.length || !model.snips.length) return null;
   exportButton.disabled = true;
   const headers = ["Source document", ...model.snips.map((snip) => snip.name.trim() || "Snip")];
   const matrix = [];
+  const bodyCells = [];
+  const formats = [];
   const notes = [];
+  const lowNames = [];
+  const template = model.docs[0];
   try {
     for (let index = 0; index < model.docs.length; index += 1) {
       const doc = model.docs[index];
       setStatus(`Extracting ${index + 1} of ${model.docs.length}: ${doc.name}`);
       const row = [doc.name];
+      const cells = [{
+        raw: doc.name,
+        number: null,
+        page: 1,
+        rect: null,
+        confidence: "high",
+        reason: "filename",
+        label: "",
+      }];
+      const rowFormats = ["General"];
       for (const snip of model.snips) {
-        try {
-          const result = await extractFromDocument(doc, rectFor(doc.id, snip));
-          row.push(result.text);
-          if (result.source === "ocr" && !result.text) notes.push(`${doc.name}: OCR returned no text for ${snip.name}.`);
-        } catch (error) {
-          row.push("");
-          notes.push(`${doc.name} / ${snip.name}: ${error.message || "Extraction failed."}`);
-        }
+        const cell = await readCell(doc, snip, template);
+        row.push(cell.value);
+        cells.push(cell);
+        rowFormats.push(cell.format);
+        if (cell.error) notes.push(`${doc.name} / ${snip.name}: ${cell.error}`);
+        if (cell.source === "ocr" && !cell.raw) notes.push(`${doc.name}: OCR returned no text for ${snip.name}.`);
+        if (cell.confidence === "low" && !lowNames.includes(doc.name)) lowNames.push(doc.name);
       }
       matrix.push(row);
+      bodyCells.push(cells);
+      formats.push(rowFormats);
     }
-    meta = {
+    meta = replaceWorkbookRecord(meta, buildWorkbookRecord({
       columns: ["__source__", ...model.snips.map((snip) => snip.id)],
-      rows: model.docs.map((doc) => doc.id),
-    };
+      docs: model.docs,
+      snips: model.snips,
+      cells: bodyCells,
+      headers,
+      matrix,
+    }));
     await persist();
     if (excelReady) {
-      await writeTable(headers, matrix);
-      Office.context.document.settings.set(SETTINGS_KEY, JSON.stringify(meta));
-      await new Promise((resolve) => Office.context.document.settings.saveAsync(resolve));
+      await writeTable(headers, matrix, formats);
+      await saveWorkbookSettings();
       await ensureSelection();
     }
-    renderPreview(headers, matrix);
+    renderPreview(headers, matrix, bodyCells);
     const excelNote = excelReady
       ? `Exported ${matrix.length} documents to the DataSniperExport table on the active sheet.`
       : `Prepared ${matrix.length} rows. Excel is not connected, so nothing was written to a workbook.`;
-    setStatus([excelNote, ...notes].join(" "));
+    const lowNote = lowNames.length ? ` Low confidence on ${lowNames.join(", ")}.` : "";
+    setStatus([`${excelNote}${lowNote}`, ...notes].filter(Boolean).join(" "));
+    return { count: matrix.length, lowNames };
   } catch (error) {
     setStatus(error.message || "Export failed.");
+    return null;
   } finally {
     exportButton.disabled = !model.docs.length || !model.snips.length;
   }
@@ -600,6 +732,7 @@ function onDialogMessage(arg) {
     persist();
     return renderAll();
   }
+  if (message.type === "apply-all") return applyBoxToAll(message);
   if (message.type !== "update") return null;
   const token = `${message.docId}:${message.snipId}`;
   const revision = message.revision || 0;
@@ -622,11 +755,86 @@ async function applySnipUpdate(message, token, revision) {
   const row = meta.rows.indexOf(message.docId);
   const col = meta.columns.indexOf(message.snipId);
   if (row < 0 || col < 0) return;
-  if (excelReady) await updateCell(row, col, message.text);
+  const amount = parseAmount(message.text || "");
+  const value = amount ? amount.value : (message.text || "");
+  const format = amount ? amountFormat(message.text) : "General";
+  if (excelReady) await updateCell(row, col, value, format);
   const cell = preview.querySelector(`[data-preview-row="${row}"][data-preview-col="${col}"]`);
-  if (cell) cell.textContent = message.text;
+  if (cell) {
+    cell.textContent = value == null ? "" : String(value);
+    if (amount) cell.title = message.text;
+    else cell.removeAttribute("title");
+  }
   const doc = model.docs.find((item) => item.id === message.docId);
+  if (meta.links) {
+    meta.links[`${row}:${col}`] = {
+      docId: message.docId,
+      name: doc ? doc.name : (meta.links[`${row}:${col}`]?.name || ""),
+      page: message.rect?.page || snip.page || 1,
+      rect: message.rect || null,
+      confidence: "high",
+      reason: "override",
+      label: meta.links[`${row}:${col}`]?.label || "",
+      raw: message.text || "",
+      number: amount ? amount.value : null,
+    };
+    if (meta.matrix?.[row]) meta.matrix[row][col] = value;
+    await saveWorkbookSettings();
+  }
   setStatus(`Updated ${snip.name || "snip"} on ${doc ? doc.name : "that document"}.`);
+}
+
+async function applyBoxToAll(message) {
+  const snip = model.snips.find((item) => item.id === message.snipId);
+  if (!snip || !message.rect) return;
+  const rect = clampRect({ ...message.rect, page: message.rect.page || snip.page || 1 });
+  snip.x = rect.x;
+  snip.y = rect.y;
+  snip.w = rect.w;
+  snip.h = rect.h;
+  snip.page = rect.page;
+  for (const docId of Object.keys(model.overrides)) {
+    if (model.overrides[docId]) delete model.overrides[docId][snip.id];
+  }
+  await persist();
+  renderSnips();
+  paintBoxes();
+  const loaded = new Set(model.docs.map((doc) => doc.name));
+  const missing = (meta?.names || []).filter((name) => name && !loaded.has(name));
+  const result = await exportAll();
+  if (!result) return;
+  const missingNote = missing.length
+    ? ` These files were not loaded, so this export does not include them: ${missing.join(", ")}.`
+    : "";
+  setStatus(`Applied this box to all ${result.count} documents.${missingNote}`);
+}
+
+async function restoreWorkbook() {
+  if (!meta || meta.version !== 2) return;
+  if (!model.snips.length && Array.isArray(meta.snips)) {
+    model.snips = meta.snips.map((snip) => ({ ...snip }));
+  }
+  const missing = [];
+  const rows = meta.rows || [];
+  for (let index = 0; index < rows.length; index += 1) {
+    const id = rows[index];
+    if (model.docs.some((doc) => doc.id === id)) continue;
+    let record = null;
+    try {
+      record = await getDocument(id);
+    } catch (error) {
+      record = null;
+    }
+    if (record) await hydrateRecord(record);
+    else missing.push({ docId: id, name: meta.names?.[index] || "document" });
+  }
+  reattachQueue = missing;
+  showReattach();
+  if (!model.activeId && model.docs.length) model.activeId = model.docs[0].id;
+  if (excelReady && Array.isArray(meta.headers) && Array.isArray(meta.matrix) && meta.headers.length) {
+    const exists = await tableExists();
+    if (!exists) await writeTable(meta.headers, meta.matrix);
+  }
 }
 
 function bytesToBase64(bytes) {
@@ -731,6 +939,11 @@ async function start() {
   } catch (error) {
     setStatus(error.message || "Could not restore saved documents.");
   }
+  try {
+    await restoreWorkbook();
+  } catch (error) {
+    setStatus(error.message || "Could not restore the workbook.");
+  }
   if (excelReady) {
     try {
       await ensureSelection();
@@ -739,6 +952,23 @@ async function start() {
     }
   }
   await renderAll();
+}
+
+if (document.documentElement.dataset.harness === "1" && window.__datasniper) {
+  window.__datasniper.dropDocument = (name) => {
+    model.docs = model.docs.filter((doc) => doc.name !== name);
+    if (!model.docs.some((doc) => doc.id === model.activeId)) {
+      model.activeId = model.docs[0]?.id || null;
+      model.page = 1;
+    }
+    return renderAll();
+  };
+  window.__datasniper.model = () => ({
+    snips: model.snips.map((snip) => ({ ...snip })),
+    overrides: JSON.parse(JSON.stringify(model.overrides)),
+    docs: model.docs.map((doc) => ({ id: doc.id, name: doc.name })),
+  });
+  window.__datasniper.clearStoredFiles = () => clearStoredFiles();
 }
 
 start().catch((error) => setStatus(error.message || "DataSniper failed to start."));

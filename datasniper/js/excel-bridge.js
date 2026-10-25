@@ -25,7 +25,7 @@ function address(row, col, rowCount = 1, colCount = 1) {
   return start === end ? start : `${start}:${end}`;
 }
 
-export function writeTable(headers, matrix) {
+export function writeTable(headers, matrix, formats) {
   const values = [headers, ...matrix];
   const target = address(0, 0, values.length, headers.length);
   return enqueue(async (context) => {
@@ -44,13 +44,14 @@ export function writeTable(headers, matrix) {
     }
     const range = sheet.getRange(target);
     range.values = values;
+    if (formats) range.numberFormat = [headers.map(() => "General"), ...formats];
     const table = sheet.tables.add(target, true);
     table.name = TABLE;
     await context.sync();
   });
 }
 
-export function updateCell(row, col, text) {
+export function updateCell(row, col, value, format) {
   return enqueue(async (context) => {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const table = sheet.tables.getItem(TABLE);
@@ -58,8 +59,19 @@ export function updateCell(row, col, text) {
     body.load("rowIndex, columnIndex");
     await context.sync();
     const cell = sheet.getRange(address(body.rowIndex + row, body.columnIndex + col));
-    cell.values = [[text]];
+    cell.values = [[value]];
+    if (format) cell.numberFormat = [[format]];
     await context.sync();
+  });
+}
+
+export function tableExists() {
+  return enqueue(async (context) => {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const existing = sheet.tables.getItemOrNullObject(TABLE);
+    existing.load("isNullObject");
+    await context.sync();
+    return !existing.isNullObject;
   });
 }
 

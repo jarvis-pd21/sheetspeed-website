@@ -72,10 +72,11 @@ test("snips three fields, reorders columns, extracts five notices, and widens a 
     const row = values.find((line) => line[0] === doc.file);
     expect(row, doc.file).toBeTruthy();
     expect(row[1]).toBe(doc.fund);
-    expect(row[2]).toBe(doc.amount);
+    expect(row[2]).toBe(doc.amountNumber);
     const investor = doc.file === layout.longDocument ? layout.truncatedInvestor : doc.investor;
     expect(row[3]).toBe(investor);
   }
+  await expect(page.locator("#preview tr").nth(1).locator("td").nth(2)).toHaveAttribute("title", layout.documents[0].amount);
   await page.screenshot({ path: path.join(shots, "04-exported.png") });
 
   const rowIndex = values.findIndex((line) => line[0] === layout.longDocument);
@@ -111,6 +112,21 @@ test("snips three fields, reorders columns, extracts five notices, and widens a 
     expect(row[3]).toBe(doc.investor);
   }
   await page.screenshot({ path: path.join(shots, "06-preview-widened.png") });
+
+  await expect(preview.locator("#apply-all")).toBeVisible();
+  await preview.locator("#apply-all").click();
+  await expect(page.locator("#status")).toContainText("Applied this box to all 5 documents");
+  const applied = await page.evaluate(() => window.__datasniper.model());
+  const investorSnip = applied.snips.find((snip) => snip.name === "Investor");
+  expect(investorSnip.w).toBeGreaterThan(layout.snips.investorNarrow.w);
+  expect(JSON.stringify(applied.overrides)).not.toContain(investorSnip.id);
+  const afterApply = await page.evaluate(() => window.__datasniper.values());
+  for (const doc of layout.documents) {
+    const row = afterApply.find((line) => line[0] === doc.file);
+    const investor = doc.file === layout.longDocument ? layout.fullInvestor : doc.investor;
+    expect(row[3], doc.file).toBe(investor);
+    expect(row[2], doc.file).toBe(doc.amountNumber);
+  }
 });
 
 test("OCR fallback reads text painted on a canvas", async ({ page }) => {
@@ -142,4 +158,108 @@ test("sample button and an image upload both open in the viewer", async ({ page 
   await expect(page.locator("#doc-list")).toContainText("capital-call-image.png");
   await page.locator(".doc-button", { hasText: "capital-call-image.png" }).click();
   await expect.poll(async () => page.locator("#page-canvas").evaluate((canvas) => canvas.width)).toBeGreaterThan(0);
+});
+
+async function readRecord(page) {
+  return page.evaluate(() => JSON.parse(window.__datasniper.settings()["datasniper.v1"]));
+}
+
+test("a shifted notice is read from its label and flagged", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples", layout.shiftedDocument),
+  ]);
+  await expect(page.locator("#doc-list li")).toHaveCount(2);
+  await draw(page, layout.snips.fund);
+  await draw(page, layout.snips.investorNarrow);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").nth(0).fill("Fund");
+  await page.locator(".snip-name").nth(1).fill("Investor");
+  await page.locator(".snip-name").nth(2).fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText(`Low confidence on ${layout.shiftedDocument}`);
+  const values = await page.evaluate(() => window.__datasniper.values());
+  const shifted = values.find((line) => line[0] === layout.shiftedDocument);
+  const template = values.find((line) => line[0] === "capital-call-01.pdf");
+  expect(template[1]).toBe("Northwind Growth Fund III, L.P.");
+  expect(template[2]).toBe("Harborview Pension Trust");
+  expect(template[3]).toBe(1250000);
+  expect(shifted[1]).toBe(layout.shifted.fund);
+  expect(shifted[2]).toBe(layout.shifted.investor);
+  expect(shifted[3]).toBe(layout.shifted.amountNumber);
+  await expect(page.locator("#preview tr.low")).toHaveCount(1);
+  const record = await readRecord(page);
+  const amountLink = Object.values(record.links).find((link) => link.name === layout.shiftedDocument && link.label === "Amount called");
+  expect(amountLink.confidence).toBe("low");
+  expect(amountLink.reason).toBe("shifted");
+  expect(amountLink.raw).toBe(layout.shifted.amount);
+  expect(amountLink.number).toBe(layout.shifted.amountNumber);
+});
+
+test("re-export into a smaller or larger grid drops stale source links", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  const first = path.join(root, "datasniper/samples/capital-call-01.pdf");
+  const second = path.join(root, "datasniper/samples/capital-call-02.pdf");
+  await page.locator("#file-input").setInputFiles([first]);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  let record = await readRecord(page);
+  expect(record.rows).toHaveLength(1);
+  expect(record.links["0:1"].number).toBe(1250000);
+  expect(record.links["0:1"].raw).toBe("$1,250,000.00");
+
+  await page.locator("#file-input").setInputFiles([second]);
+  await expect(page.locator("#doc-list li")).toHaveCount(2);
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  record = await readRecord(page);
+  expect(record.names).toEqual(["capital-call-01.pdf", "capital-call-02.pdf"]);
+  expect(record.links["2:0"]).toBeUndefined();
+  let values = await page.evaluate(() => window.__datasniper.values());
+  expect(values).toHaveLength(3);
+  expect(values[2][1]).toBe(875400.5);
+
+  await page.evaluate(() => window.__datasniper.dropDocument("capital-call-02.pdf"));
+  await expect(page.locator("#doc-list li")).toHaveCount(1);
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  record = await readRecord(page);
+  expect(record.rows).toHaveLength(1);
+  expect(record.names).toEqual(["capital-call-01.pdf"]);
+  expect(record.links["1:0"]).toBeUndefined();
+  expect(JSON.stringify(record.links)).not.toContain("capital-call-02.pdf");
+  values = await page.evaluate(() => window.__datasniper.values());
+  expect(values).toHaveLength(2);
+  expect(values[1][0]).toBe("capital-call-01.pdf");
+  expect(values[1][1]).toBe(1250000);
+});
+
+test("a reopened workbook asks for a missing file by filename", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  await page.evaluate(() => window.__datasniper.clearStoredFiles());
+  await page.reload();
+  await expect(page.locator("#reattach")).toBeVisible();
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-01.pdf");
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.values())).toEqual([
+    ["Source document", "Amount called"],
+    ["capital-call-01.pdf", 1250000],
+  ]);
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-02.pdf"));
+  await expect(page.locator("#status")).toContainText("Choose capital-call-01.pdf");
+  await expect(page.locator("#reattach")).toBeVisible();
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await expect(page.locator("#reattach")).toBeHidden();
+  await expect(page.locator("#doc-list")).toContainText("capital-call-01.pdf");
+  await page.evaluate(() => window.__datasniper.select(1, 1));
+  const preview = page.frameLocator("#ds-harness-dialog");
+  await expect(preview.locator("#doc-title")).toHaveText("capital-call-01.pdf");
+  await expect(preview.locator("#live-text")).toHaveText("$1,250,000.00");
 });

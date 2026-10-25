@@ -8,31 +8,36 @@
       "file": "capital-call-01.pdf",
       "fund": "Northwind Growth Fund III, L.P.",
       "investor": "Harborview Pension Trust",
-      "amount": "$1,250,000.00"
+      "amount": "$1,250,000.00",
+      "amountNumber": 1250000
     },
     {
       "file": "capital-call-02.pdf",
       "fund": "Northwind Growth Fund III, L.P.",
       "investor": "Cedar & Pine Family Office LLC",
-      "amount": "$875,400.50"
+      "amount": "$875,400.50",
+      "amountNumber": 875400.5
     },
     {
       "file": "capital-call-03.pdf",
       "fund": "Blackpine Opportunistic Credit Fund II",
       "investor": "Meridian University Endowment",
-      "amount": "$2,100,000.00"
+      "amount": "$2,100,000.00",
+      "amountNumber": 2100000
     },
     {
       "file": "capital-call-04.pdf",
       "fund": "Blackpine Opportunistic Credit Fund II",
       "investor": "The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998",
-      "amount": "$640,250.75"
+      "amount": "$640,250.75",
+      "amountNumber": 640250.75
     },
     {
       "file": "capital-call-05.pdf",
       "fund": "Sable Ridge Venture Partners IV, L.P.",
       "investor": "Oak Street Capital Advisors",
-      "amount": "$3,450,000.00"
+      "amount": "$3,450,000.00",
+      "amountNumber": 3450000
     }
   ],
   "snips": {
@@ -67,5 +72,17 @@
   },
   "longDocument": "capital-call-04.pdf",
   "truncatedInvestor": "The Johnathan Q. Abernathy Rev",
-  "fullInvestor": "The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998"
+  "fullInvestor": "The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998",
+  "longNameDocument": "capital-call-06.pdf",
+  "longNameInvestor": "Alexandra Catherine Pemberton Worthington III",
+  "longNameTruncated": "Alexandra Catherine Pemberton Worthing",
+  "longNameFund": "Sable Ridge Venture Partners IV, L.P.",
+  "longNameAmount": "$424,242.42",
+  "shiftedDocument": "capital-call-07.pdf",
+  "shifted": {
+    "fund": "Northwind Growth Fund III, L.P.",
+    "investor": "Northline Municipal Pension Plan",
+    "amount": "$424,242.00",
+    "amountNumber": 424242
+  }
 }

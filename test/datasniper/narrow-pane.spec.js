@@ -57,8 +57,10 @@ test("the public pages link DataSniper and the install note is one line", async 
   await page.goto("/");
   await expect(page.locator("header a.x-link[href='/datasniper/']")).toHaveText("DataSniper");
   await expect(page.locator("section[aria-label='DataSniper for Excel'] h2")).toHaveText("DataSniper for Excel");
+  await expect(page.locator("section[aria-label='DataSniper for Excel']")).toContainText("DataSniper runs in Excel on Mac, Windows, and the web.");
   await page.goto("/datasniper/");
   await expect(page.locator("meta[name='robots']")).toHaveAttribute("content", /index/);
   await expect(page.locator("#install")).toContainText("Network blocks sheetspeed.agi-jarvis.com? Use this alternate manifest.");
   await expect(page.locator("#install a[href='/datasniper/manifest-alt.xml']")).toHaveText("alternate manifest");
+  await expect(page.locator("body")).toContainText("DataSniper runs in Excel on Mac, Windows, and the web. DataSnipper’s desktop add-in runs in Excel on Windows, and DataSnipper also offers a separate Excel Online add-in.");
 });

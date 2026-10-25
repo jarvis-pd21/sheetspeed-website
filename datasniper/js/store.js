@@ -65,3 +65,15 @@ export async function loadSession() {
   const store = db.transaction("session", "readonly").objectStore("session");
   return completion(store.get("current"));
 }
+
+export async function clearStoredFiles() {
+  const db = await openDb();
+  const tx = db.transaction(["documents", "session"], "readwrite");
+  tx.objectStore("documents").clear();
+  tx.objectStore("session").clear();
+  await new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error || new Error("Could not clear stored files."));
+  });
+}

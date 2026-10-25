@@ -104,7 +104,7 @@ Macabacus is a mature productivity suite primarily for Microsoft Excel and Power
 
 ## DataSniper
 
-DataSniper is an Excel add-in from SheetSpeed. Snip a field on the first PDF or image. DataSniper reads that same page-relative box on every uploaded document and writes one row per document, plus a source-document column. Click a result cell to preview the page with the snip highlighted. Drag that snip and the cell updates with the text now inside the box. File bytes stay in the add-in on this machine. OCR runs in the browser only when a page has no text layer.
+DataSniper is an Excel add-in from SheetSpeed. Snip a field on the first PDF or image. DataSniper reads that same page-relative box on every uploaded document and writes one row per document, plus a source-document column. If a later file shifts a field, DataSniper follows the nearby label from the first document and marks that row. Unambiguous currency amounts are written as numbers, and the page text stays with the cell. The workbook stores the template and each value’s document, page, and region. Click a result cell to preview the page with the snip highlighted. Drag that snip and the cell updates. Apply this box to all documents copies the rectangle onto the template and reads every loaded row again. File bytes stay in the add-in on this machine. OCR runs in the browser only when a page has no text layer. DataSniper runs in Excel on Mac, Windows, and the web. DataSnipper’s desktop add-in runs in Excel on Windows, and DataSnipper also offers a separate Excel Online add-in.
 
 - Product page: https://sheetspeed.agi-jarvis.com/datasniper/
 - Manifest: https://sheetspeed.agi-jarvis.com/datasniper/manifest.xml
