@@ -208,6 +208,65 @@ export function fieldRectForDocument(templateItems, templateSize, targetItems, t
 const AMOUNT_SCALE = { K: 1e3, M: 1e6, B: 1e9 };
 
 /**
+ * When every character of the text under the box was extracted, the drawn
+ * highlight follows that line. A box that cuts a value off stays as drawn.
+ */
+export function highlightRectForValue(items, pageWidth, pageHeight, rect) {
+  if (!items?.length || !pageWidth || !pageHeight || !rect || rect.w <= 0 || rect.h <= 0) return rect;
+  const snipLeft = rect.x * pageWidth;
+  const snipRight = (rect.x + rect.w) * pageWidth;
+  const snipTop = pageHeight - rect.y * pageHeight;
+  const snipBottom = snipTop - rect.h * pageHeight;
+  const touched = [];
+  for (const item of items) {
+    if (!item.str || !item.width) continue;
+    const count = item.str.length;
+    if (!count) continue;
+    const charWidth = item.width / count;
+    if (!item.str.trim() && charWidth > (item.fontSize || 10) * 0.85) continue;
+    const box = itemBox(item);
+    if (!overlaps(box.bottom, box.top, snipBottom, snipTop)) continue;
+    if (box.right <= snipLeft || box.left >= snipRight) continue;
+    for (let index = 0; index < count; index += 1) {
+      if (!item.str[index].trim()) continue;
+      const center = item.x + (index + 0.5) * charWidth;
+      if (center < snipLeft || center >= snipRight) return rect;
+    }
+    touched.push(box);
+  }
+  if (!touched.length) return rect;
+  const left = Math.min(...touched.map((box) => box.left));
+  const right = Math.max(...touched.map((box) => box.right));
+  const top = Math.max(...touched.map((box) => box.top));
+  const bottom = Math.min(...touched.map((box) => box.bottom));
+  const pad = 1;
+  return clampRect({
+    x: (left - pad) / pageWidth,
+    y: (pageHeight - (top + pad)) / pageHeight,
+    w: (right - left + pad * 2) / pageWidth,
+    h: (top - bottom + pad * 2) / pageHeight,
+    page: rect.page,
+  });
+}
+
+export function textRectsForItems(items, pageWidth, pageHeight) {
+  if (!items?.length || !pageWidth || !pageHeight) return [];
+  return items.flatMap((item) => {
+    if (!item.str || !item.str.trim() || !item.width) return [];
+    const box = itemBox(item);
+    const w = (box.right - box.left) / pageWidth;
+    const h = (box.top - box.bottom) / pageHeight;
+    if (w <= 0 || h <= 0) return [];
+    return [{
+      x: box.left / pageWidth,
+      y: (pageHeight - box.top) / pageHeight,
+      w,
+      h,
+    }];
+  });
+}
+
+/**
  * Unambiguous money becomes a number. Plain integers, percents, and names stay text.
  * Five covered shapes: $1,250,000.00 · 1,250,000.00 · (1,250.50) · USD 1,250,000.00 · $1.25M
  */

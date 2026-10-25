@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/taskpane.html" />
   <link rel="icon" href="assets/icon-32.png" />
-  <link rel="stylesheet" href="css/app.css?v=5" />
-  <script src="js/boot.js?v=5"></script>
+  <link rel="stylesheet" href="css/app.css?v=6" />
+  <script src="js/boot.js?v=6"></script>
 </head>
 <body class="taskpane">
   <div id="app">
@@ -42,7 +42,7 @@
           <button id="open-viewer" type="button">Open large viewer</button>
         </div>
         <div id="viewer-scroll">
-          <p id="empty-state">Upload PDFs or images. Drag a rectangle on the first document. Each snip becomes a column, in the order shown at the right.</p>
+          <p id="empty-state">Upload PDFs or images. Drag a rectangle on the first document. Each snip becomes a column, in the order of the snip list.</p>
           <div id="viewer" hidden>
             <canvas id="page-canvas"></canvas>
             <div id="overlay"></div>
@@ -69,10 +69,21 @@
       <p id="status" aria-live="polite"></p>
     </footer>
   </div>
+  <div id="clear-confirm" class="confirm" hidden>
+    <div>
+      <p><strong>Clear every document?</strong></p>
+      <p>The exported Excel table can stay on the sheet, or it can be deleted with the documents.</p>
+      <div class="confirm-actions">
+        <button id="clear-keep" type="button">Keep the table</button>
+        <button id="clear-delete" type="button">Delete the table</button>
+        <button id="clear-cancel" class="secondary" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
   <div id="mock-workbook" hidden>
     <div class="mock-title">Excel workbook · harness</div>
     <div id="mock-grid"></div>
   </div>
-  <script type="module" src="js/taskpane.js?v=5"></script>
+  <script type="module" src="js/taskpane.js?v=6"></script>
 </body>
 </html>

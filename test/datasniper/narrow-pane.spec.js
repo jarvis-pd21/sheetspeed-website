@@ -22,6 +22,8 @@ async function draw(page, overlay, rect) {
 test("a 240px task pane keeps a compact list and snips in the large viewer", async ({ page }) => {
   await page.setViewportSize({ width: 240, height: 800 });
   await page.goto("/datasniper/taskpane.html?harness=1");
+  await expect(page.locator("#empty-state")).toContainText("in the order of the snip list");
+  await expect(page.locator("#empty-state")).not.toContainText("at the right");
   await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples", layout.documents[0].file));
   await expect(page.locator("#doc-list li")).toHaveCount(1);
   await expect.poll(async () => page.locator("#doc-list").evaluate((el) => getComputedStyle(el).display)).toBe("flex");

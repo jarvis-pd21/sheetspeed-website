@@ -314,6 +314,8 @@ test("a label-matched preview uses the saved region and will not adopt another f
   const preview = page.frameLocator("#ds-harness-dialog");
   await expect(preview.locator("#confidence-note")).toBeVisible();
   await expect(preview.locator("#confidence-note")).toHaveText("Low confidence: matched by label");
+  const notePad = await preview.locator("#confidence-note").evaluate((node) => Number.parseFloat(getComputedStyle(node).paddingTop));
+  expect(notePad).toBeGreaterThanOrEqual(8);
   await expect(preview.locator("#live-text")).toHaveText(layout.shifted.investor);
   const top = await preview.locator(".snip-box").evaluate((box) => Number.parseFloat(box.style.top));
   expect(top).toBeGreaterThan((layout.snips.investorNarrow.y + 0.02) * 100);
@@ -344,6 +346,7 @@ test("a label-matched preview uses the saved region and will not adopt another f
     col: investorCol,
   })).toBe(layout.shifted.investor);
   await expect(preview.locator("#live-text")).toHaveText(layout.shifted.investor);
+  await expect(preview.locator("#apply-all")).toBeHidden();
   await page.evaluate(() => window.__datasniper.dialog.close());
 
   await page.locator("#mark-low").uncheck();
@@ -366,6 +369,14 @@ test("snip labels stay outside the text in the pane, the large viewer, and the p
   await page.locator(".snip-name").nth(1).fill("Investor");
   await page.locator(".snip-name").nth(2).fill("Amount called");
   await expectLabelsOffTheText(page.locator("#overlay"));
+  const chips = await page.locator("#overlay .snip-box span").evaluateAll((nodes) => nodes.map((node) => ({
+    text: node.textContent,
+    title: node.title,
+    chip: node.classList.contains("chip"),
+  })));
+  expect(chips.map((chip) => chip.text)).toEqual(["1", "2", "3"]);
+  expect(chips.map((chip) => chip.title)).toEqual(["Fund", "Investor", "Amount called"]);
+  expect(chips.every((chip) => chip.chip)).toBe(true);
   await page.locator("#viewer").screenshot({ path: path.join(dir, "pane-thumbnail.png") });
 
   await page.locator("#open-viewer").click();
@@ -400,8 +411,70 @@ test("remove and clear all drop documents and their sheet rows", async ({ page }
   await expect.poll(async () => page.evaluate(() => window.__datasniper.values().length)).toBe(2);
   await expect.poll(async () => page.evaluate(() => window.__datasniper.values()[1][0])).toBe("capital-call-01.pdf");
   await page.locator("#clear-docs").click();
+  await expect(page.locator("#clear-confirm")).toBeVisible();
+  await page.locator("#clear-cancel").click();
+  await expect(page.locator("#doc-list li")).toHaveCount(1);
+  await page.locator("#clear-docs").click();
+  await page.locator("#clear-keep").click();
   await expect(page.locator("#doc-list li")).toHaveCount(0);
-  await expect(page.locator("#clear-docs")).toBeHidden();
+  await expect(page.locator("#status")).toContainText("Excel table is still on the sheet");
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.values().length)).toBe(2);
+  expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(true);
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  await page.locator("#clear-docs").click();
+  await page.locator("#clear-delete").click();
+  await expect(page.locator("#doc-list li")).toHaveCount(0);
+  await expect(page.locator("#status")).toContainText("and the Excel table");
   await expect.poll(async () => page.evaluate(() => window.__datasniper.values())).toEqual([]);
   expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(false);
+});
+
+test("comments.add rejects an options object", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  const rejected = await page.evaluate(async () => {
+    try {
+      await Excel.run(async (context) => {
+        const sheet = context.workbook.worksheets.getActiveWorksheet();
+        sheet.comments.add("A2", { content: "DataSniper: matched by label", contentType: "Plain" });
+        await context.sync();
+      });
+      return false;
+    } catch (error) {
+      return /Excel\.ContentType\.plain/.test(error.message);
+    }
+  });
+  expect(rejected).toBe(true);
+});
+
+test("older Excel falls back from comments to notes, then to the fill", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples", layout.shiftedDocument),
+  ]);
+  await draw(page, layout.snips.fund);
+  await page.locator(".snip-name").fill("Fund");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  const commented = await page.evaluate(() => window.__datasniper.marks().comments.length);
+  expect(commented).toBeGreaterThan(0);
+
+  await page.evaluate(() => { window.__datasniper.allowComments = false; });
+  await page.locator("#mark-low").uncheck();
+  await page.locator("#mark-low").check();
+  await expect(page.locator("#status")).toContainText("have a note instead");
+  const noted = await page.evaluate(() => window.__datasniper.marks());
+  expect(noted.comments).toEqual([]);
+  expect(noted.notes.length).toBeGreaterThan(0);
+  expect(noted.notes.every((note) => note.content === "DataSniper: matched by label")).toBe(true);
+
+  await page.evaluate(() => { window.__datasniper.allowNotes = false; });
+  await page.locator("#mark-low").uncheck();
+  await page.locator("#mark-low").check();
+  await expect(page.locator("#status")).toContainText("amber fill only");
+  const filled = await page.evaluate(() => window.__datasniper.marks());
+  expect(filled.notes).toEqual([]);
+  expect(Object.values(filled.fills).filter(Boolean).length).toBeGreaterThan(0);
 });

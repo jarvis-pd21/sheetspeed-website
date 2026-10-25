@@ -1,7 +1,7 @@
 /**
- * Snip names sit outside the rectangle so they do not cover the text
- * inside it or the next line. Above the box when that band is free,
- * otherwise in the side margin, otherwise a numbered chip.
+ * Snip names sit outside the rectangle and off the page text.
+ * Above the box when that band is free, otherwise in the side margin,
+ * otherwise a numbered chip. The pane thumbnail asks for chips only.
  */
 
 export function intersects(a, b) {
@@ -44,32 +44,81 @@ export function chooseLabelPlace(box, label, overlay, obstacles) {
   return "chip";
 }
 
-export function finishLabels(overlay) {
+export function chooseChipCorner(box, overlay, obstacles) {
+  const size = 14;
+  const gap = 2;
+  const spots = [
+    { left: box.right + gap, top: box.top },
+    { left: box.left - gap - size, top: box.top },
+    { left: box.left, top: box.top - gap - size },
+    { left: box.right - size, top: box.top - gap - size },
+  ];
+  const fits = (spot) => {
+    const rect = { left: spot.left, top: spot.top, right: spot.left + size, bottom: spot.top + size };
+    return inside(rect, overlay)
+      && !intersects(rect, box)
+      && !obstacles.some((item) => intersects(rect, item));
+  };
+  const spot = spots.find(fits) || spots[0];
+  return { left: spot.left, top: spot.top, right: spot.left + size, bottom: spot.top + size };
+}
+
+function textObstacles(overlayRect, textRects) {
+  return (textRects || []).map((rect) => ({
+    left: overlayRect.left + rect.x * overlayRect.width,
+    top: overlayRect.top + rect.y * overlayRect.height,
+    right: overlayRect.left + (rect.x + rect.w) * overlayRect.width,
+    bottom: overlayRect.top + (rect.y + rect.h) * overlayRect.height,
+  }));
+}
+
+function placeChip(label, boxRect, corner, index, full) {
+  label.classList.add("chip");
+  label.textContent = String(index + 1);
+  label.title = full;
+  label.style.left = `${corner.left - boxRect.left}px`;
+  label.style.top = `${corner.top - boxRect.top}px`;
+  label.style.right = "auto";
+  label.style.bottom = "auto";
+}
+
+export function finishLabels(overlay, options = {}) {
   if (!overlay) return;
   const boxes = [...overlay.querySelectorAll(".snip-box")];
   const overlayRect = overlay.getBoundingClientRect();
   if (!overlayRect.width || !overlayRect.height) return;
+  const pageText = textObstacles(overlayRect, options.textRects);
   const occupied = [];
   boxes.forEach((box, index) => {
     const label = box.querySelector("span");
     if (!label) return;
     const full = label.dataset.fullName || label.textContent || "Snip";
     label.dataset.fullName = full;
-    label.textContent = full;
     label.classList.remove("above", "side", "side-right", "chip", "below");
-    label.title = "";
+    label.style.left = "";
+    label.style.top = "";
+    label.style.right = "";
+    label.style.bottom = "";
     const boxRect = box.getBoundingClientRect();
+    const others = boxes.filter((other) => other !== box).map((other) => other.getBoundingClientRect());
+    const obstacles = [...others, ...occupied, ...pageText];
+    if (options.chipsOnly) {
+      placeChip(label, boxRect, chooseChipCorner(boxRect, overlayRect, obstacles), index, full);
+      occupied.push(label.getBoundingClientRect());
+      return;
+    }
+    label.textContent = full;
+    label.title = "";
     const measured = label.getBoundingClientRect();
     const place = chooseLabelPlace(
       boxRect,
       { width: Math.min(measured.width || 48, 180), height: Math.max(measured.height || 14, 14) },
       overlayRect,
-      [...boxes.filter((other) => other !== box).map((other) => other.getBoundingClientRect()), ...occupied],
+      obstacles,
     );
     label.classList.add(place);
     if (place === "chip") {
-      label.textContent = String(index + 1);
-      label.title = full;
+      placeChip(label, boxRect, chooseChipCorner(boxRect, overlayRect, obstacles), index, full);
     }
     occupied.push(label.getBoundingClientRect());
   });
