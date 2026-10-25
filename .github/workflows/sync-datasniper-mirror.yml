@@ -1,0 +1,25 @@
+name: Sync DataSniper mirror
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "datasniper/**"
+      - "scripts/sync_datasniper_mirror.py"
+      - ".github/workflows/sync-datasniper-mirror.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy datasniper/ to jarvis-pd21/datasniper
+        env:
+          DATASNIPER_MIRROR_TOKEN: ${{ secrets.DATASNIPER_MIRROR_TOKEN }}
+        run: python3 scripts/sync_datasniper_mirror.py

@@ -255,6 +255,15 @@
             iframe.title = "DataSniper preview";
             document.body.appendChild(iframe);
           }
+          var width = Math.max(1, Math.min(100, Number(options && options.width) || 55));
+          var height = Math.max(1, Math.min(100, Number(options && options.height) || 72));
+          iframe.style.left = ((100 - width) / 2) + "%";
+          iframe.style.top = ((100 - height) / 2) + "%";
+          iframe.style.right = "auto";
+          iframe.style.width = width + "%";
+          iframe.style.height = height + "%";
+          iframe.dataset.dialogWidth = String(width);
+          iframe.dataset.dialogHeight = String(height);
           var dialog = {
             _handlers: {},
             messageChild: function (message) {

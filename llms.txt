@@ -102,9 +102,19 @@ SheetWhiz is a well-known Chrome extension for Excel-like shortcuts in Google Sh
 ### vs Macabacus (Excel / Office)
 Macabacus is a mature productivity suite primarily for Microsoft Excel and PowerPoint. SheetSpeed targets Google Sheets, Docs and Slides in Chrome. Users looking for “Macabacus for Google Sheets” should treat SheetSpeed as a Sheets-native shortcut and visible-formula tracing tool, not a Macabacus license or port.
 
+## DataSniper
+
+DataSniper is an Excel add-in from SheetSpeed. Snip a field on the first PDF or image. DataSniper reads that same page-relative box on every uploaded document and writes one row per document, plus a source-document column. Click a result cell to preview the page with the snip highlighted. Drag that snip and the cell updates with the text now inside the box. File bytes stay in the add-in on this machine. OCR runs in the browser only when a page has no text layer.
+
+- Product page: https://sheetspeed.agi-jarvis.com/datasniper/
+- Manifest: https://sheetspeed.agi-jarvis.com/datasniper/manifest.xml
+- Alternate manifest, when sheetspeed.agi-jarvis.com is blocked: https://sheetspeed.agi-jarvis.com/datasniper/manifest-alt.xml (loads https://jarvis-pd21.github.io/datasniper/)
+- Excel for Mac, Windows, and Excel on the web. Sideload the manifest. This is not an AppSource listing.
+
 ## Pages for crawlers and answer engines
 
 - Home: https://sheetspeed.agi-jarvis.com/
+- DataSniper: https://sheetspeed.agi-jarvis.com/datasniper/
 - Features: https://sheetspeed.agi-jarvis.com/features.html
 - Install: https://sheetspeed.agi-jarvis.com/install.html
 - Pricing: https://sheetspeed.agi-jarvis.com/pricing.html

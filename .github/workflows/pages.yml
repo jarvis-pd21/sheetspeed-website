@@ -58,3 +58,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Ping IndexNow
+        if: success()
+        continue-on-error: true
+        run: python3 scripts/indexnow.py
