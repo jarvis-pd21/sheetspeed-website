@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { fieldRectForDocument, parseAmount } from "../../datasniper/js/extract.js";
-import { buildWorkbookRecord, replaceWorkbookRecord } from "../../datasniper/js/workbook.js";
+import { chooseLabelPlace } from "../../datasniper/js/labels.js";
+import { buildWorkbookRecord, clashesWithAnotherField, replaceWorkbookRecord } from "../../datasniper/js/workbook.js";
 
 test("five unambiguous amount formats become numbers and the rest stay text", () => {
   assert.deepEqual(parseAmount("$1,250,000.00"), { value: 1250000, raw: "$1,250,000.00" });
@@ -49,6 +50,38 @@ test("a label that moves with an extra line shifts the box and lowers confidence
   assert.equal(missing.confidence, "low");
   assert.equal(missing.reason, "label-missing");
   assert.equal(missing.label, "Investor");
+});
+
+test("labels move above the box, then into the margin, then into a chip", () => {
+  const overlay = { left: 0, top: 0, right: 400, bottom: 600 };
+  const box = { left: 100, top: 200, right: 220, bottom: 230 };
+  const label = { width: 80, height: 14 };
+  assert.equal(chooseLabelPlace(box, label, overlay, []), "above");
+  const crowdedAbove = { left: 90, top: 180, right: 230, bottom: 198 };
+  assert.equal(chooseLabelPlace(box, label, overlay, [crowdedAbove]), "side");
+  const crowdedSide = { left: 0, top: 190, right: 99, bottom: 240 };
+  const crowdedRight = { left: 220, top: 190, right: 400, bottom: 240 };
+  assert.equal(chooseLabelPlace(box, label, overlay, [crowdedAbove, crowdedSide]), "side-right");
+  assert.equal(chooseLabelPlace(box, label, overlay, [crowdedAbove, crowdedSide, crowdedRight]), "chip");
+  const nearTop = { left: 100, top: 4, right: 220, bottom: 30 };
+  assert.equal(chooseLabelPlace(nearTop, label, overlay, []), "side");
+});
+
+test("a label-matched nudge that reads another field is rejected", () => {
+  const fundRect = { x: 0.25, y: 0.21, w: 0.38, h: 0.025, page: 1 };
+  const investorRect = { x: 0.25, y: 0.29, w: 0.3, h: 0.025, page: 1 };
+  const links = {
+    "6:1": { raw: "Northwind Growth Fund III, L.P.", rect: fundRect },
+    "6:2": { raw: "Northline Municipal Pension Plan", confidence: "low", reason: "shifted", rect: investorRect },
+    "6:3": { raw: "$424,242.00", rect: { x: 0.25, y: 0.43, w: 0.14, h: 0.025, page: 1 } },
+  };
+  assert.equal(clashesWithAnotherField(links, 6, 2, "Northwind Growth Fund III, L.P."), true);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "Northwind Growth"), true);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "", fundRect), true);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "Northline Municipal Pension Plan"), false);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "Northline Municipal Pension Plan", investorRect), false);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "$424,242.00"), true);
+  assert.equal(clashesWithAnotherField(links, 6, 2, "Northline Municipal"), false);
 });
 
 test("replacing the workbook record drops links from a smaller or larger grid", () => {

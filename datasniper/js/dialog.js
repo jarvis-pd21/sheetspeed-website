@@ -1,4 +1,5 @@
 import { clampRect, normalizeDrag } from "./extract.js";
+import { finishLabels } from "./labels.js";
 import { extractFromDocument, loadDocument, renderImage, renderPdfPage } from "./pdf-engine.js";
 import { getDocument, loadSession } from "./store.js";
 
@@ -18,6 +19,7 @@ const viewerBar = document.querySelector("#viewer-bar");
 const viewerHint = document.querySelector("#viewer-hint");
 const previewHint = document.querySelector("#preview-hint");
 const applyAll = document.querySelector("#apply-all");
+const confidenceNote = document.querySelector("#confidence-note");
 const readout = document.querySelector("#dialog-readout");
 const pageLabel = document.querySelector("#page-label");
 const prevPage = document.querySelector("#prev-page");
@@ -30,10 +32,12 @@ let snipId = params.get("snip");
 let viewerPage = Number(params.get("page")) || 1;
 if (!Number.isFinite(viewerPage) || viewerPage < 1) viewerPage = 1;
 let activeRect = null;
+let resolved = null;
 let drag = null;
 let drawing = null;
 let extractTimer = 0;
 let revision = 0;
+let displayTicket = 0;
 
 function colorFor(index) {
   return COLORS[index % COLORS.length];
@@ -57,17 +61,22 @@ function currentPage() {
 function rectFor(id) {
   const snip = session.snips.find((item) => item.id === id);
   if (!snip) return null;
-  return session.overrides?.[docId]?.[id] || snip;
+  if (session.overrides?.[docId]?.[id]) return session.overrides[docId][id];
+  if (!viewerMode && id === snipId && resolved?.rect) {
+    return { ...resolved.rect, page: resolved.rect.page || snip.page || 1 };
+  }
+  return snip;
+}
+
+function showConfidence() {
+  if (!confidenceNote) return;
+  const matched = !viewerMode && resolved && resolved.confidence === "low" && resolved.reason === "shifted";
+  confidenceNote.hidden = !matched;
+  if (matched) confidenceNote.textContent = "Low confidence: matched by label";
 }
 
 function post(message) {
   Office.context.ui.messageParent(JSON.stringify(message));
-}
-
-function placeLabel(label, rect) {
-  const bounds = overlay.getBoundingClientRect();
-  const pixelHeight = bounds.height * (Number(rect?.h) || 0);
-  if (bounds.height > 0 && pixelHeight < 16) label.classList.add("below");
 }
 
 function visibleSnips() {
@@ -109,7 +118,6 @@ function paint() {
     const label = document.createElement("span");
     label.textContent = snip.name || "Snip";
     label.style.background = rgba(color, 0.55);
-    placeLabel(label, rect);
     box.append(label);
     if (!viewerMode && (!snipId || snip.id === snipId)) {
       for (const handle of ["nw", "n", "ne", "e", "se", "s", "sw", "w"]) {
@@ -121,6 +129,7 @@ function paint() {
     }
     overlay.append(box);
   });
+  finishLabels(overlay);
   if (drawing) {
     const rect = normalizeDrag(drawing.start, drawing.current);
     const box = document.createElement("div");
@@ -149,11 +158,28 @@ async function render() {
 
 async function showText() {
   if (!opened || !activeRect) return;
-  const result = await extractFromDocument(opened, activeRect);
+  const ticket = ++displayTicket;
+  const rect = { ...activeRect };
+  const result = await extractFromDocument(opened, rect);
+  if (ticket !== displayTicket) return;
   liveText.textContent = result.text || "(empty)";
   sourceLabel.textContent = result.source === "ocr" ? "OCR" : "Text layer";
   const snip = currentSnip();
   if (snip) snipTitle.textContent = snip.name || "Snip";
+}
+
+function applyResolved(payload) {
+  resolved = payload || null;
+  if (!opened || viewerMode) {
+    showConfidence();
+    return;
+  }
+  const snip = currentSnip();
+  const rect = snip ? rectFor(snip.id) : null;
+  if (rect) activeRect = { ...rect, page: rect.page || snip.page || 1 };
+  paint();
+  showText();
+  showConfidence();
 }
 
 async function runExtract(ticket) {
@@ -318,6 +344,7 @@ async function openRecord(record, nextSession) {
   }
   await render();
   if (!viewerMode && snip) await showText();
+  showConfidence();
 }
 
 function base64ToBytes(value) {
@@ -342,8 +369,24 @@ function onParentMessage(raw) {
     if (opened) render();
     return;
   }
+  if (message.type === "resolved") {
+    if (message.docId && docId && message.docId !== docId) return;
+    if (message.snipId && snipId && message.snipId !== snipId) return;
+    applyResolved(message.resolved);
+    return;
+  }
+  if (message.type === "restore-rect") {
+    if (message.snipId && snipId && message.snipId !== snipId) return;
+    if (message.rect) activeRect = { ...message.rect, page: message.rect.page || activeRect?.page || 1 };
+    if (message.text != null) liveText.textContent = message.text || "(empty)";
+    paint();
+    showConfidence();
+    return;
+  }
   if (message.type === "show") {
     if (applyAll) applyAll.hidden = true;
+    resolved = message.resolved || null;
+    showConfidence();
     docId = message.docId;
     snipId = message.snipId || null;
     getDocument(docId).then((record) => {
@@ -375,6 +418,7 @@ function onParentMessage(raw) {
     };
     docId = record.id;
     snipId = incoming.meta.snipId || null;
+    resolved = incoming.meta.resolved || null;
     if (incoming.meta.page) viewerPage = incoming.meta.page;
     session = { snips: incoming.meta.snips || [], overrides: incoming.meta.overrides || {} };
     openRecord(record, session).catch((error) => {
@@ -429,6 +473,9 @@ async function start() {
       post({ type: "need-document", docId, snipId });
       return;
     }
+    // The dialog can already have the PDF. The saved region still lives in the
+    // workbook, so ask for it before reading the box.
+    post({ type: "need-resolved", docId, snipId });
     await openRecord(record, session);
   } catch (error) {
     emptyState.hidden = false;

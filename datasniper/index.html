@@ -47,8 +47,8 @@
     <section id="capital-call">
       <h2>A capital call, read once and applied to the series</h2>
       <p>Take a capital call notice. On the first PDF you snip three regions: fund name, investor name, and total amount called. DataSniper names each snip, and each name becomes a column. Drag the snips into the order the sheet should use. Export writes one row for that notice and one row for every other notice you uploaded with it.</p>
-      <p>The boxes are page-relative. They do not search for a label. They read the same rectangle on page one of each file, which is the right tool when the administrator’s template is stable. If a later notice wraps a long investor name past the box you drew, you open that cell, widen the snip on the preview, and the cell updates with the text now inside the box.</p>
-      <p>Five synthetic notices in <a href="#samples">the sample set</a> share that template. Notice 04 carries a trust name long enough to show the clip: a narrow snip stops at “The Johnathan Q. Abernathy Rev”, and a wider one returns the full “The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998”.</p>
+      <p>The boxes are page-relative. They read the same rectangle on page one of each file when the administrator’s template is stable. When a later notice inserts a line, DataSniper follows the label beside the first snip, marks that row, and the preview opens on the moved region. If a later notice wraps a long investor name past the box you drew, you open that cell, widen the snip on the preview, and the cell updates with the text now inside the box.</p>
+      <p>Seven synthetic notices in <a href="#samples">the sample set</a> share that template. Notice 04 carries a trust name long enough to show the clip: a narrow snip stops at “The Johnathan Q. Abernathy Rev”, and a wider one returns the full “The Johnathan Q. Abernathy Revocable Living Trust dated March 14, 1998”. Notice 07 inserts one extra line so the fields move down.</p>
     </section>
 
     <section id="capabilities">
@@ -210,7 +210,7 @@
         <details class="faq-item">
           <summary>How does the preview open?</summary>
           <div class="answer">
-            <p>Click a result cell while the DataSniper task pane is open. Excel opens a dialog on that document with the snip highlighted. After you move the box, Apply this box to all documents copies that rectangle onto the template and reads every loaded row again. If the file is no longer stored in this browser, DataSniper asks you to choose that same filename. Closing the pane stops the selection listener until you open DataSniper again.</p>
+            <p>Click a result cell while the DataSniper task pane is open. Excel opens a dialog on that document with the region that produced the cell, including a label match that moved the box. After you move the box, Apply this box to all documents copies that rectangle onto the template and reads every loaded row again. A nudge that lands on a different field does not replace the label match. If the file is no longer stored in this browser, DataSniper asks you to choose that same filename. A workbook that already has DataSniper links opens the task pane again the next time that file opens.</p>
           </div>
         </details>
         <details class="faq-item">
@@ -275,8 +275,8 @@
     </section>
 
     <section id="samples">
-      <h2>Practice on five capital call notices</h2>
-      <p>The notices share one template and differ in fund, investor, and amount called. They are synthetic. They are not demands for payment. Snip the three fields on notice 01, export, and then open notice 04’s investor cell if you want to see a narrow box truncate a long name.</p>
+      <h2>Practice on seven capital call notices</h2>
+      <p>The notices share one template and differ in fund, investor, and amount called. They are synthetic. They are not demands for payment. Snip the three fields on notice 01, export, and then open notice 04’s investor cell if you want to see a narrow box truncate a long name. Notice 07 is the same call with one extra line, so a label match has to follow the fields.</p>
       <table>
         <thead>
           <tr><th>File</th><th>Fund</th><th>Investor</th><th>Amount called</th></tr>
@@ -312,9 +312,21 @@
             <td data-label="Investor">Oak Street Capital Advisors</td>
             <td data-label="Amount called">$3,450,000.00</td>
           </tr>
+          <tr>
+            <td data-label="File"><a href="/datasniper/samples/capital-call-06.pdf">capital-call-06.pdf</a></td>
+            <td data-label="Fund">Sable Ridge Venture Partners IV, L.P.</td>
+            <td data-label="Investor">Alexandra Catherine Pemberton Worthington III</td>
+            <td data-label="Amount called">$424,242.42</td>
+          </tr>
+          <tr>
+            <td data-label="File"><a href="/datasniper/samples/capital-call-07.pdf">capital-call-07.pdf</a></td>
+            <td data-label="Fund">Northwind Growth Fund III, L.P.</td>
+            <td data-label="Investor">Northline Municipal Pension Plan</td>
+            <td data-label="Amount called">$424,242.00</td>
+          </tr>
         </tbody>
       </table>
-      <p>An image-only twin of the first notice is at <a href="/datasniper/samples/capital-call-image.png">capital-call-image.png</a>. Coordinates measured from the text layer are in <a href="/datasniper/samples/layout.json">layout.json</a>. You can also load the five PDFs from the Load samples button inside the task pane.</p>
+      <p>An image-only twin of the first notice is at <a href="/datasniper/samples/capital-call-image.png">capital-call-image.png</a>. Coordinates measured from the text layer are in <a href="/datasniper/samples/layout.json">layout.json</a>. You can also load notices 01–07 from the Load sample notices button inside the task pane.</p>
       <p><a href="/datasniper/taskpane.html?harness=1">Open the browser harness</a> if you want to walk the snip, reorder, export, and preview flow before sideloading.</p>
     </section>
   </main>

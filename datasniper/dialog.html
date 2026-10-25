@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/dialog.html" />
   <link rel="icon" href="assets/icon-32.png" />
-  <link rel="stylesheet" href="css/app.css?v=3" />
-  <script src="js/boot.js?v=3"></script>
+  <link rel="stylesheet" href="css/app.css?v=5" />
+  <script src="js/boot.js?v=5"></script>
 </head>
 <body class="preview-dialog">
   <div id="app">
@@ -36,6 +36,7 @@
       <div class="hint" id="source-label"></div>
     </div>
     <p class="hint" id="preview-hint">Drag the box or a handle. The Excel cell updates when the text changes.</p>
+    <p id="confidence-note" hidden>Low confidence: matched by label</p>
     <button id="apply-all" type="button" hidden>Apply this box to all documents</button>
     <p class="hint" id="viewer-hint" hidden>Drag a rectangle on the page. Each snip becomes the next column.</p>
     <div id="viewer-scroll">
@@ -46,6 +47,6 @@
       </div>
     </div>
   </div>
-  <script type="module" src="js/dialog.js?v=3"></script>
+  <script type="module" src="js/dialog.js?v=5"></script>
 </body>
 </html>

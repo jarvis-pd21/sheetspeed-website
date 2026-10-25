@@ -333,24 +333,73 @@ footer {
 
 .snip-box span {
   position: absolute;
-  left: 2px;
-  top: 2px;
+  left: 0;
+  bottom: calc(100% + 3px);
+  top: auto;
   z-index: 1;
-  max-width: calc(100% - 4px);
+  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 10px;
-  line-height: 13px;
+  line-height: 14px;
   font-weight: 650;
   color: white;
-  padding: 0 3px;
+  padding: 0 4px;
   border-radius: 2px;
   white-space: nowrap;
   pointer-events: none;
 }
 
-.snip-box span.below {
-  top: calc(100% + 2px);
+.snip-box span.side {
+  right: calc(100% + 3px);
+  left: auto;
+  top: 0;
+  bottom: auto;
+}
+
+.snip-box span.side-right {
+  left: calc(100% + 3px);
+  right: auto;
+  top: 0;
+  bottom: auto;
+}
+
+.snip-box span.chip {
+  left: -16px;
+  top: -1px;
+  bottom: auto;
+  width: 14px;
+  height: 14px;
+  max-width: 14px;
+  padding: 0;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 14px;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.doc-actions, .mark-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.mark-toggle {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.remove-doc {
+  flex: none;
+  padding: 2px 6px;
+}
+
+#confidence-note {
+  margin: 0 0 8px;
+  color: #8a4b08;
+  font-weight: 650;
 }
 
 .preview-dialog {

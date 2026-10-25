@@ -7,7 +7,7 @@
   }
   if (harness) document.documentElement.dataset.harness = "1";
   var src = harness
-    ? "js/office-mock.js?v=3"
+    ? "js/office-mock.js?v=5"
     : "https://appsforoffice.microsoft.com/lib/1/hosted/office.js";
   document.write('<script src="' + src + '"><\/script>');
 })();

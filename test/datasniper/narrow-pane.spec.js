@@ -44,13 +44,14 @@ test("a 240px task pane keeps a compact list and snips in the large viewer", asy
     const label = box.querySelector("span");
     const boxBounds = box.getBoundingClientRect();
     const labelBounds = label.getBoundingClientRect();
-    return {
-      below: label.classList.contains("below"),
-      coversLineAbove: labelBounds.top < boxBounds.top - 1,
-    };
+    const coversText = labelBounds.left < boxBounds.right - 2
+      && labelBounds.right > boxBounds.left + 2
+      && labelBounds.top < boxBounds.bottom - 2
+      && labelBounds.bottom > boxBounds.top + 2;
+    return { below: label.classList.contains("below"), coversText };
   });
-  expect(placement.below).toBe(true);
-  expect(placement.coversLineAbove).toBe(false);
+  expect(placement.below).toBe(false);
+  expect(placement.coversText).toBe(false);
 });
 
 test("the public pages link DataSniper and the install note is one line", async ({ page }) => {

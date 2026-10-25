@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/datasniper/taskpane.html" />
   <link rel="icon" href="assets/icon-32.png" />
-  <link rel="stylesheet" href="css/app.css?v=3" />
-  <script src="js/boot.js?v=3"></script>
+  <link rel="stylesheet" href="css/app.css?v=5" />
+  <script src="js/boot.js?v=5"></script>
 </head>
 <body class="taskpane">
   <div id="app">
@@ -52,9 +52,13 @@
       <aside>
         <h2>Documents</h2>
         <ul id="doc-list"></ul>
+        <div class="doc-actions">
+          <button id="clear-docs" class="secondary" type="button" hidden>Clear all</button>
+        </div>
         <h2>Snips <span>Drag the handle to set column order.</span></h2>
         <ul id="snip-list"></ul>
         <button id="export-btn" type="button" disabled>Export to Excel</button>
+        <label class="mark-toggle"><input id="mark-low" type="checkbox" checked /> Mark low-confidence cells</label>
         <div id="preview-wrap" hidden>
           <h2>Last export</h2>
           <div id="preview"></div>
@@ -69,6 +73,6 @@
     <div class="mock-title">Excel workbook · harness</div>
     <div id="mock-grid"></div>
   </div>
-  <script type="module" src="js/taskpane.js?v=3"></script>
+  <script type="module" src="js/taskpane.js?v=5"></script>
 </body>
 </html>
