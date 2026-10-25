@@ -118,88 +118,122 @@ function requirementSupported(version) {
   }
 }
 
-async function stripCollection(context, collection) {
-  if (!collection || typeof collection.load !== "function") return;
-  collection.load("items");
-  await context.sync();
-  const items = collection.items || [];
-  items.forEach((item) => item.load && item.load("content"));
-  await context.sync();
-  items.forEach((item) => {
-    if (item.content === LOW_CONFIDENCE_NOTE && typeof item.delete === "function") item.delete();
-  });
-  await context.sync();
+function normalizeColor(value) {
+  const text = String(value ?? "").trim().replace(/^#/, "").toUpperCase();
+  if (!text || text === "NONE" || text === "NULL" || text === "AUTOMATIC" || text === "UNDEFINED") return "";
+  return text;
 }
 
-async function writeCommentsOrNotes(entries, enabled) {
-  try {
-    await enqueue(async (context) => {
-      const sheet = context.workbook.worksheets.getActiveWorksheet();
-      try {
-        await stripCollection(context, sheet.comments);
-      } catch (error) {
-        /* This Excel has no comment collection. */
-      }
-      try {
-        await stripCollection(context, sheet.notes);
-      } catch (error) {
-        /* This Excel has no note collection. */
-      }
-    });
-  } catch (error) {
-    /* A host without comments or notes still keeps the fill. */
-  }
-  if (!enabled) return "";
-  let commentProblem = "";
-  if (!requirementSupported("1.10")) {
-    commentProblem = "This Excel can't add comments.";
-  } else {
+async function readCollection(context, collection) {
+  if (!collection || typeof collection.load !== "function") return [];
+  collection.load("items");
+  await context.sync();
+  const items = [...(collection.items || [])];
+  items.forEach((item) => {
     try {
-      await enqueue(async (context) => {
-        const sheet = context.workbook.worksheets.getActiveWorksheet();
-        const { addresses } = await dataCells(context, entries);
-        addresses.forEach((cellAddress) => {
-          sheet.comments.add(cellAddress, LOW_CONFIDENCE_NOTE, Excel.ContentType.plain);
-        });
-        await context.sync();
-      });
+      item.load("content");
     } catch (error) {
-      commentProblem = error.message || "Excel could not add the low-confidence comment.";
+      /* The content is already present. */
     }
-  }
-  if (!commentProblem) return "";
-  if (!requirementSupported("1.18")) {
-    return `${commentProblem} This Excel can't add notes either. Low-confidence cells keep the amber fill only.`;
-  }
-  try {
-    await enqueue(async (context) => {
-      const sheet = context.workbook.worksheets.getActiveWorksheet();
-      if (!sheet.notes || typeof sheet.notes.add !== "function") {
-        throw new Error("This Excel can't add notes.");
-      }
-      const { addresses } = await dataCells(context, entries);
-      addresses.forEach((cellAddress) => {
-        sheet.notes.add(cellAddress, LOW_CONFIDENCE_NOTE);
-      });
-      await context.sync();
-    });
-  } catch (error) {
-    const noteProblem = error.message || "Excel could not add a note.";
-    return `${commentProblem} ${noteProblem} Low-confidence cells keep the amber fill only.`;
-  }
-  return `${commentProblem} Low-confidence cells have a note instead.`;
+    try {
+      const location = item.getLocation();
+      location.load("rowIndex,columnIndex");
+      item._markLocation = location;
+    } catch (error) {
+      item._markLocation = null;
+    }
+  });
+  await context.sync();
+  return items;
+}
+
+function reconcileMarks(items, wanted) {
+  const present = new Set();
+  items.forEach((item) => {
+    if (item.content !== LOW_CONFIDENCE_NOTE) return;
+    const location = item._markLocation;
+    if (!location || !Number.isInteger(location.rowIndex) || !Number.isInteger(location.columnIndex)) return;
+    const key = `${location.rowIndex}:${location.columnIndex}`;
+    if (wanted.has(key)) present.add(key);
+    else if (typeof item.delete === "function") item.delete();
+  });
+  return present;
 }
 
 export function applyLowConfidenceMarks(entries, enabled) {
-  const paint = enqueue(async (context) => {
-    const { cells } = await dataCells(context, entries);
-    cells.forEach((cell) => {
-      if (enabled) cell.format.fill.color = LOW_CONFIDENCE_FILL;
-      else cell.format.fill.clear();
-    });
+  return enqueue(async (context) => {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const { cells, addresses } = await dataCells(context, entries);
+    cells.forEach((cell) => cell.load("rowIndex,columnIndex,format/fill/color"));
     await context.sync();
+    const wanted = new Map();
+    if (enabled) {
+      cells.forEach((cell, index) => {
+        wanted.set(`${cell.rowIndex}:${cell.columnIndex}`, addresses[index]);
+      });
+    }
+    const fillWanted = normalizeColor(LOW_CONFIDENCE_FILL);
+    cells.forEach((cell) => {
+      let current = "";
+      try {
+        current = normalizeColor(cell.format.fill.color);
+      } catch (error) {
+        current = null;
+      }
+      if (enabled) {
+        if (current !== fillWanted) cell.format.fill.color = LOW_CONFIDENCE_FILL;
+      } else if (current) {
+        cell.format.fill.clear();
+      }
+    });
+
+    let commentProblem = "";
+    let commentItems = [];
+    try {
+      commentItems = await readCollection(context, sheet.comments);
+    } catch (error) {
+      commentProblem = "This Excel can't add comments.";
+    }
+    const commentPresent = reconcileMarks(commentItems, wanted);
+    if (!commentProblem && enabled && !requirementSupported("1.10")) {
+      commentProblem = "This Excel can't add comments.";
+    }
+    if (!commentProblem && enabled) {
+      try {
+        wanted.forEach((address, key) => {
+          if (!commentPresent.has(key)) {
+            sheet.comments.add(address, LOW_CONFIDENCE_NOTE, Excel.ContentType.plain);
+          }
+        });
+        await context.sync();
+      } catch (error) {
+        commentProblem = error.message || "Excel could not add the low-confidence comment.";
+      }
+    }
+
+    const noteWanted = commentProblem && enabled ? wanted : new Map();
+    let noteProblem = "";
+    try {
+      const noteItems = await readCollection(context, sheet.notes);
+      const notePresent = reconcileMarks(noteItems, noteWanted);
+      if (noteWanted.size) {
+        if (!requirementSupported("1.18") || !sheet.notes || typeof sheet.notes.add !== "function") {
+          noteProblem = "This Excel can't add notes.";
+        } else {
+          noteWanted.forEach((address, key) => {
+            if (!notePresent.has(key)) sheet.notes.add(address, LOW_CONFIDENCE_NOTE);
+          });
+          await context.sync();
+        }
+      }
+    } catch (error) {
+      noteProblem = error.message || "Excel could not add a note.";
+    }
+
+    if (!enabled || !commentProblem) return "";
+    if (!noteProblem) return `${commentProblem} Low-confidence cells have a note instead.`;
+    return `${commentProblem} ${noteProblem} Low-confidence cells keep the amber fill only.`;
   });
-  return paint.then(() => writeCommentsOrNotes(entries, enabled));
 }
 
 export function watchSelection(handler) {

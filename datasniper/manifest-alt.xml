@@ -28,11 +28,6 @@
     <Hosts>
       <Host xsi:type="Workbook">
         <DesktopFormFactor>
-          <GetStarted>
-            <Title resid="GetStarted.Title"/>
-            <Description resid="GetStarted.Description"/>
-            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
-          </GetStarted>
           <FunctionFile resid="Commands.Url"/>
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
             <OfficeTab id="TabHome">
@@ -72,17 +67,14 @@
         <bt:Image id="Icon.80" DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://jarvis-pd21.github.io/datasniper/"/>
         <bt:Url id="Commands.Url" DefaultValue="https://jarvis-pd21.github.io/datasniper/commands.html"/>
         <bt:Url id="Taskpane.Url" DefaultValue="https://jarvis-pd21.github.io/datasniper/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GetStarted.Title" DefaultValue="DataSniper is ready"/>
         <bt:String id="Group.Label" DefaultValue="DataSniper"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="DataSniper"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="GetStarted.Description" DefaultValue="Open DataSniper, snip fields on the first document, and export one row per file."/>
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Upload documents, snip fields, and export one Excel row per file."/>
       </bt:LongStrings>
     </Resources>

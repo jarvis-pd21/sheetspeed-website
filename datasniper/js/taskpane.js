@@ -129,30 +129,48 @@ async function addFiles(fileList) {
   const files = [...fileList];
   if (!files.length) return;
   if (reattachQueue.length) {
-    const wanted = reattachQueue[0];
-    const file = files.find((item) => item.name === wanted.name);
-    if (!file) {
-      setStatus(`Choose ${wanted.name} to open that row again.`);
+    const pending = reattachQueue.slice();
+    const matched = [];
+    files.forEach((file) => {
+      const index = pending.findIndex((item) => item.name === file.name);
+      if (index < 0) return;
+      matched.push({ file, wanted: pending[index] });
+      pending.splice(index, 1);
+    });
+    if (!matched.length) {
+      const names = reattachQueue.map((item) => item.name).join(", ");
+      setStatus(reattachQueue.length === 1
+        ? `Choose ${names} to open that row again.`
+        : `Choose ${names} to open those rows again.`);
       return;
     }
-    try {
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      const mime = file.type || (file.name.toLowerCase().endsWith(".pdf") ? "application/pdf" : "application/octet-stream");
-      await saveDocument({ id: wanted.docId, name: file.name, mime, bytes });
-      await hydrateRecord({ id: wanted.docId, name: file.name, mime, bytes });
-      reattachQueue = reattachQueue.filter((item) => item.docId !== wanted.docId);
-      if (!model.activeId) {
-        model.activeId = wanted.docId;
-        model.page = 1;
+    const attached = [];
+    const failures = [];
+    for (const { file, wanted } of matched) {
+      try {
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        const mime = file.type || (file.name.toLowerCase().endsWith(".pdf") ? "application/pdf" : "application/octet-stream");
+        await saveDocument({ id: wanted.docId, name: file.name, mime, bytes });
+        await hydrateRecord({ id: wanted.docId, name: file.name, mime, bytes });
+        reattachQueue = reattachQueue.filter((item) => item.docId !== wanted.docId);
+        if (!model.activeId) {
+          model.activeId = wanted.docId;
+          model.page = 1;
+        }
+        attached.push(file.name);
+      } catch (error) {
+        failures.push(`${file.name}: ${error.message || "Could not open that file."}`);
       }
-      await persist();
-      showReattach();
-      await renderAll();
-      const rest = reattachQueue.map((item) => item.name).join(", ");
-      setStatus(rest ? `Re-attached ${file.name}. Still missing ${rest}.` : `Re-attached ${file.name}.`);
-    } catch (error) {
-      setStatus(`${file.name}: ${error.message || "Could not open that file."}`);
     }
+    await persist();
+    showReattach();
+    await renderAll();
+    const count = attached.length;
+    const summary = `Re-attached ${count} document${count === 1 ? "" : "s"}.`;
+    const rest = reattachQueue.map((item) => item.name).join(", ");
+    const missingNote = rest ? ` Still missing ${rest}.` : "";
+    const failureNote = failures.length ? ` ${failures.join(" ")}` : "";
+    setStatus(`${summary}${missingNote}${failureNote}`);
     return;
   }
   setStatus(`Reading ${files.length} document${files.length === 1 ? "" : "s"}…`);
@@ -491,14 +509,38 @@ function amountFormat(raw) {
   return /[$€£]|\b(USD|EUR|GBP|CAD|AUD)\b/i.test(raw || "") ? "$#,##0.00" : "#,##0.00";
 }
 
+function stableValue(value) {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (value && typeof value === "object") {
+    return Object.keys(value).sort().reduce((out, key) => {
+      out[key] = stableValue(value[key]);
+      return out;
+    }, {});
+  }
+  return value;
+}
+
+function canonicalRecord(value) {
+  try {
+    const parsed = typeof value === "string" ? JSON.parse(value) : value;
+    return JSON.stringify(stableValue(parsed));
+  } catch (error) {
+    return null;
+  }
+}
+
+function sameFlag(current, expected) {
+  if (current === expected) return true;
+  return typeof current === "string" && current.toLowerCase() === String(expected);
+}
+
 async function saveWorkbookSettings() {
   if (!excelReady || !meta) return;
   const hasLinks = Boolean(meta.links && Object.keys(meta.links).length);
   const settings = Office.context.document.settings;
   const record = JSON.stringify(meta);
-  const currentShow = settings.get("Office.AutoShowTaskpaneWithDocument");
-  const showMatches = currentShow === hasLinks || currentShow === String(hasLinks);
-  if (settings.get(SETTINGS_KEY) === record && showMatches) return;
+  const sameRecord = canonicalRecord(settings.get(SETTINGS_KEY)) === canonicalRecord(record);
+  if (sameRecord && sameFlag(settings.get("Office.AutoShowTaskpaneWithDocument"), hasLinks)) return;
   settings.set(SETTINGS_KEY, record);
   settings.set("Office.AutoShowTaskpaneWithDocument", hasLinks);
   await new Promise((resolve) => settings.saveAsync(resolve));
@@ -533,7 +575,7 @@ function resolvedPayload(docId, snipId) {
 
 async function syncLowMarks() {
   const enabled = document.querySelector("#mark-low")?.checked !== false;
-  if (meta) meta.markLowConfidence = enabled;
+  if (meta && meta.markLowConfidence !== enabled) meta.markLowConfidence = enabled;
   if (!excelReady || !meta?.links) return "";
   const entries = Object.entries(meta.links).flatMap(([key, link]) => {
     if (!link || link.confidence !== "low") return [];

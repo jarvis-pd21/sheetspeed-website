@@ -8,6 +8,8 @@
   var selectionHandlers = [];
   var settings = {};
   var settingsSaves = 0;
+  var writes = 0;
+  var SHEET_KEY = "datasniper.harness.sheet";
   try {
     settings = JSON.parse(sessionStorage.getItem("datasniper.harness.settings") || "{}") || {};
     settingsSaves = Number(sessionStorage.getItem("datasniper.harness.settingsSaves") || "0") || 0;
@@ -24,6 +26,28 @@
     }
   }
   var top = window.parent === window;
+
+  function noteWrite() {
+    writes += 1;
+    if (!top) return;
+    try {
+      sessionStorage.setItem(SHEET_KEY, JSON.stringify({
+        grid: grid,
+        fills: fills,
+        comments: comments.map(function (item) {
+          return { row: item.row, col: item.col, content: item.content };
+        }),
+        notes: notes.map(function (item) {
+          return { row: item.row, col: item.col, content: item.content };
+        }),
+        tables: tables.map(function (table) {
+          return { name: table.name, address: table._address, hasHeaders: table._hasHeaders };
+        }),
+      }));
+    } catch (error) {
+      /* The next reload still has the in-memory sheet. */
+    }
+  }
 
   function key(row, col) {
     return row + "," + col;
@@ -79,6 +103,7 @@
           grid[key(this.rowIndex + r, this.columnIndex + c)] = values[r][c];
         }
       }
+      noteWrite();
       renderGrid();
     },
   });
@@ -99,6 +124,7 @@
       return note.row < this.rowIndex || note.row >= this.rowIndex + this.rowCount
         || note.col < this.columnIndex || note.col >= this.columnIndex + this.columnCount;
     }, this);
+    noteWrite();
     renderGrid();
   };
 
@@ -107,12 +133,17 @@
       var range = this;
       return {
         fill: {
+          get color() {
+            if (range.rowCount !== 1 || range.columnCount !== 1) return "";
+            return fills[key(range.rowIndex, range.columnIndex)] || "";
+          },
           set color(value) {
             for (var r = 0; r < range.rowCount; r += 1) {
               for (var c = 0; c < range.columnCount; c += 1) {
                 fills[key(range.rowIndex + r, range.columnIndex + c)] = value;
               }
             }
+            noteWrite();
             renderGrid();
           },
           clear: function () {
@@ -121,6 +152,7 @@
                 delete fills[key(range.rowIndex + r, range.columnIndex + c)];
               }
             }
+            noteWrite();
             renderGrid();
           },
         },
@@ -151,7 +183,71 @@
     tables = tables.filter(function (table) {
       return table !== this;
     }, this);
+    noteWrite();
   };
+
+  function pushComment(row, col, content) {
+    var comment = {
+      row: row,
+      col: col,
+      content: content,
+      load: function () {},
+      getLocation: function () {
+        return new Range(columnName(col) + (row + 1));
+      },
+      delete: function () {
+        comments = comments.filter(function (item) { return item !== comment; });
+        noteWrite();
+      },
+    };
+    comments.push(comment);
+    return comment;
+  }
+
+  function pushNote(row, col, content) {
+    var note = {
+      row: row,
+      col: col,
+      content: content,
+      load: function () {},
+      getLocation: function () {
+        return new Range(columnName(col) + (row + 1));
+      },
+      delete: function () {
+        notes = notes.filter(function (item) { return item !== note; });
+        noteWrite();
+      },
+    };
+    notes.push(note);
+    return note;
+  }
+
+  function loadSheet() {
+    if (!top) return;
+    var saved = null;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(SHEET_KEY) || "null");
+    } catch (error) {
+      saved = null;
+    }
+    if (!saved) return;
+    grid = saved.grid || {};
+    fills = saved.fills || {};
+    comments = [];
+    notes = [];
+    tables = [];
+    (saved.comments || []).forEach(function (item) {
+      pushComment(item.row, item.col, item.content);
+    });
+    (saved.notes || []).forEach(function (item) {
+      pushNote(item.row, item.col, item.content);
+    });
+    (saved.tables || []).forEach(function (item) {
+      var table = new Table(item.address, item.hasHeaders);
+      table.name = item.name;
+      tables.push(table);
+    });
+  }
 
   function columnName(index) {
     var n = index + 1;
@@ -181,6 +277,7 @@
         add: function (address, hasHeaders) {
           var table = new Table(address, hasHeaders);
           tables.push(table);
+          Promise.resolve().then(noteWrite);
           return table;
         },
       },
@@ -198,16 +295,8 @@
             throw new Error("comments.add expects a cell address, the note text, and Excel.ContentType.plain.");
           }
           var parsed = parseAddress(cellAddress);
-          var comment = {
-            row: parsed.rowIndex,
-            col: parsed.columnIndex,
-            content: content,
-            load: function () {},
-            delete: function () {
-              comments = comments.filter(function (item) { return item !== comment; });
-            },
-          };
-          comments.push(comment);
+          var comment = pushComment(parsed.rowIndex, parsed.columnIndex, content);
+          noteWrite();
           return comment;
         },
         load: function () {},
@@ -219,16 +308,8 @@
             throw new Error("notes.add expects a cell address and the note text.");
           }
           var parsed = parseAddress(cellAddress);
-          var note = {
-            row: parsed.rowIndex,
-            col: parsed.columnIndex,
-            content: content,
-            load: function () {},
-            delete: function () {
-              notes = notes.filter(function (item) { return item !== note; });
-            },
-          };
-          notes.push(note);
+          var note = pushNote(parsed.rowIndex, parsed.columnIndex, content);
+          noteWrite();
           return note;
         },
         load: function () {},
@@ -345,6 +426,7 @@
             } catch (error) {
               /* The count still advances in memory for this page. */
             }
+            noteWrite();
             if (callback) callback({ status: "succeeded" });
           },
         },
@@ -426,6 +508,7 @@
     },
   };
 
+  loadSheet();
   window.Office = Office;
   window.Excel = {
     ContentType: { plain: "Plain", mention: "Mention" },
@@ -447,6 +530,7 @@
       },
       settings: function () { return settings; },
       settingsSaves: function () { return settingsSaves; },
+      writes: function () { return writes; },
       startupBehavior: null,
       marks: function () {
         return {
