@@ -79,6 +79,15 @@
   "longNameFund": "Sable Ridge Venture Partners IV, L.P.",
   "longNameAmount": "$424,242.42",
   "shiftedDocument": "capital-call-07.pdf",
+  "sampleFiles": [
+    "capital-call-01.pdf",
+    "capital-call-02.pdf",
+    "capital-call-03.pdf",
+    "capital-call-04.pdf",
+    "capital-call-05.pdf",
+    "capital-call-06.pdf",
+    "capital-call-07.pdf"
+  ],
   "shifted": {
     "fund": "Northwind Growth Fund III, L.P.",
     "investor": "Northline Municipal Pension Plan",

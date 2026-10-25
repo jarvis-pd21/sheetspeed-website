@@ -8,6 +8,30 @@ const layout = JSON.parse(readFileSync(path.join(root, "datasniper/samples/layou
 const shots = "/opt/cursor/artifacts/datasniper";
 mkdirSync(shots, { recursive: true });
 
+async function expectLabelsOffTheText(overlay) {
+  const report = await overlay.evaluate((root) => [...root.querySelectorAll(".snip-box")].map((box) => {
+    const label = box.querySelector("span");
+    const boxBounds = box.getBoundingClientRect();
+    const labelBounds = label.getBoundingClientRect();
+    const hits = (target) => labelBounds.left < target.right - 1
+      && labelBounds.right > target.left + 1
+      && labelBounds.top < target.bottom - 1
+      && labelBounds.bottom > target.top + 1;
+    const others = [...root.querySelectorAll(".snip-box")].filter((other) => other !== box);
+    return {
+      text: label.textContent,
+      place: label.className,
+      hitsOwn: hits(boxBounds),
+      hitsOther: others.some((other) => hits(other.getBoundingClientRect())),
+    };
+  }));
+  expect(report.length).toBeGreaterThan(0);
+  for (const item of report) {
+    expect(item.hitsOwn, JSON.stringify(item)).toBe(false);
+    expect(item.hitsOther, JSON.stringify(item)).toBe(false);
+  }
+}
+
 async function draw(page, rect) {
   const overlay = page.locator("#overlay");
   await expect.poll(async () => overlay.boundingBox().then((box) => box?.height || 0)).toBeGreaterThan(200);
@@ -38,14 +62,7 @@ test("snips three fields, reorders columns, extracts five notices, and widens a 
   await page.locator(".snip-name").nth(1).fill("Investor");
   await page.locator(".snip-name").nth(2).fill("Amount called");
   await expect(page.locator(".snip-box")).toHaveCount(3);
-  const labelsInside = await page.locator(".snip-box").evaluateAll((boxes) => boxes.map((box) => {
-    const label = box.querySelector("span");
-    const boxBounds = box.getBoundingClientRect();
-    const labelBounds = label.getBoundingClientRect();
-    const fontSize = Number.parseFloat(getComputedStyle(label).fontSize);
-    return labelBounds.top >= boxBounds.top - 1 && fontSize <= 10;
-  }));
-  expect(labelsInside).toEqual([true, true, true]);
+  await expectLabelsOffTheText(page.locator("#overlay"));
   await page.screenshot({ path: path.join(shots, "02-snips-named.png") });
 
   const handle = page.locator(".snip-row").nth(2).locator(".drag-handle");
@@ -150,11 +167,12 @@ test("OCR fallback reads text painted on a canvas", async ({ page }) => {
 test("sample button and an image upload both open in the viewer", async ({ page }) => {
   await page.goto("/datasniper/taskpane.html?harness=1");
   await page.locator("#load-samples").click();
-  await expect(page.locator("#doc-list li")).toHaveCount(5);
+  await expect(page.locator("#doc-list li")).toHaveCount(7);
+  await expect(page.locator("#doc-list")).toContainText("capital-call-07.pdf");
   await expect(page.locator("#page-canvas")).toBeVisible();
 
   await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-image.png"));
-  await expect(page.locator("#doc-list li")).toHaveCount(6);
+  await expect(page.locator("#doc-list li")).toHaveCount(8);
   await expect(page.locator("#doc-list")).toContainText("capital-call-image.png");
   await page.locator(".doc-button", { hasText: "capital-call-image.png" }).click();
   await expect.poll(async () => page.locator("#page-canvas").evaluate((canvas) => canvas.width)).toBeGreaterThan(0);
@@ -262,4 +280,128 @@ test("a reopened workbook asks for a missing file by filename", async ({ page })
   const preview = page.frameLocator("#ds-harness-dialog");
   await expect(preview.locator("#doc-title")).toHaveText("capital-call-01.pdf");
   await expect(preview.locator("#live-text")).toHaveText("$1,250,000.00");
+});
+
+test("a label-matched preview uses the saved region and will not adopt another field", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples", layout.shiftedDocument),
+  ]);
+  await draw(page, layout.snips.fund);
+  await draw(page, layout.snips.investorNarrow);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").nth(0).fill("Fund");
+  await page.locator(".snip-name").nth(1).fill("Investor");
+  await page.locator(".snip-name").nth(2).fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(true);
+  expect(await page.evaluate(() => window.__datasniper.startupBehavior)).toBe("Load");
+
+  const values = await page.evaluate(() => window.__datasniper.values());
+  const rowIndex = values.findIndex((line) => line[0] === layout.shiftedDocument);
+  const investorCol = values[0].indexOf("Investor");
+  expect(values[rowIndex][investorCol]).toBe(layout.shifted.investor);
+  const marks = await page.evaluate(() => window.__datasniper.marks());
+  const noted = marks.comments.filter((comment) => comment.content === "DataSniper: matched by label");
+  expect(noted.length).toBeGreaterThan(0);
+  for (const comment of noted) {
+    expect(marks.fills[`${comment.row},${comment.col}`]).toBe("#FDE7C7");
+  }
+
+  await page.evaluate((hit) => window.__datasniper.select(hit.row, hit.col), { row: rowIndex, col: investorCol });
+  const preview = page.frameLocator("#ds-harness-dialog");
+  await expect(preview.locator("#confidence-note")).toBeVisible();
+  await expect(preview.locator("#confidence-note")).toHaveText("Low confidence: matched by label");
+  await expect(preview.locator("#live-text")).toHaveText(layout.shifted.investor);
+  const top = await preview.locator(".snip-box").evaluate((box) => Number.parseFloat(box.style.top));
+  expect(top).toBeGreaterThan((layout.snips.investorNarrow.y + 0.02) * 100);
+
+  const overlay = preview.locator("#overlay");
+  const box = await overlay.boundingBox();
+  const snip = await preview.locator(".snip-box").boundingBox();
+  const deltaY = await page.evaluate(({ file, investorRaw, fundRaw }) => {
+    const meta = JSON.parse(window.__datasniper.settings()["datasniper.v1"]);
+    const links = Object.values(meta.links).filter((link) => link.name === file);
+    const investor = links.find((link) => link.raw === investorRaw);
+    const fund = links.find((link) => link.raw === fundRaw);
+    return fund.rect.y - investor.rect.y;
+  }, {
+    file: layout.shiftedDocument,
+    investorRaw: layout.shifted.investor,
+    fundRaw: layout.shifted.fund,
+  });
+  const startX = snip.x + snip.width / 2;
+  const startY = snip.y + snip.height / 2;
+  await page.mouse.move(startX, startY);
+  await page.mouse.down();
+  await page.mouse.move(startX, startY + deltaY * box.height, { steps: 12 });
+  await page.mouse.up();
+  await expect(page.locator("#status")).toContainText("another field");
+  await expect.poll(async () => page.evaluate(({ row, col }) => window.__datasniper.values()[row][col], {
+    row: rowIndex,
+    col: investorCol,
+  })).toBe(layout.shifted.investor);
+  await expect(preview.locator("#live-text")).toHaveText(layout.shifted.investor);
+  await page.evaluate(() => window.__datasniper.dialog.close());
+
+  await page.locator("#mark-low").uncheck();
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.marks().comments.length)).toBe(0);
+  const cleared = await page.evaluate(() => window.__datasniper.marks());
+  expect(Object.values(cleared.fills).filter(Boolean)).toEqual([]);
+  const kept = await page.evaluate(() => window.__datasniper.values());
+  expect(kept[rowIndex][investorCol]).toBe(layout.shifted.investor);
+});
+
+test("snip labels stay outside the text in the pane, the large viewer, and the preview", async ({ page }) => {
+  const dir = "/opt/cursor/artifacts/datasniper-labels";
+  mkdirSync(dir, { recursive: true });
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await draw(page, layout.snips.fund);
+  await draw(page, layout.snips.investorNarrow);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").nth(0).fill("Fund");
+  await page.locator(".snip-name").nth(1).fill("Investor");
+  await page.locator(".snip-name").nth(2).fill("Amount called");
+  await expectLabelsOffTheText(page.locator("#overlay"));
+  await page.locator("#viewer").screenshot({ path: path.join(dir, "pane-thumbnail.png") });
+
+  await page.locator("#open-viewer").click();
+  const viewer = page.frameLocator("#ds-harness-dialog");
+  await expect(viewer.locator(".snip-box")).toHaveCount(3);
+  await expectLabelsOffTheText(viewer.locator("#overlay"));
+  await page.locator("#ds-harness-dialog").screenshot({ path: path.join(dir, "large-viewer.png") });
+  await page.evaluate(() => window.__datasniper.dialog.close());
+  await expect(page.locator("#ds-harness-dialog")).toHaveCount(0);
+
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 1");
+  await page.evaluate(() => window.__datasniper.select(1, 2));
+  const preview = page.frameLocator("#ds-harness-dialog");
+  await expect(preview.locator("#live-text")).toHaveText("Harborview Pension Trust");
+  await expectLabelsOffTheText(preview.locator("#overlay"));
+  await page.locator("#ds-harness-dialog").screenshot({ path: path.join(dir, "preview.png") });
+});
+
+test("remove and clear all drop documents and their sheet rows", async ({ page }) => {
+  await page.goto("/datasniper/taskpane.html?harness=1");
+  await page.locator("#file-input").setInputFiles([
+    path.join(root, "datasniper/samples/capital-call-01.pdf"),
+    path.join(root, "datasniper/samples/capital-call-02.pdf"),
+  ]);
+  await draw(page, layout.snips.amount);
+  await page.locator(".snip-name").fill("Amount called");
+  await page.locator("#export-btn").click();
+  await expect(page.locator("#status")).toContainText("Exported 2");
+  await page.locator(".remove-doc", { hasText: "Remove" }).nth(1).click();
+  await expect(page.locator("#doc-list li")).toHaveCount(1);
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.values().length)).toBe(2);
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.values()[1][0])).toBe("capital-call-01.pdf");
+  await page.locator("#clear-docs").click();
+  await expect(page.locator("#doc-list li")).toHaveCount(0);
+  await expect(page.locator("#clear-docs")).toBeHidden();
+  await expect.poll(async () => page.evaluate(() => window.__datasniper.values())).toEqual([]);
+  expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(false);
 });

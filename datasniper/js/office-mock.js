@@ -1,5 +1,7 @@
 (function () {
   var grid = {};
+  var fills = {};
+  var comments = [];
   var tables = [];
   var selection = { row: 0, col: 0 };
   var selectionHandlers = [];
@@ -80,11 +82,43 @@
   Range.prototype.clear = function () {
     for (var r = 0; r < this.rowCount; r += 1) {
       for (var c = 0; c < this.columnCount; c += 1) {
-        delete grid[key(this.rowIndex + r, this.columnIndex + c)];
+        var cellKey = key(this.rowIndex + r, this.columnIndex + c);
+        delete grid[cellKey];
+        delete fills[cellKey];
       }
     }
+    comments = comments.filter(function (comment) {
+      return comment.row < this.rowIndex || comment.row >= this.rowIndex + this.rowCount
+        || comment.col < this.columnIndex || comment.col >= this.columnIndex + this.columnCount;
+    }, this);
     renderGrid();
   };
+
+  Object.defineProperty(Range.prototype, "format", {
+    get: function () {
+      var range = this;
+      return {
+        fill: {
+          set color(value) {
+            for (var r = 0; r < range.rowCount; r += 1) {
+              for (var c = 0; c < range.columnCount; c += 1) {
+                fills[key(range.rowIndex + r, range.columnIndex + c)] = value;
+              }
+            }
+            renderGrid();
+          },
+          clear: function () {
+            for (var r = 0; r < range.rowCount; r += 1) {
+              for (var c = 0; c < range.columnCount; c += 1) {
+                delete fills[key(range.rowIndex + r, range.columnIndex + c)];
+              }
+            }
+            renderGrid();
+          },
+        },
+      };
+    },
+  });
 
   function Table(address, hasHeaders) {
     this.name = "Table1";
@@ -150,6 +184,24 @@
           selectionHandlers.push(handler);
         },
       },
+      comments: {
+        add: function (range, content) {
+          var text = typeof content === "string" ? content : content.content;
+          var comment = {
+            row: range.rowIndex,
+            col: range.columnIndex,
+            content: text,
+            load: function () {},
+            delete: function () {
+              comments = comments.filter(function (item) { return item !== comment; });
+            },
+          };
+          comments.push(comment);
+          return comment;
+        },
+        load: function () {},
+        get items() { return comments.slice(); },
+      },
     };
   }
 
@@ -210,8 +262,9 @@
       html += "<tr>";
       row.forEach(function (cell, c) {
         var tag = r === 0 ? "th" : "td";
-        var selected = selection.row === r && selection.col === c ? " class='selected'" : "";
-        html += "<" + tag + selected + ">" + escapeHtml(cell) + "</" + tag + ">";
+        var selected = selection.row === r && selection.col === c ? " selected" : "";
+        var fill = fills[key(r, c)] ? " style='background:" + fills[key(r, c)] + "'" : "";
+        html += "<" + tag + " class='" + selected.trim() + "'" + fill + ">" + escapeHtml(cell) + "</" + tag + ">";
       });
       html += "</tr>";
     });
@@ -231,6 +284,7 @@
     HostType: { Excel: "Excel" },
     PlatformType: { OfficeOnline: "OfficeOnline", PC: "PC", Mac: "Mac" },
     AsyncResultStatus: { Succeeded: "succeeded", Failed: "failed" },
+    StartupBehavior: { load: "Load", none: "None" },
     EventType: {
       DialogMessageReceived: "dialogMessageReceived",
       DialogEventReceived: "dialogEventReceived",
@@ -256,6 +310,9 @@
             if (callback) callback({ status: "succeeded" });
           },
         },
+      },
+      requirements: {
+        isSetSupported: function () { return true; },
       },
       ui: {
         displayDialogAsync: function (url, options, callback) {
@@ -319,6 +376,13 @@
     });
   });
 
+  Office.addin = {
+    setStartupBehavior: function (value) {
+      if (top) window.__datasniper.startupBehavior = value;
+      return Promise.resolve();
+    },
+  };
+
   window.Office = Office;
   window.Excel = {
     run: function (batch) {
@@ -338,6 +402,15 @@
         }, Promise.resolve());
       },
       settings: function () { return settings; },
+      startupBehavior: null,
+      marks: function () {
+        return {
+          fills: Object.assign({}, fills),
+          comments: comments.map(function (comment) {
+            return { row: comment.row, col: comment.col, content: comment.content };
+          }),
+        };
+      },
       dialog: null,
     };
     document.addEventListener("DOMContentLoaded", renderGrid);

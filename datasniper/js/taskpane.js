@@ -1,7 +1,8 @@
 import { clampRect, fieldRectForDocument, normalizeDrag, pageHasTextLayer, parseAmount } from "./extract.js";
+import { finishLabels } from "./labels.js";
 import { extractFromDocument, loadDocument, pageGeometry, renderImage, renderPdfPage } from "./pdf-engine.js";
-import { tableExists, updateCell, watchSelection, writeTable } from "./excel-bridge.js";
-import { buildWorkbookRecord, replaceWorkbookRecord } from "./workbook.js";
+import { applyLowConfidenceMarks, clearTable, tableExists, updateCell, watchSelection, writeTable } from "./excel-bridge.js";
+import { buildWorkbookRecord, clashesWithAnotherField, replaceWorkbookRecord } from "./workbook.js";
 import { clearStoredFiles, createId, getDocument, loadSession, saveDocument, saveSession } from "./store.js";
 
 const SETTINGS_KEY = "datasniper.v1";
@@ -165,11 +166,12 @@ async function loadSamples() {
     if (!response.ok) throw new Error("Sample list was not found.");
     const layout = await response.json();
     const files = [];
-    for (const entry of layout.documents) {
-      const fileResponse = await fetch(`samples/${entry.file}`);
-      if (!fileResponse.ok) throw new Error(`Missing ${entry.file}`);
+    const names = layout.sampleFiles || layout.documents.map((entry) => entry.file);
+    for (const name of names) {
+      const fileResponse = await fetch(`samples/${name}`);
+      if (!fileResponse.ok) throw new Error(`Missing ${name}`);
       const bytes = new Uint8Array(await fileResponse.arrayBuffer());
-      files.push({ name: entry.file, type: "application/pdf", arrayBuffer: async () => bytes.buffer.slice(0) });
+      files.push({ name, type: "application/pdf", arrayBuffer: async () => bytes.buffer.slice(0) });
     }
     await addFiles(files);
   } catch (error) {
@@ -196,7 +198,13 @@ function renderDocs() {
       persist();
       renderAll();
     });
-    item.append(button);
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "secondary remove-doc";
+    remove.dataset.docId = doc.id;
+    remove.textContent = "Remove";
+    remove.setAttribute("aria-label", `Remove ${doc.name}`);
+    item.append(button, remove);
     docList.append(item);
 
     const option = document.createElement("option");
@@ -216,6 +224,8 @@ function renderDocs() {
   emptyState.hidden = Boolean(doc);
   viewer.hidden = !doc;
   exportButton.disabled = !model.docs.length || !model.snips.length;
+  const clearDocs = document.querySelector("#clear-docs");
+  if (clearDocs) clearDocs.hidden = model.docs.length === 0;
 }
 
 async function renderPage() {
@@ -248,10 +258,10 @@ function paintBoxes() {
     const label = document.createElement("span");
     label.textContent = snip.name || "Snip";
     label.style.background = rgba(color, 0.55);
-    placeLabel(label, snip);
     box.append(label);
     overlay.append(box);
   });
+  finishLabels(overlay);
   if (drawing) {
     const rect = normalizeDrag(drawing.start, drawing.current);
     const box = document.createElement("div");
@@ -319,12 +329,6 @@ function renderPreview(headers, matrix, cells) {
     table.append(tr);
   });
   preview.replaceChildren(table);
-}
-
-function placeLabel(label, rect) {
-  const bounds = overlay.getBoundingClientRect();
-  const pixelHeight = bounds.height * (Number(rect?.h) || 0);
-  if (bounds.height > 0 && pixelHeight < 16) label.classList.add("below");
 }
 
 async function renderAll() {
@@ -456,8 +460,51 @@ function amountFormat(raw) {
 
 async function saveWorkbookSettings() {
   if (!excelReady || !meta) return;
+  const hasLinks = Boolean(meta.links && Object.keys(meta.links).length);
   Office.context.document.settings.set(SETTINGS_KEY, JSON.stringify(meta));
+  Office.context.document.settings.set("Office.AutoShowTaskpaneWithDocument", hasLinks);
   await new Promise((resolve) => Office.context.document.settings.saveAsync(resolve));
+  if (hasLinks && Office.addin && Office.StartupBehavior && typeof Office.addin.setStartupBehavior === "function") {
+    try {
+      await Office.addin.setStartupBehavior(Office.StartupBehavior.load);
+    } catch (error) {
+      /* The document setting still reopens the pane on hosts without startup behavior. */
+    }
+  }
+}
+
+function linkFor(docId, snipId) {
+  if (!meta?.links || !meta.columns || !meta.rows || !snipId) return null;
+  const row = meta.rows.indexOf(docId);
+  const col = meta.columns.indexOf(snipId);
+  if (row < 0 || col < 0) return null;
+  return meta.links[`${row}:${col}`] || null;
+}
+
+function resolvedPayload(docId, snipId) {
+  const link = linkFor(docId, snipId);
+  if (!link?.rect) return null;
+  return {
+    rect: link.rect,
+    confidence: link.confidence || "high",
+    reason: link.reason || "",
+    label: link.label || "",
+    raw: link.raw || "",
+  };
+}
+
+async function syncLowMarks() {
+  const enabled = document.querySelector("#mark-low")?.checked !== false;
+  if (meta) meta.markLowConfidence = enabled;
+  if (!excelReady || !meta?.links) return;
+  const entries = Object.entries(meta.links).flatMap(([key, link]) => {
+    if (!link || link.confidence !== "low") return [];
+    const [row, col] = key.split(":").map(Number);
+    if (!Number.isInteger(row) || !Number.isInteger(col)) return [];
+    return [{ row, col }];
+  });
+  await applyLowConfidenceMarks(entries, enabled);
+  await saveWorkbookSettings();
 }
 
 async function readCell(doc, snip, template) {
@@ -570,6 +617,11 @@ async function exportAll() {
       await ensureSelection();
     }
     renderPreview(headers, matrix, bodyCells);
+    try {
+      await syncLowMarks();
+    } catch (error) {
+      notes.push(error.message || "Could not mark the low-confidence cells.");
+    }
     const excelNote = excelReady
       ? `Exported ${matrix.length} documents to the DataSniperExport table on the active sheet.`
       : `Prepared ${matrix.length} rows. Excel is not connected, so nothing was written to a workbook.`;
@@ -679,7 +731,12 @@ function pushViewerState() {
 async function openPreview(docId, snipId) {
   if (dialog && dialogMode === "preview") {
     try {
-      dialog.messageChild(JSON.stringify({ type: "show", docId, snipId }));
+      dialog.messageChild(JSON.stringify({
+        type: "show",
+        docId,
+        snipId,
+        resolved: resolvedPayload(docId, snipId),
+      }));
       return;
     } catch (error) {
       dialog = null;
@@ -708,6 +765,23 @@ function onDialogMessage(arg) {
   const message = JSON.parse(arg.message);
   if (message.type === "need-document" || message.type === "viewer-ready") {
     return sendDocument(message.docId || model.activeId, message.snipId || null);
+  }
+  if (message.type === "need-resolved") {
+    if (!dialog) return null;
+    const targetDoc = message.docId || null;
+    const targetSnip = message.snipId || null;
+    try {
+      dialog.messageChild(JSON.stringify({
+        type: "resolved",
+        docId: targetDoc,
+        snipId: targetSnip,
+        resolved: resolvedPayload(targetDoc, targetSnip),
+      }));
+    } catch (error) {
+      dialog = null;
+      dialogMode = null;
+    }
+    return null;
   }
   if (message.type === "create-snip") {
     const doc = activeDoc();
@@ -747,14 +821,32 @@ async function applySnipUpdate(message, token, revision) {
   if ((latestUpdate.get(token) || 0) !== revision) return;
   const snip = model.snips.find((item) => item.id === message.snipId);
   if (!snip) return;
-  if (!model.overrides[message.docId]) model.overrides[message.docId] = {};
-  model.overrides[message.docId][message.snipId] = clampRect({ ...message.rect, page: message.rect.page || snip.page || 1 });
-  await persist();
-  if ((latestUpdate.get(token) || 0) !== revision) return;
   if (!meta) return;
   const row = meta.rows.indexOf(message.docId);
   const col = meta.columns.indexOf(message.snipId);
   if (row < 0 || col < 0) return;
+  const previous = meta.links?.[`${row}:${col}`];
+  const labelMatched = previous && previous.confidence === "low" && previous.reason === "shifted";
+  if (labelMatched && clashesWithAnotherField(meta.links, row, col, message.text, message.rect)) {
+    setStatus(`That box landed on another field. ${snip.name || "The snip"} stayed on the label match.`);
+    try {
+      dialog?.messageChild(JSON.stringify({
+        type: "restore-rect",
+        docId: message.docId,
+        snipId: message.snipId,
+        rect: previous.rect,
+        text: previous.raw || "",
+      }));
+    } catch (error) {
+      dialog = null;
+      dialogMode = null;
+    }
+    return;
+  }
+  if (!model.overrides[message.docId]) model.overrides[message.docId] = {};
+  model.overrides[message.docId][message.snipId] = clampRect({ ...message.rect, page: message.rect.page || snip.page || 1 });
+  await persist();
+  if ((latestUpdate.get(token) || 0) !== revision) return;
   const amount = parseAmount(message.text || "");
   const value = amount ? amount.value : (message.text || "");
   const format = amount ? amountFormat(message.text) : "General";
@@ -835,6 +927,63 @@ async function restoreWorkbook() {
     const exists = await tableExists();
     if (!exists) await writeTable(meta.headers, meta.matrix);
   }
+  const markBox = document.querySelector("#mark-low");
+  if (markBox) markBox.checked = meta.markLowConfidence !== false;
+  try {
+    await syncLowMarks();
+  } catch (error) {
+    setStatus(error.message || "Could not restore the low-confidence marks.");
+  }
+}
+
+async function removeDocument(id) {
+  const doc = model.docs.find((item) => item.id === id);
+  model.docs = model.docs.filter((item) => item.id !== id);
+  delete model.overrides[id];
+  if (model.activeId === id) {
+    model.activeId = model.docs[0]?.id || null;
+    model.page = 1;
+  }
+  await persist();
+  await renderAll();
+  if (meta?.rows?.includes(id)) {
+    if (model.docs.length && model.snips.length) await exportAll();
+    else await clearSheetExport();
+  }
+  setStatus(doc ? `Removed ${doc.name}.` : "Removed that document.");
+}
+
+async function clearAllDocuments() {
+  model.docs = [];
+  model.overrides = {};
+  model.activeId = null;
+  model.page = 1;
+  reattachQueue = [];
+  showReattach();
+  await persist();
+  await renderAll();
+  if (meta) await clearSheetExport();
+  setStatus("Cleared every document.");
+}
+
+async function clearSheetExport() {
+  meta = {
+    version: 2,
+    columns: ["__source__", ...model.snips.map((snip) => snip.id)],
+    rows: [],
+    names: [],
+    snips: model.snips.map((snip) => ({ ...snip })),
+    headers: [],
+    matrix: [],
+    links: {},
+    markLowConfidence: document.querySelector("#mark-low")?.checked !== false,
+  };
+  if (excelReady) {
+    await clearTable();
+    await saveWorkbookSettings();
+  }
+  previewWrap.hidden = true;
+  preview.replaceChildren();
 }
 
 function bytesToBase64(bytes) {
@@ -856,6 +1005,7 @@ async function sendDocument(docId, snipId) {
     name: record.name,
     mime: record.mime,
     snipId: snipId || null,
+    resolved: resolvedPayload(record.id, snipId),
     page: model.page,
     snips: model.snips,
     overrides: model.overrides,
@@ -882,6 +1032,17 @@ fileInput.addEventListener("change", () => {
   addFiles(files);
 });
 samplesButton.addEventListener("click", () => loadSamples());
+document.querySelector("#clear-docs").addEventListener("click", () => {
+  clearAllDocuments().catch((error) => setStatus(error.message || "Could not clear the documents."));
+});
+document.querySelector("#mark-low").addEventListener("change", () => {
+  syncLowMarks().catch((error) => setStatus(error.message || "Could not update the low-confidence marks."));
+});
+docList.addEventListener("click", (event) => {
+  const button = event.target.closest(".remove-doc");
+  if (!button) return;
+  removeDocument(button.dataset.docId).catch((error) => setStatus(error.message || "Could not remove that document."));
+});
 exportButton.addEventListener("click", () => exportAll());
 openViewerButton.addEventListener("click", () => openLargeViewer());
 docSelect.addEventListener("change", () => {

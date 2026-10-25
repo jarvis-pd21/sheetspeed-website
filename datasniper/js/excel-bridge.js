@@ -75,6 +75,74 @@ export function tableExists() {
   });
 }
 
+export function clearTable() {
+  return enqueue(async (context) => {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const existing = sheet.tables.getItemOrNullObject(TABLE);
+    existing.load("isNullObject");
+    await context.sync();
+    if (existing.isNullObject) return;
+    const range = existing.getRange();
+    range.load("rowIndex, columnIndex, rowCount, columnCount");
+    await context.sync();
+    const oldAddress = address(range.rowIndex, range.columnIndex, range.rowCount, range.columnCount);
+    existing.delete();
+    sheet.getRange(oldAddress).clear();
+    await context.sync();
+  });
+}
+
+export const LOW_CONFIDENCE_NOTE = "DataSniper: matched by label";
+const LOW_CONFIDENCE_FILL = "#FDE7C7";
+
+async function dataCells(context, entries) {
+  const sheet = context.workbook.worksheets.getActiveWorksheet();
+  const table = sheet.tables.getItemOrNullObject(TABLE);
+  table.load("isNullObject");
+  await context.sync();
+  if (table.isNullObject) return { sheet, cells: [] };
+  const body = table.getDataBodyRange();
+  body.load("rowIndex, columnIndex");
+  await context.sync();
+  const cells = entries.map((entry) => sheet.getRange(address(body.rowIndex + entry.row, body.columnIndex + entry.col)));
+  return { sheet, cells };
+}
+
+async function stripLowNotes(context, sheet) {
+  if (!sheet.comments || typeof sheet.comments.load !== "function") return;
+  const comments = sheet.comments;
+  comments.load("items");
+  await context.sync();
+  const items = comments.items || [];
+  items.forEach((item) => item.load && item.load("content"));
+  await context.sync();
+  items.forEach((item) => {
+    if (item.content === LOW_CONFIDENCE_NOTE && typeof item.delete === "function") item.delete();
+  });
+  await context.sync();
+}
+
+export function applyLowConfidenceMarks(entries, enabled) {
+  const paint = enqueue(async (context) => {
+    const { cells } = await dataCells(context, entries);
+    cells.forEach((cell) => {
+      if (enabled) cell.format.fill.color = LOW_CONFIDENCE_FILL;
+      else cell.format.fill.clear();
+    });
+    await context.sync();
+  });
+  return paint.then(() => enqueue(async (context) => {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    await stripLowNotes(context, sheet);
+    if (!enabled || !sheet.comments || typeof sheet.comments.add !== "function") return;
+    const { cells } = await dataCells(context, entries);
+    cells.forEach((cell) => {
+      sheet.comments.add(cell, { content: LOW_CONFIDENCE_NOTE, contentType: "Plain" });
+    });
+    await context.sync();
+  }).catch(() => {}));
+}
+
 export function watchSelection(handler) {
   return enqueue(async (context) => {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
