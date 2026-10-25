@@ -4,6 +4,7 @@
   if(!fig||!data)return;
   var clips;try{clips=JSON.parse(data.textContent)}catch(e){return}
   var stage=fig.querySelector('.m-stage'),cap=fig.querySelector('.m-cap'),dots=fig.querySelector('.m-dots'),next=fig.querySelector('.m-next');
+  var poster=stage.querySelector('.m-poster');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var base='/assets/demos/',ver=data.getAttribute('data-v'),q=ver?'?v='+ver:'',vids=[],cur=0;
   function make(i){
@@ -36,10 +37,28 @@
     if(old!==v){old.pause();old.classList.remove('is-on')}
     cur=i;load(v);v.classList.add('is-on');
     // 2026-10-21: per-clip zoom so the action fills the frame (toolbar clip stays 1x)
-    v.style.transform=clips[i].zoom?('scale('+clips[i].zoom+')'):'';
+    var zoom=clips[i].zoom?('scale('+clips[i].zoom+')'):'';
+    v.style.transform=zoom;
+    // Keep a decoded first frame on top until the video is actually playing.
+    // Mobile was showing the gray stage while the clip was still buffering.
+    stage.classList.remove('is-playing');
+    if(poster){
+      poster.src=base+clips[i].id+'.jpg'+q;
+      poster.style.transform=zoom;
+    }
+    v.addEventListener('playing',function onPlay(){
+      if(vids[cur]===v)stage.classList.add('is-playing');
+    },{once:true});
     cap.innerHTML=clips[i].cap;
     [].forEach.call(dots.children,function(d,k){d.setAttribute('aria-selected',k===i?'true':'false')});
-    if(!reduce){try{v.currentTime=0}catch(e){}var p=v.play();if(p&&p.catch)p.catch(function(){})}
+    if(!reduce){
+      var start=function(){
+        try{if(v.readyState>=1)v.currentTime=0}catch(e){}
+        var p=v.play();if(p&&p.catch)p.catch(function(){});
+      };
+      if(v.readyState>=1)start();
+      else v.addEventListener('loadedmetadata',start,{once:true});
+    }
     if(!reduce)load(vids[(i+1)%clips.length]); // preload next only
   }
   vids.forEach(function(v,i){v.addEventListener('ended',function(){if(i===cur&&!reduce)show(cur+1)})});
