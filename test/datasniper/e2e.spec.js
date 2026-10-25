@@ -420,7 +420,14 @@ test("remove and clear all drop documents and their sheet rows", async ({ page }
   await expect(page.locator("#status")).toContainText("Excel table is still on the sheet");
   await expect.poll(async () => page.evaluate(() => window.__datasniper.values().length)).toBe(2);
   expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(true);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  await expect(page.locator("#reattach")).toBeVisible();
+  await expect(page.locator("#reattach-name")).toHaveText("capital-call-01.pdf");
+  await expect(page.locator("#doc-list li")).toHaveCount(0);
   await page.locator("#file-input").setInputFiles(path.join(root, "datasniper/samples/capital-call-01.pdf"));
+  await expect(page.locator("#reattach")).toBeHidden();
+  await expect(page.locator("#doc-list li")).toHaveCount(1);
   await page.locator("#export-btn").click();
   await expect(page.locator("#status")).toContainText("Exported 1");
   await page.locator("#clear-docs").click();
@@ -429,6 +436,10 @@ test("remove and clear all drop documents and their sheet rows", async ({ page }
   await expect(page.locator("#status")).toContainText("and the Excel table");
   await expect.poll(async () => page.evaluate(() => window.__datasniper.values())).toEqual([]);
   expect(await page.evaluate(() => window.__datasniper.settings()["Office.AutoShowTaskpaneWithDocument"])).toBe(false);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-datasniper-ready", "1");
+  await expect(page.locator("#reattach")).toBeHidden();
+  await expect(page.locator("#doc-list li")).toHaveCount(0);
 });
 
 test("comments.add rejects an options object", async ({ page }) => {
