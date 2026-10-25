@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>3c9d7e21-5a4b-4f8e-8d2c-1b6a0e9f7a52</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>SheetSpeed</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="DataSniper (alt host)"/>
+  <Description DefaultValue="Snip regions on a template document and extract the same fields from every uploaded PDF into an Excel table."/>
+  <IconUrl DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://jarvis-pd21.github.io/datasniper/"/>
+  <AppDomains>
+    <AppDomain>https://jarvis-pd21.github.io</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="ExcelApi" MinVersion="1.7"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://jarvis-pd21.github.io/datasniper/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="DataSniper.Group">
+                <Label resid="Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="DataSniper.OpenPane">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://jarvis-pd21.github.io/datasniper/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://jarvis-pd21.github.io/datasniper/"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://jarvis-pd21.github.io/datasniper/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://jarvis-pd21.github.io/datasniper/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="DataSniper is ready"/>
+        <bt:String id="Group.Label" DefaultValue="DataSniper"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="DataSniper"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Open DataSniper, snip fields on the first document, and export one row per file."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Upload documents, snip fields, and export one Excel row per file."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
