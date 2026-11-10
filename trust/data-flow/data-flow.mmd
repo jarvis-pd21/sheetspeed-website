@@ -1,0 +1,27 @@
+flowchart LR
+  User[User in Chrome]
+  Page[Open Google Sheet / Doc / Slide]
+  Ext[SheetSpeed extension]
+  Local[Chrome local storage]
+  Sync[Chrome sync if the user enables it]
+  GAPI[Google Sheets / Slides / Drive APIs]
+  Drive[Temporary PNG in the user's Drive]
+  CWS[Chrome Web Store]
+  CF[Cloudflare]
+  Site[GitHub Pages website]
+  Fonts[Google Fonts]
+  Mail[Google Workspace mailbox]
+  EP[ExtensionPay - when billing opens]
+  Stripe[Stripe - when billing opens]
+
+  User --> Ext
+  Ext --> Page
+  Ext --> Local
+  Ext -.-> Sync
+  Ext -->|Pro after consent| GAPI
+  GAPI -.-> Drive
+  User --> CWS
+  User --> CF --> Site
+  CF --> Fonts
+  User -->|support email| Mail
+  Ext -.->|not during early access| EP --> Stripe

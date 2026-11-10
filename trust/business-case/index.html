@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SheetSpeed — business case</title>
+  <meta name="description" content="Editable one-page business case to fill with your numbers." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/trust/business-case/" />
+  <link rel="icon" href="https://sheetspeed.agi-jarvis.com/assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://sheetspeed.agi-jarvis.com/css/site.css?v=20261025install" />
+  <style>
+:root { --text:#1a1a1a; --muted:#5c6570; --line:#d8d8d8; --bg:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--text); background:var(--bg);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size:16px; line-height:1.6; }
+.page { max-width:860px; margin:0 auto; padding:32px 20px 64px; }
+h1 { margin:0 0 8px; font-size:1.7rem; letter-spacing:-0.02em; }
+h2 { margin:1.6rem 0 .5rem; font-size:1.15rem; }
+h3 { margin:1.2rem 0 .4rem; font-size:1.02rem; }
+p, li { margin:.45rem 0; }
+ul, ol { padding-left:1.25rem; }
+.meta, .prepared { color:var(--muted); font-size:.9rem; }
+.banner { border:1px solid #e3d7a6; background:#fff8de; padding:12px 14px; border-radius:8px; font-size:.92rem; }
+.banner.ok { border-color:#bad6cd; background:#f0f8f4; }
+code { font-size:.88em; overflow-wrap:anywhere; background:#f4f4f4; padding:.05em .3em; border-radius:3px; }
+pre { background:#f6f6f6; padding:12px 14px; overflow:auto; border-radius:8px; font-size:.88rem; }
+table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:.92rem; }
+th, td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:.55rem .5rem; }
+th { font-weight:600; }
+hr { border:0; border-top:1px solid var(--line); margin:1.4rem 0; }
+.copy-btn { font: inherit; font-size:.82rem; font-weight:600; padding:.25rem .6rem;
+  border:1px solid #c9c9c9; background:#fff; border-radius:6px; cursor:pointer; }
+.copy-btn:hover { background:#f6f6f6; }
+.copy-btn.copied { background:#f0f8f4; border-color:#bad6cd; }
+.row-actions { white-space:nowrap; }
+.toc { width:100%; }
+.steps { counter-reset: step; list-style:none; padding:0; }
+.steps li { counter-increment: step; position:relative; padding:8px 0 8px 2.2rem; border-bottom:1px solid var(--line); }
+.steps li::before { content: counter(step); position:absolute; left:0; top:10px;
+  width:1.5rem; height:1.5rem; border-radius:50%; border:1px solid #bbb;
+  font-size:.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; }
+.note { color:var(--muted); font-size:.92rem; }
+a { color:#1a1a1a; }
+@media print {
+  body { font-size:10.5pt; }
+  .page { padding:0; max-width:none; }
+  .no-print, .copy-btn, header, footer { display:none !important; }
+  a { text-decoration:none; color:inherit; }
+  h1 { font-size:16pt; }
+  h2 { font-size:12pt; }
+  table { font-size:9.5pt; }
+  .prepared { position: running(footer); }
+}
+@page { size: letter; margin: 0.6in 0.7in; }
+</style>
+</head>
+<body>
+<header class="x-head no-print"><div class="x-head-in"><a class="x-brand" href="https://sheetspeed.agi-jarvis.com/"><img src="https://sheetspeed.agi-jarvis.com/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+<main class="page legal-doc"><h1>SheetSpeed business case (fill in with your numbers)</h1>
+<p><strong>One page.</strong> Fill the blanks in about 20 minutes with information you already have, then forward this to finance or a budget owner. Prepared with the SheetSpeed trust pack. Light branding only — swap this line for your letterhead if you want.</p>
+<p><strong>Do not treat hours saved as hard savings.</strong> Hard savings are only costs you would actually stop paying. Time-saved figures are soft estimates. Show an expected case and a downside case. Every assumption stays visible.</p>
+<h2>1. The problem (use your organization’s language)</h2>
+<p>Today, [team] does [forecasts / reporting / modeling / client decks] in Google Sheets, Docs and Slides. We still rely on Excel-style keyboard habits, so we [lose time in menus / retrain people / keep a paid shortcut tool / other: ________]. This matters because [impact in one sentence].</p>
+<h2>2. Cost of doing nothing</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Annual $ (your figure)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paid shortcut or add-on we would cancel if the pilot succeeds (hard)</td>
+<td>$________</td>
+<td>Only if you would actually cancel it</td>
+</tr>
+<tr>
+<td>Other hard costs that would stop (licenses, contractors)</td>
+<td>$________</td>
+<td>Leave $0 if none</td>
+</tr>
+<tr>
+<td><strong>Hard savings if we switch (sum)</strong></td>
+<td>$________</td>
+<td>Headline number for finance</td>
+</tr>
+<tr>
+<td>Time spent on avoidable menu work (soft, optional)</td>
+<td>See section 4</td>
+<td>Not a headcount cut unless you will reduce headcount</td>
+</tr>
+</tbody>
+</table>
+<p>If we do nothing, we continue to pay the hard costs above and keep the current workflow.</p>
+<h2>3. The solution (two sentences)</h2>
+<p>SheetSpeed is a Chrome extension that adds Excel, Word and PowerPoint Alt shortcuts to Google Sheets, Docs and Slides. Spreadsheet content is not sent to a SheetSpeed server; Core works without connecting Google, and Pro tools call Google APIs from the browser only after a user consents.</p>
+<h2>4. Financial case — assumptions on the page</h2>
+<p><strong>Price after early access</strong> (published list, not a custom quote): $7.99/user/month, <strong>$69/user/year</strong>, or $149 lifetime. Use annual list price unless you have a written team quote.</p>
+<p><code>Annual subscription cost = Seats × Price per seat</code></p>
+<p><strong>Hard savings (headline):</strong> <code>Net hard $ = Hard savings from section 2 − Annual subscription cost</code></p>
+<p>If hard savings are $0, say so. A $0 hard case can still be a “buy” if the pilot meets written success criteria and the subscription is an acceptable productivity cost — but do not convert hours into dollars and call that a saving.</p>
+<p><strong>Soft estimate — hours (not hard ROI):</strong> <code>Hours/year (estimate) = N × H × S × W</code></p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Meaning</th>
+<th>Whose input?</th>
+<th>Expected</th>
+<th>Downside</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N</td>
+<td>People in the first rollout</td>
+<td>Buyer</td>
+<td>____</td>
+<td>____ (often the same)</td>
+</tr>
+<tr>
+<td>H</td>
+<td>Hours/week in Sheets, Docs or Slides</td>
+<td>Buyer</td>
+<td>____</td>
+<td>____</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Share of that time you believe shortcuts would save</td>
+<td><strong>Open</strong> — your belief, not a vendor measurement</td>
+<td>____ (try 5%)</td>
+<td><strong>2%</strong> or <strong>0%</strong></td>
+</tr>
+<tr>
+<td>W</td>
+<td>Working weeks/year</td>
+<td>Buyer</td>
+<td>48</td>
+<td>48</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Fully loaded $/hour, only if you must show a dollar view of time</td>
+<td>Buyer</td>
+<td>$____</td>
+<td>$____</td>
+</tr>
+<tr>
+<td>Seats × price</td>
+<td>Annual list cost after billing opens</td>
+<td>Seller list price</td>
+<td>$69 × seats, or $0 during early access</td>
+<td>Same</td>
+</tr>
+</tbody>
+</table>
+<p><code>Soft $ view (not hard savings) = Hours/year × C</code></p>
+<p><strong>Expected case:</strong> use the Expected column. <strong>Downside case:</strong> use the Downside column (lower S; no tool cancellation unless you are sure). If downside net hard $ is negative or zero and you still want the tool, say that plainly.</p>
+<p><strong>Open questions:</strong> [e.g. Will we cancel ________? Who approves software of this size here? Do we need Refresh from Sheets?]</p>
+<h2>5. Implementation plan (pilot cost is $0; no one is charged unless a paid plan starts later, after notice)</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Owner</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IT allowlists or force-installs Store ID <code>ljlmgielacploapelnjhodicgbjipcaa</code> on a pilot OU</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Written success criteria agreed (2–3 measures)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Security pack sent; DPA/legal review starts <strong>in parallel</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Pilot starts after install works; weekly check-in</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Go/no-go with the budget owner</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table><p class="prepared">Last updated 10 November 2026.</p></main>
+<footer class="x-foot no-print"><div class="x-foot-in"><a href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a href="https://sheetspeed.agi-jarvis.com/privacy/">Privacy</a><a href="https://sheetspeed.agi-jarvis.com/terms/">Terms</a><a href="https://sheetspeed.agi-jarvis.com/support/">Support</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+
+</body></html>

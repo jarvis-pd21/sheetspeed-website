@@ -28,6 +28,7 @@
 <h1>SheetSpeed security</h1>
 <p class="meta">Updated October 20, 2026 · Covers the Chrome extension (Core and 0.4) and SheetSpeed for Excel on Mac.</p>
 <p>SheetSpeed runs in Chrome. Native shortcuts act through Google's document controls. Connected tools in the 0.4 update call Google APIs directly. Workbook contents are not routed through a SheetSpeed-operated server or an AI provider in the inspected Store packages.</p>
+<p>The trust pack for IT and procurement review is at <a href="/trust/">/trust/</a>.</p>
 <h2>SheetSpeed for Excel on Mac</h2>
 <ul><li><strong>Apple-verified:</strong> signed with a Developer ID Application certificate and notarized by Apple. Gatekeeper verifies the signature and notarization ticket on first launch.</li><li><strong>One permission:</strong> macOS Accessibility (System Settings → Privacy &amp; Security). It is required to observe the Option-key sequences and drive Excel / PowerPoint through accessibility APIs. The app only acts while Excel or PowerPoint is the front app; keystrokes are never logged.</li><li><strong>No network:</strong> the app holds no network entitlement — it makes no network connections, ships no analytics or telemetry, and cannot transmit data off the machine (verifiable with <code>codesign -d --entitlements</code>).</li><li><strong>Untrusted user keymaps:</strong> bundled keymaps ship inside the signed app. Keymaps placed in <code>~/Library/Application Support/SheetSpeed/Keymaps/</code> are treated as untrusted: <code>script</code> (AppleScript) steps are dropped at load, so a keymap file can never execute code.</li><li><strong>Updates:</strong> newer builds are published on this site; every release is signed and notarized the same way.</li></ul>
 <h2>Implemented controls</h2>
@@ -45,7 +46,7 @@
 <nav class="review-nav" aria-label="Enterprise review"><a href="/enterprise/">Enterprise review</a><a href="/security/">Security</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/support/">Support</a></nav>
 </article>
   </main>
-  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/datasniper/">DataSniper</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/dpa/">DPA</a><a href="/subprocessors/">Subprocessors</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+  <footer class="x-foot"><div class="x-foot-in"><a href="/blog/">Blog</a><a href="/datasniper/">DataSniper</a><a href="/pricing.html">Pricing</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/dpa/">DPA</a><a href="/subprocessors/">Subprocessors</a><a href="/trust/">Trust</a><a href="/refund/">Refund</a><a href="/support/">Support</a><a href="https://github.com/jarvis-pd21/sheetspeed-website" rel="noopener">GitHub</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
  <script src="/js/site.js?v=20261025install"></script>
 </body>
 </html>
