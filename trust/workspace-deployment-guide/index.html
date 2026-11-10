@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SheetSpeed — Workspace admin guide</title>
+  <meta name="description" content="Allowlist, force-install, and a small-OU pilot." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/trust/workspace-deployment-guide/" />
+  <link rel="icon" href="https://sheetspeed.agi-jarvis.com/assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://sheetspeed.agi-jarvis.com/css/site.css?v=20261025install" />
+  <style>
+:root { --text:#1a1a1a; --muted:#5c6570; --line:#d8d8d8; --bg:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--text); background:var(--bg);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size:16px; line-height:1.6; }
+.page { max-width:860px; margin:0 auto; padding:32px 20px 64px; }
+h1 { margin:0 0 8px; font-size:1.7rem; letter-spacing:-0.02em; }
+h2 { margin:1.6rem 0 .5rem; font-size:1.15rem; }
+h3 { margin:1.2rem 0 .4rem; font-size:1.02rem; }
+p, li { margin:.45rem 0; }
+ul, ol { padding-left:1.25rem; }
+.meta, .prepared { color:var(--muted); font-size:.9rem; }
+.banner { border:1px solid #e3d7a6; background:#fff8de; padding:12px 14px; border-radius:8px; font-size:.92rem; }
+.banner.ok { border-color:#bad6cd; background:#f0f8f4; }
+code { font-size:.88em; overflow-wrap:anywhere; background:#f4f4f4; padding:.05em .3em; border-radius:3px; }
+pre { background:#f6f6f6; padding:12px 14px; overflow:auto; border-radius:8px; font-size:.88rem; }
+table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:.92rem; }
+th, td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:.55rem .5rem; }
+th { font-weight:600; }
+hr { border:0; border-top:1px solid var(--line); margin:1.4rem 0; }
+.copy-btn { font: inherit; font-size:.82rem; font-weight:600; padding:.25rem .6rem;
+  border:1px solid #c9c9c9; background:#fff; border-radius:6px; cursor:pointer; }
+.copy-btn:hover { background:#f6f6f6; }
+.copy-btn.copied { background:#f0f8f4; border-color:#bad6cd; }
+.row-actions { white-space:nowrap; }
+.toc { width:100%; }
+.steps { counter-reset: step; list-style:none; padding:0; }
+.steps li { counter-increment: step; position:relative; padding:8px 0 8px 2.2rem; border-bottom:1px solid var(--line); }
+.steps li::before { content: counter(step); position:absolute; left:0; top:10px;
+  width:1.5rem; height:1.5rem; border-radius:50%; border:1px solid #bbb;
+  font-size:.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; }
+.note { color:var(--muted); font-size:.92rem; }
+a { color:#1a1a1a; }
+@media print {
+  body { font-size:10.5pt; }
+  .page { padding:0; max-width:none; }
+  .no-print, .copy-btn, header, footer { display:none !important; }
+  a { text-decoration:none; color:inherit; }
+  h1 { font-size:16pt; }
+  h2 { font-size:12pt; }
+  table { font-size:9.5pt; }
+  .prepared { position: running(footer); }
+}
+@page { size: letter; margin: 0.6in 0.7in; }
+</style>
+</head>
+<body>
+<header class="x-head no-print"><div class="x-head-in"><a class="x-brand" href="https://sheetspeed.agi-jarvis.com/"><img src="https://sheetspeed.agi-jarvis.com/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+<main class="page legal-doc"><h1>SheetSpeed workspace deployment guide</h1>
+<p><strong>Forward this as-is to the Workspace or Chrome admin.</strong> Step-by-step rollout. Store ID: <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</p>
+<p><strong>Recommended path.</strong> Pilot one organizational unit with <strong>Allow install</strong> or <strong>Force install</strong>. Verify shortcuts, consent denial, and (if you will permit it) Refresh from Sheets. Then widen the OU. Keep a documented rollback (set <strong>Block</strong>, or remove Force install).</p>
+<h2>Before you start</h2>
+<ul>
+<li>You need a Google Admin console administrator account.</li>
+<li>For Chrome on Windows, Mac or Linux, turn on Chrome browser management for the OU. See <a href="https://support.google.com/chrome/a/answer/2657289">Set Chrome policies for users or browsers</a>.</li>
+<li>Confirm whether your domain allowlists the Chrome Web Store or blocks everything by default. See <a href="https://support.google.com/chrome/a/answer/6177431">Allow or block apps and extensions</a>.</li>
+<li>Decide now whether <strong>Refresh from Sheets</strong> is in scope. It briefly link-shares a temporary Drive PNG. If your sharing policy forbids that, tell testers not to use it and do not need the Slides / <code>drive.file</code> OAuth scopes.</li>
+</ul>
+<h2>1. Pilot OU first</h2>
+<ol>
+<li>Create or pick a small <strong>child organizational unit</strong> (or a group of user accounts) for the pilot.</li>
+<li>Sign in to the Admin console.</li>
+<li>Go to <strong>Menu &gt; Devices &gt; Chrome &gt; Apps &amp; extensions &gt; Users &amp; browsers</strong> (Chrome Enterprise Core / Browser Cloud Management: <strong>Menu &gt; Chrome browser &gt; Apps &amp; extensions &gt; Users &amp; browsers</strong>). Official steps: <a href="https://support.google.com/chrome/a/answer/6177431">Allow or block</a>, <a href="https://support.google.com/chrome/a/answer/6306504">Force install</a>.</li>
+<li>Select the <strong>pilot OU</strong> (or group).</li>
+<li>Add the extension from the Chrome Web Store or by ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</li>
+<li>Set <strong>Installation policy</strong>:<br />
+   - <strong>Allow install</strong> if you want volunteers to opt in. Best for a first pilot.<br />
+   - <strong>Force install</strong> if you want it present for every account in the OU, silently, and not removable by the user. Force-install grants the extension’s Chrome permissions.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<h2>2. Force install vs allow</h2>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>What happens</th>
+<th>When to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Allow install</td>
+<td>Users can install from the Store; they can remove it.</td>
+<td>Pilot, or teams that should opt in.</td>
+</tr>
+<tr>
+<td>Force install</td>
+<td>Installed automatically; users cannot remove it.</td>
+<td>After a successful pilot, if IT wants a standard image.</td>
+</tr>
+<tr>
+<td>Block</td>
+<td>Cannot install; existing copies are removed.</td>
+<td>Rollback, or orgs that decline the product.</td>
+</tr>
+<tr>
+<td>Force install + pin to ChromeOS taskbar</td>
+<td>Force-install, pinned on <strong>ChromeOS</strong> only.</td>
+<td>ChromeOS fleets that want the icon visible.</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Pinning</h2>
+<p><strong>Yes, Google supports pinning, with a platform split.</strong></p>
+<ul>
+<li>In the Admin console installation policy, <strong>Force install + pin to ChromeOS taskbar</strong> pins on <strong>ChromeOS</strong>. Source: <a href="https://support.google.com/chrome/a/answer/6306504">Automatically install apps and extensions</a>.</li>
+<li>To pin the icon to the <strong>Chrome toolbar</strong> on managed Windows, Mac or Linux browsers, set <code>toolbar_pin</code> to <code>force_pinned</code> in the <code>ExtensionSettings</code> policy for this extension ID. Source: <a href="https://support.google.com/chrome/a/answer/9867568">Configure ExtensionSettings policy</a>. If you do not set it, the default is unpinned (the user can pin it).</li>
+<li>After pinning, verify on a test device: open <code>chrome://policy</code>, reload policies, and confirm the <code>ExtensionSettings</code> (Google’s page also says <code>ExtensionSetting</code>) value is valid JSON. Google recommends testing on a small OU first because an invalid JSON string can prevent pinning.</li>
+</ul>
+<h2>4. Trust the OAuth app (Pro tools only)</h2>
+<p>Core shortcuts do <strong>not</strong> need this. Do it if the pilot will use Pro tools (trace dependents, goal seek, what-if, freeze, auto-color, format cycles, Paste Exact, image export, or Refresh from Sheets).</p>
+<p><strong>Client ID:</strong> <code>289674995985-nel531mer5peurv6dt7e156tl79pj25p.apps.googleusercontent.com</code></p>
+<p><strong>Scopes to allow, and no others:</strong></p>
+<ul>
+<li><code>https://www.googleapis.com/auth/spreadsheets</code></li>
+<li><code>https://www.googleapis.com/auth/presentations</code> (Refresh from Sheets)</li>
+<li><code>https://www.googleapis.com/auth/drive.file</code> (Refresh from Sheets; not full Drive)</li>
+</ul>
+<p>Google currently classifies <code>spreadsheets</code> and <code>presentations</code> among high-risk Drive &amp; Docs scopes in <a href="https://support.google.com/a/answer/7281227">API controls</a>. The app may appear <strong>unverified</strong> until Google’s verification finishes. Users can be blocked from unverified apps unless an admin configures access. See <a href="https://knowledge.workspace.google.com/admin/apps/authorize-unverified-third-party-apps">Authorize unverified third-party apps</a> and <a href="https://support.google.com/a/answer/7281227">Control which apps access Google Workspace data</a>.</p>
+<p><strong>Recommended setting: Specific Google data</strong>, limited to the three scopes above — not <strong>Trusted</strong> (Trusted would allow all Google Workspace scopes).</p>
+<p>Steps (from Google’s API controls article, last checked 10 November 2026):</p>
+<ol>
+<li>Admin console: <strong>Menu &gt; Security &gt; Access and data control &gt; API controls</strong>.</li>
+<li>Click <strong>Manage App Access</strong>.</li>
+<li>Click <strong>Configure new app</strong>, search by the client ID above, and select the app. If it is not searchable yet, a user in the pilot OU must attempt Connect Google once; accessed apps can take 24–48 hours to appear.</li>
+<li>Scope the change to the <strong>pilot OU</strong> first.</li>
+<li>Choose <strong>Specific Google data</strong> and allow only the scopes listed above. If Connect Google also requires Sign-in scopes, include only those Google says are required for sign-in. SheetSpeed itself requests the three scopes above, not a Google Sign-in profile scope.</li>
+<li>Save. Confirm a pilot user can complete the consent screen, and that a user <strong>outside</strong> the OU is unchanged.</li>
+</ol>
+<p>Do <strong>not</strong> disable organization sharing policies to make Refresh from Sheets work.</p>
+<h2>5. Verification checklist (pilot OU)</h2>
+<p>On a <strong>non-confidential</strong> test spreadsheet, in a managed Chrome profile:</p>
+<ul>
+<li>[ ] Extension ID in <code>chrome://extensions</code> is <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</li>
+<li>[ ] A Core shortcut works without connecting Google (for example an Alt sequence or command search).</li>
+<li>[ ] Denying the Google consent screen leaves Core working and Pro tools blocked.</li>
+<li>[ ] After consent, one Pro tool works on the test sheet, then Disconnect and revoke at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+<li>[ ] If Refresh from Sheets is in scope, test it once and confirm the temporary Drive file is deleted. If it is out of scope, confirm testers know not to use it.</li>
+<li>[ ] Clear local undo history in Settings, then uninstall or Block on a test account and confirm the extension is gone.</li>
+</ul>
+<h2>6. Broader rollout</h2>
+<p>After the pilot check-in, apply the same installation policy to parent or sibling OUs. Re-check <code>chrome://policy</code> on one machine in each new OU. A Store extension can update itself; an approved install is not a permanent version freeze — review Chrome update controls if you need to stage versions.</p>
+<h2>7. Rollback</h2>
+<ol>
+<li>In <strong>Users &amp; browsers</strong>, select the OU, set SheetSpeed to <strong>Block</strong>, or remove <strong>Force install</strong>, and Save. Google states that dropping force-install removes the item from the user’s machine.</li>
+<li>Ask users who connected Google to revoke SheetSpeed at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+<li>If you configured API controls, set the OAuth app to <strong>Blocked</strong> for that OU, or unconfigure it, so Pro tokens cannot be reused.</li>
+<li>Optional: testers inspect Drive for leftover temporary PNGs.</li>
+</ol>
+<p><strong>Support:</strong> jarvis@agi-jarvis.com</p><p class="prepared">Last updated 10 November 2026.</p></main>
+<footer class="x-foot no-print"><div class="x-foot-in"><a href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a href="https://sheetspeed.agi-jarvis.com/privacy/">Privacy</a><a href="https://sheetspeed.agi-jarvis.com/terms/">Terms</a><a href="https://sheetspeed.agi-jarvis.com/support/">Support</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+
+</body></html>

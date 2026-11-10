@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SheetSpeed — IT FAQ</title>
+  <meta name="description" content="Permissions, data flow, uninstall, change of control." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/trust/it-faq/" />
+  <link rel="icon" href="https://sheetspeed.agi-jarvis.com/assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://sheetspeed.agi-jarvis.com/css/site.css?v=20261025install" />
+  <style>
+:root { --text:#1a1a1a; --muted:#5c6570; --line:#d8d8d8; --bg:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--text); background:var(--bg);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size:16px; line-height:1.6; }
+.page { max-width:860px; margin:0 auto; padding:32px 20px 64px; }
+h1 { margin:0 0 8px; font-size:1.7rem; letter-spacing:-0.02em; }
+h2 { margin:1.6rem 0 .5rem; font-size:1.15rem; }
+h3 { margin:1.2rem 0 .4rem; font-size:1.02rem; }
+p, li { margin:.45rem 0; }
+ul, ol { padding-left:1.25rem; }
+.meta, .prepared { color:var(--muted); font-size:.9rem; }
+.banner { border:1px solid #e3d7a6; background:#fff8de; padding:12px 14px; border-radius:8px; font-size:.92rem; }
+.banner.ok { border-color:#bad6cd; background:#f0f8f4; }
+code { font-size:.88em; overflow-wrap:anywhere; background:#f4f4f4; padding:.05em .3em; border-radius:3px; }
+pre { background:#f6f6f6; padding:12px 14px; overflow:auto; border-radius:8px; font-size:.88rem; }
+table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:.92rem; }
+th, td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:.55rem .5rem; }
+th { font-weight:600; }
+hr { border:0; border-top:1px solid var(--line); margin:1.4rem 0; }
+.copy-btn { font: inherit; font-size:.82rem; font-weight:600; padding:.25rem .6rem;
+  border:1px solid #c9c9c9; background:#fff; border-radius:6px; cursor:pointer; }
+.copy-btn:hover { background:#f6f6f6; }
+.copy-btn.copied { background:#f0f8f4; border-color:#bad6cd; }
+.row-actions { white-space:nowrap; }
+.toc { width:100%; }
+.steps { counter-reset: step; list-style:none; padding:0; }
+.steps li { counter-increment: step; position:relative; padding:8px 0 8px 2.2rem; border-bottom:1px solid var(--line); }
+.steps li::before { content: counter(step); position:absolute; left:0; top:10px;
+  width:1.5rem; height:1.5rem; border-radius:50%; border:1px solid #bbb;
+  font-size:.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; }
+.note { color:var(--muted); font-size:.92rem; }
+a { color:#1a1a1a; }
+@media print {
+  body { font-size:10.5pt; }
+  .page { padding:0; max-width:none; }
+  .no-print, .copy-btn, header, footer { display:none !important; }
+  a { text-decoration:none; color:inherit; }
+  h1 { font-size:16pt; }
+  h2 { font-size:12pt; }
+  table { font-size:9.5pt; }
+  .prepared { position: running(footer); }
+}
+@page { size: letter; margin: 0.6in 0.7in; }
+</style>
+</head>
+<body>
+<header class="x-head no-print"><div class="x-head-in"><a class="x-brand" href="https://sheetspeed.agi-jarvis.com/"><img src="https://sheetspeed.agi-jarvis.com/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+<main class="page legal-doc"><h1>SheetSpeed IT FAQ</h1>
+<p><strong>Forward this as-is to IT or security.</strong> About 3–4 minutes. Chrome Web Store ID: <code>ljlmgielacploapelnjhodicgbjipcaa</code>. Evidence is the Store package built from <code>jarvis-pd21/sheetspeed-extension</code> at commit <code>2e2b338</code> (version 0.4.5 r64), plus the public legal pages.</p>
+<p><strong>Bottom line.</strong> SheetSpeed is a Manifest V3 Chrome extension. It has no SheetSpeed-operated server for spreadsheet or document content. Pro tools talk to Google APIs from the user’s browser, only after the user consents.</p>
+<h2>Permissions in the early-access Store package</h2>
+<p>The <strong>source</strong> manifest also declares an <code>extensionpay.com</code> content script and optional <code>nativeMessaging</code>. <strong><code>npm run package:pro</code> drops both</strong> while early access is on (<code>EARLY_ACCESS=true</code> in <code>extension/lib/pro-config.js</code>; transform in <code>scripts/lib/store-manifest.mjs</code>). Review the Store zip, not only the source tree.</p>
+<table>
+<thead>
+<tr>
+<th>Permission or host</th>
+<th>Why it is there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>storage</code></td>
+<td>Shortcut settings, enabled state, and Pro undo/recovery records on the device. A license cache is added only once billing opens.</td>
+</tr>
+<tr>
+<td><code>activeTab</code></td>
+<td>Act on the Google document the user is using when they invoke SheetSpeed.</td>
+</tr>
+<tr>
+<td><code>identity</code></td>
+<td>Ask Chrome for a Google access token, after the user approves the consent screen, so Pro tools can call Google APIs.</td>
+</tr>
+<tr>
+<td><code>https://sheets.googleapis.com/*</code></td>
+<td>Pro tools read and write the spreadsheet the user is working in, through the Google Sheets API.</td>
+</tr>
+<tr>
+<td><code>https://slides.googleapis.com/*</code></td>
+<td>Refresh from Sheets only: read the current slide and replace SheetSpeed-linked images.</td>
+</tr>
+<tr>
+<td><code>https://www.googleapis.com/drive/v3/*</code> and <code>https://www.googleapis.com/upload/drive/v3/*</code></td>
+<td>Refresh from Sheets only: upload, share, unshare, find and delete a temporary PNG in the <strong>user’s</strong> Drive.</td>
+</tr>
+<tr>
+<td>Content scripts on Google Sheets, Docs and Slides document and create URLs</td>
+<td>Run shortcuts, key tips and the panel on those pages. Docs are local only: no Docs API, no document text sent.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not in the Store package today:</strong> <code>nativeMessaging</code> (local development AI helper) and the <code>extensionpay.com</code> content script (billing). They are added only if those features are later packaged.</p>
+<h2>Data flow</h2>
+<ol>
+<li><strong>Core shortcuts:</strong> keyboard → extension on the Google page → Google’s existing document controls. Nothing goes to a SheetSpeed server.</li>
+<li><strong>Pro tools (after Connect Google):</strong> browser → Google Sheets, Slides or Drive APIs → the user’s Google files. The token stays in Chrome. Dressler Labs does not receive the token or the file contents.</li>
+<li><strong>Local records:</strong> settings and, for Pro edits, undo/recovery snapshots → <code>chrome.storage.local</code> on the device. Optional settings sync uses the user’s Chrome profile, not a SheetSpeed account.</li>
+<li><strong>Website and support:</strong> visits to https://sheetspeed.agi-jarvis.com go through Cloudflare to GitHub Pages, and load Google Fonts; support email goes to jarvis@agi-jarvis.com on Google Workspace. Separate from workbook processing.</li>
+</ol>
+<p><strong>Refresh from Sheets caveat.</strong> Google Slides can only replace an image from a URL, so SheetSpeed briefly link-shares a temporary PNG (<code>anyone with the link</code>, discovery off) in the user’s Drive, then tries to unshare and delete it. Cleanup can fail if the browser closes mid-way. Skip this feature where link sharing is prohibited.</p>
+<h2>OAuth (Pro only, consent-based)</h2>
+<ul>
+<li><strong>Nothing connects</strong> until the user approves Google’s consent screen.</li>
+<li><strong>Client ID:</strong> <code>289674995985-nel531mer5peurv6dt7e156tl79pj25p.apps.googleusercontent.com</code></li>
+<li><strong>Scopes, in two steps:</strong></li>
+<li>On Connect for Pro tools: <code>https://www.googleapis.com/auth/spreadsheets</code></li>
+<li>Only the first time the user runs Refresh from Sheets: also <code>https://www.googleapis.com/auth/presentations</code> and <code>https://www.googleapis.com/auth/drive.file</code> (files the app created, not full Drive)</li>
+<li>Google’s Sheets and Slides grants can be <strong>broader than the one open file</strong>. SheetSpeed’s commands target the open file (or the source spreadsheet stamped on a refreshed image).</li>
+<li>The app may still show Google’s <strong>unverified app</strong> notice while Google verification is pending.</li>
+<li>Users can disconnect in SheetSpeed Settings and revoke access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+</ul>
+<h2>Subprocessors (what Dressler Labs actually uses)</h2>
+<p>Listed at https://sheetspeed.agi-jarvis.com/subprocessors/: Google (Chrome Web Store, Google APIs for Pro, Fonts, Workspace mail), GitHub Pages, Cloudflare (including Web Analytics on the website). <strong>ExtensionPay and Stripe activate only when paid billing opens</strong> and are not contacted during early access.</p>
+<p>Spreadsheet content is not processed by Dressler Labs.</p>
+<h2>Allow, force-install, or block (Google Admin)</h2>
+<p>Cite: <a href="https://support.google.com/chrome/a/answer/6177431">Allow or block apps and extensions</a> and <a href="https://support.google.com/chrome/a/answer/6306504">Automatically install apps and extensions</a>.</p>
+<ol>
+<li>Sign in to the Google Admin console as an administrator.</li>
+<li>Go to <strong>Menu &gt; Devices &gt; Chrome &gt; Apps &amp; extensions &gt; Users &amp; browsers</strong> (or, with Chrome Browser Cloud Management / Chrome Enterprise Core, <strong>Menu &gt; Chrome browser &gt; Apps &amp; extensions &gt; Users &amp; browsers</strong>).</li>
+<li>Select the <strong>organizational unit</strong> (or group, for users) you want the policy to apply to. Start with a pilot OU.</li>
+<li>Add SheetSpeed from the Chrome Web Store, or by ID: <code>ljlmgielacploapelnjhodicgbjipcaa</code>.</li>
+<li>Under <strong>Installation policy</strong>, choose:
+   - <strong>Allow install</strong> — users may install it themselves.
+   - <strong>Force install</strong> — it installs automatically; users cannot remove it. Force-install also grants the extension’s Chrome permissions.
+   - <strong>Block</strong> — users cannot install it; existing installs are removed.
+   - <strong>Force install + pin to ChromeOS taskbar</strong> — force-install, and pin on <strong>ChromeOS</strong>. For pinning on the Chrome <strong>browser toolbar</strong> (Windows, Mac, Linux), use the <code>ExtensionSettings</code> policy field <code>toolbar_pin: force_pinned</code>. See <a href="https://support.google.com/chrome/a/answer/9867568">Configure ExtensionSettings policy</a>.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>If your domain <strong>blocks all Chrome Web Store items except an allowlist</strong>, add this ID to the allowlist or the install will fail. The Chrome Web Store service should be on for user-initiated installs; force-installed extensions still install if the Store service is off (<a href="https://support.google.com/chrome/a/answer/6177431">Google’s note</a>).</p>
+<p><strong>Windows, Mac or Linux browsers</strong> need Chrome browser management turned on for that OU (<a href="https://support.google.com/chrome/a/answer/2657289">Set Chrome policies</a>).</p>
+<h2>How to remove it</h2>
+<ul>
+<li><strong>Not force-installed:</strong> the user opens <code>chrome://extensions</code> and removes SheetSpeed. Uninstalling deletes local extension storage (settings and undo records). It cannot undo edits already written to the Google file.</li>
+<li><strong>Force-installed:</strong> an admin changes the installation policy off of Force install, or sets <strong>Block</strong>. Google documents that removing an item from the force-install list removes it from the user’s machine (<a href="https://support.google.com/chrome/a/answer/6306504">force-install article</a>).</li>
+<li><strong>Google account access:</strong> Settings → Disconnect in the extension, and revoke SheetSpeed at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+<li>Inspect Drive for any leftover “SheetSpeed refresh (temporary).png” if Refresh from Sheets was used.</li>
+</ul>
+<h2>What leaves the browser</h2>
+<p><strong>Spreadsheet, Doc and Slide content never goes to a SheetSpeed server.</strong> Dressler Labs does not receive your Google access token.</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Does it leave the browser?</th>
+<th>Where it goes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core shortcuts, key tips, Docs processing</td>
+<td>No. They run on the open Google page.</td>
+<td>Nowhere off the device, except the document already lives in Google.</td>
+</tr>
+<tr>
+<td>Pro tool reads and writes, after consent</td>
+<td>Yes, to <strong>Google only</strong>, from the browser.</td>
+<td><code>sheets.googleapis.com</code>, and for Refresh from Sheets also <code>slides.googleapis.com</code> and Drive v3.</td>
+</tr>
+<tr>
+<td>Settings / undo records</td>
+<td>Only if the user turns on Chrome settings sync. Undo stays local.</td>
+<td>Chrome local storage; optional Chrome sync under the user’s profile.</td>
+</tr>
+<tr>
+<td>Support email you choose to send</td>
+<td>Yes, if you email support.</td>
+<td>jarvis@agi-jarvis.com on Google Workspace.</td>
+</tr>
+<tr>
+<td>Website visits</td>
+<td>Yes, ordinary page requests.</td>
+<td>Cloudflare, GitHub Pages, Google Fonts, Cloudflare Web Analytics. No spreadsheet content.</td>
+</tr>
+<tr>
+<td>License or payment data</td>
+<td>Not during early access.</td>
+<td>ExtensionPay and Stripe, only after billing opens.</td>
+</tr>
+</tbody>
+</table>
+<p>The extension does <strong>not</strong> use <code>&lt;all_urls&gt;</code>, does not load remote code, and does not include page-content analytics.</p>
+<h2>Uninstall and data deletion</h2>
+<p><strong>Confirming removal</strong></p>
+<ol>
+<li>If the extension was <strong>not</strong> force-installed: open <code>chrome://extensions</code> and remove SheetSpeed. The extension ID <code>ljlmgielacploapelnjhodicgbjipcaa</code> should no longer appear.</li>
+<li>If it <strong>was</strong> force-installed: an admin must set the installation policy to <strong>Block</strong>, or remove <strong>Force install</strong>, then confirm it is gone on a test machine. Users cannot remove a force-installed extension themselves.</li>
+<li>Revoke Google access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>, and use Disconnect in SheetSpeed Settings if the extension is still installed.</li>
+<li>Uninstalling deletes Chrome extension storage on that profile (settings and undo/recovery records). It cannot undo edits already saved in the Google file, and it cannot erase a leftover Drive temporary PNG — check Drive for “SheetSpeed refresh (temporary).png” if Refresh from Sheets was used.</li>
+<li>Dressler Labs holds no copy of your spreadsheets to delete. To delete support email you sent, email jarvis@agi-jarvis.com and ask.</li>
+</ol>
+<h2>Change of control</h2>
+<p>SheetSpeed is operated by Philip Dressler, doing business as Dressler Labs, a sole proprietorship. <strong>There is no published change-of-control clause in the current Terms</strong>, and no source-code escrow.</p>
+<p>If ownership changed, the product were shut down, or the Chrome Web Store listing were transferred or unpublished, the honest process today would be: notice on the website and, if still possible, in the extension; customers can uninstall and revoke Google access at any time. Because Dressler Labs does not host spreadsheet content, there is no vendor database of workbooks to migrate or hand over. Google files, Chrome local storage, and OAuth grants stay under the customer’s and user’s own accounts.</p>
+<p>This is a real gap for some reviews. A contractual commitment would be a separate [DECISION] for the operator, not something this pack invents.</p>
+<h2>What we do not claim</h2>
+<p>No SOC 2, ISO 27001, penetration-test report, formal bug bounty, SSO/SCIM, or data-residency commitment. A standard <a href="https://sheetspeed.agi-jarvis.com/dpa/">DPA</a> is offered. Personal-data breaches for data Dressler Labs actually holds are notified within 72 hours. Audits are by written questionnaire.</p>
+<p><strong>Support:</strong> jarvis@agi-jarvis.com</p><p class="prepared">Last updated 10 November 2026.</p></main>
+<footer class="x-foot no-print"><div class="x-foot-in"><a href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a href="https://sheetspeed.agi-jarvis.com/privacy/">Privacy</a><a href="https://sheetspeed.agi-jarvis.com/terms/">Terms</a><a href="https://sheetspeed.agi-jarvis.com/support/">Support</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+
+</body></html>

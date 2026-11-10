@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SheetSpeed — for teammates</title>
+  <meta name="description" content="Day-one walkthrough and a short FAQ." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://sheetspeed.agi-jarvis.com/trust/teammates/" />
+  <link rel="icon" href="https://sheetspeed.agi-jarvis.com/assets/icon-128.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://sheetspeed.agi-jarvis.com/css/site.css?v=20261025install" />
+  <style>
+:root { --text:#1a1a1a; --muted:#5c6570; --line:#d8d8d8; --bg:#fff; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--text); background:var(--bg);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size:16px; line-height:1.6; }
+.page { max-width:860px; margin:0 auto; padding:32px 20px 64px; }
+h1 { margin:0 0 8px; font-size:1.7rem; letter-spacing:-0.02em; }
+h2 { margin:1.6rem 0 .5rem; font-size:1.15rem; }
+h3 { margin:1.2rem 0 .4rem; font-size:1.02rem; }
+p, li { margin:.45rem 0; }
+ul, ol { padding-left:1.25rem; }
+.meta, .prepared { color:var(--muted); font-size:.9rem; }
+.banner { border:1px solid #e3d7a6; background:#fff8de; padding:12px 14px; border-radius:8px; font-size:.92rem; }
+.banner.ok { border-color:#bad6cd; background:#f0f8f4; }
+code { font-size:.88em; overflow-wrap:anywhere; background:#f4f4f4; padding:.05em .3em; border-radius:3px; }
+pre { background:#f6f6f6; padding:12px 14px; overflow:auto; border-radius:8px; font-size:.88rem; }
+table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:.92rem; }
+th, td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:.55rem .5rem; }
+th { font-weight:600; }
+hr { border:0; border-top:1px solid var(--line); margin:1.4rem 0; }
+.copy-btn { font: inherit; font-size:.82rem; font-weight:600; padding:.25rem .6rem;
+  border:1px solid #c9c9c9; background:#fff; border-radius:6px; cursor:pointer; }
+.copy-btn:hover { background:#f6f6f6; }
+.copy-btn.copied { background:#f0f8f4; border-color:#bad6cd; }
+.row-actions { white-space:nowrap; }
+.toc { width:100%; }
+.steps { counter-reset: step; list-style:none; padding:0; }
+.steps li { counter-increment: step; position:relative; padding:8px 0 8px 2.2rem; border-bottom:1px solid var(--line); }
+.steps li::before { content: counter(step); position:absolute; left:0; top:10px;
+  width:1.5rem; height:1.5rem; border-radius:50%; border:1px solid #bbb;
+  font-size:.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; }
+.note { color:var(--muted); font-size:.92rem; }
+a { color:#1a1a1a; }
+@media print {
+  body { font-size:10.5pt; }
+  .page { padding:0; max-width:none; }
+  .no-print, .copy-btn, header, footer { display:none !important; }
+  a { text-decoration:none; color:inherit; }
+  h1 { font-size:16pt; }
+  h2 { font-size:12pt; }
+  table { font-size:9.5pt; }
+  .prepared { position: running(footer); }
+}
+@page { size: letter; margin: 0.6in 0.7in; }
+</style>
+</head>
+<body>
+<header class="x-head no-print"><div class="x-head-in"><a class="x-brand" href="https://sheetspeed.agi-jarvis.com/"><img src="https://sheetspeed.agi-jarvis.com/assets/sheetspeed-logo.png" alt="" width="26" height="26" />SheetSpeed</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a class="x-link" href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a class="x-cta" href="https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa" data-store-cta>Add to Chrome</a></div></header>
+<main class="page legal-doc"><h1>For teammates — day one and a short FAQ</h1>
+<p><strong>About two minutes.</strong> This is what changes if your team is in a SheetSpeed pilot. It does not change how Google files are stored.</p>
+<h2>Day one</h2>
+<ol>
+<li>Your admin may allow the extension, or you may install <strong>SheetSpeed</strong> from the Chrome Web Store (ID <code>ljlmgielacploapelnjhodicgbjipcaa</code>). Use only the Store listing your admin named.</li>
+<li>Open an existing Google Sheet, Doc or Slide — there is no new file type.</li>
+<li>Try a familiar Excel-style shortcut, or hold Alt (Option on a Mac) to see key tips. Core shortcuts do not ask you to connect Google.</li>
+<li>Some optional tools (the Pro set) will ask for Google permission if you use them. You can decline and keep using Core.</li>
+<li>If something gets in the way, tell [champion] rather than struggling through the pilot in silence.</li>
+</ol>
+<p>Product walkthroughs live on the SheetSpeed site: https://sheetspeed.agi-jarvis.com/</p>
+<h2>Will this make my job harder?</h2>
+<p><strong>Usually no, and you can turn it off.</strong> It adds keyboard shortcuts to the Google files you already have. It is not a new editor and not a new login for Core.</p>
+<p><strong>Will it see my email or my other tabs?</strong> Content scripts run only on Google Sheets, Docs and Slides document pages, not on your other sites. It is not a keylogger.</p>
+<p><strong>Does my spreadsheet go to SheetSpeed?</strong> No. Content stays in Google. Optional Pro tools talk to Google from your browser after you consent.</p>
+<p><strong>What if I do not want it?</strong> If it was not force-installed, remove it from <code>chrome://extensions</code>. If it was force-installed, ask your admin. You can also revoke Google access at https://myaccount.google.com/permissions.</p>
+<p><strong>Is this permanent?</strong> No. The team has a go/no-go date. This is a trial against written criteria.</p><p class="prepared">Last updated 10 November 2026.</p></main>
+<footer class="x-foot no-print"><div class="x-foot-in"><a href="https://sheetspeed.agi-jarvis.com/blog/">Blog</a><a href="https://sheetspeed.agi-jarvis.com/pricing.html">Pricing</a><a href="https://sheetspeed.agi-jarvis.com/privacy/">Privacy</a><a href="https://sheetspeed.agi-jarvis.com/terms/">Terms</a><a href="https://sheetspeed.agi-jarvis.com/support/">Support</a><span style="margin-left:auto">© 2026 SheetSpeed</span></div></footer>
+
+</body></html>
