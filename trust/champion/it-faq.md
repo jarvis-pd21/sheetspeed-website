@@ -1,24 +1,36 @@
 # SheetSpeed IT FAQ
 
-**Forward this as-is to IT or security.** About 3–4 minutes. Chrome Web Store ID: `ljlmgielacploapelnjhodicgbjipcaa`. Evidence is the Store package built from `jarvis-pd21/sheetspeed-extension` at commit `2e2b338` (version 0.4.5 r64), plus the public legal pages.
+**Forward this as-is to IT or security.** About 3–4 minutes. Chrome Web Store ID: `ljlmgielacploapelnjhodicgbjipcaa`. Evidence is the version 0.4.6 r65 package submitted for store review (SHA-256 `6f24355f5201f6148045847fb53fc68772523068285911fee5c65837aef8138a`; main at `c72ec7e`), plus the public legal pages.
 
 **Bottom line.** SheetSpeed is a Manifest V3 Chrome extension. It has no SheetSpeed-operated server for spreadsheet or document content. Pro tools talk to Google APIs from the user’s browser, only after the user consents.
 
-## Permissions in the early-access Store package
+## Permissions in the 0.4.6 Store package
 
-The **source** manifest also declares an `extensionpay.com` content script and optional `nativeMessaging`. **`npm run package:pro` drops both** while early access is on (`EARLY_ACCESS=true` in `extension/lib/pro-config.js`; transform in `scripts/lib/store-manifest.mjs`). Review the Store zip, not only the source tree.
+Required permissions are granted at install. There is no `host_permissions` list and no local-companion permission. The extension has no host access by default. Google API hosts are optional and are requested only when a tool needs them. The 0.4.6 Store package does not include ExtensionPay. Review the Store zip, not only the source tree.
 
-| Permission or host | Why it is there |
+**Required** (`permissions`):
+
+| Permission | Why it is there |
 | --- | --- |
 | `storage` | Shortcut settings, enabled state, and Pro undo/recovery records on the device. A license cache is added only once billing opens. |
 | `activeTab` | Act on the Google document the user is using when they invoke SheetSpeed. |
-| `identity` | Ask Chrome for a Google access token, after the user approves the consent screen, so Pro tools can call Google APIs. |
+| `identity` | Ask Chrome for a Google access token, after the user approves the consent screen, so Pro tools can call Google APIs. Granted at install; Google is not connected until the user consents. |
+
+**Optional** (`optional_host_permissions`), not granted until a tool needs them:
+
+| Host | Why it is there |
+| --- | --- |
 | `https://sheets.googleapis.com/*` | Pro tools read and write the spreadsheet the user is working in, through the Google Sheets API. |
 | `https://slides.googleapis.com/*` | Refresh from Sheets only: read the current slide and replace SheetSpeed-linked images. |
 | `https://www.googleapis.com/drive/v3/*` and `https://www.googleapis.com/upload/drive/v3/*` | Refresh from Sheets only: upload, share, unshare, find and delete a temporary PNG in the **user’s** Drive. |
-| Content scripts on Google Sheets, Docs and Slides document and create URLs | Run shortcuts, key tips and the panel on those pages. Docs are local only: no Docs API, no document text sent. |
 
-**Not in the Store package today:** `nativeMessaging` (local development AI helper) and the `extensionpay.com` content script (billing). They are added only if those features are later packaged.
+Content scripts run on Google Sheets, Docs and Slides document and create URLs (shortcuts, key tips and the panel). Docs are local only: no Docs API, no document text sent. That is not a host permission and it does not allow Google API calls.
+
+**Not in the 0.4.6 package:** a local companion app, and ExtensionPay (no `extensionpay.com` content script and no ExtPay library). ExtensionPay would return only when billing opens, after advance notice under the DPA’s 30-day objection window.
+
+## Managed policies
+
+Admins can set three boolean keys in the Google Admin console (**Policy for extensions**) or in Chrome’s `3rdparty` policy: `slidesLinkShare`, `settingsSync`, and `googleApiTools`. A missing key leaves the default. `false` forces the feature off. Refresh from Sheets and settings sync are off until the user opts in. See the [Workspace admin guide](https://sheetspeed.agi-jarvis.com/trust/workspace-deployment-guide/) for sample JSON, including a force-install `ExtensionSettings` block for ID `ljlmgielacploapelnjhodicgbjipcaa`.
 
 ## Data flow
 
@@ -27,7 +39,7 @@ The **source** manifest also declares an `extensionpay.com` content script and o
 3. **Local records:** settings and, for Pro edits, undo/recovery snapshots → `chrome.storage.local` on the device. Optional settings sync uses the user’s Chrome profile, not a SheetSpeed account.
 4. **Website and support:** visits to https://sheetspeed.agi-jarvis.com go through Cloudflare to GitHub Pages, and load Google Fonts; support email goes to jarvis@agi-jarvis.com on Google Workspace. Separate from workbook processing.
 
-**Refresh from Sheets caveat.** Google Slides can only replace an image from a URL, so SheetSpeed briefly link-shares a temporary PNG (`anyone with the link`, discovery off) in the user’s Drive, then tries to unshare and delete it. Cleanup can fail if the browser closes mid-way. Skip this feature where link sharing is prohibited.
+**Refresh from Sheets caveat.** The command is off by default. The user must opt in, and an administrator can force it off with `slidesLinkShare: false`. Google Slides can only replace an image from a URL, so when the command runs, SheetSpeed briefly link-shares a temporary PNG (`anyone with the link`, discovery off) in the user’s Drive, then tries to unshare and delete it. Cleanup can fail if the browser closes mid-way. Where link sharing is prohibited, set the policy to `false`.
 
 ## OAuth (Pro only, consent-based)
 
@@ -42,7 +54,7 @@ The **source** manifest also declares an `extensionpay.com` content script and o
 
 ## Subprocessors (what Dressler Labs actually uses)
 
-Listed at https://sheetspeed.agi-jarvis.com/subprocessors/: Google (Chrome Web Store, Google APIs for Pro, Fonts, Workspace mail), GitHub Pages, Cloudflare (including Web Analytics on the website). **ExtensionPay and Stripe activate only when paid billing opens** and are not contacted during early access.
+Listed at https://sheetspeed.agi-jarvis.com/subprocessors/: Google (Chrome Web Store, Google APIs for Pro, Fonts, Workspace mail), GitHub Pages, Cloudflare (including Web Analytics on the website). **ExtensionPay is not a current subprocessor.** It would return when billing opens, after advance notice under the DPA’s 30-day objection window. Stripe would be added under the same notice. Neither is contacted during early access.
 
 Spreadsheet content is not processed by Dressler Labs.
 
@@ -56,7 +68,7 @@ Cite: [Allow or block apps and extensions](https://support.google.com/chrome/a/a
 4. Add SheetSpeed from the Chrome Web Store, or by ID: `ljlmgielacploapelnjhodicgbjipcaa`.
 5. Under **Installation policy**, choose:
    - **Allow install** — users may install it themselves.
-   - **Force install** — it installs automatically; users cannot remove it. Force-install also grants the extension’s Chrome permissions.
+   - **Force install** — it installs automatically; users cannot remove it. Force-install grants the required Chrome permissions (`storage`, `activeTab`, `identity`), not the optional Google API hosts.
    - **Block** — users cannot install it; existing installs are removed.
    - **Force install + pin to ChromeOS taskbar** — force-install, and pin on **ChromeOS**. For pinning on the Chrome **browser toolbar** (Windows, Mac, Linux), use the `ExtensionSettings` policy field `toolbar_pin: force_pinned`. See [Configure ExtensionSettings policy](https://support.google.com/chrome/a/answer/9867568).
 6. Click **Save**.
@@ -81,10 +93,10 @@ If your domain **blocks all Chrome Web Store items except an allowlist**, add th
 | --- | --- | --- |
 | Core shortcuts, key tips, Docs processing | No. They run on the open Google page. | Nowhere off the device, except the document already lives in Google. |
 | Pro tool reads and writes, after consent | Yes, to **Google only**, from the browser. | `sheets.googleapis.com`, and for Refresh from Sheets also `slides.googleapis.com` and Drive v3. |
-| Settings / undo records | Only if the user turns on Chrome settings sync. Undo stays local. | Chrome local storage; optional Chrome sync under the user’s profile. |
+| Settings / undo records | Settings sync is off by default. Only if the user turns it on. Undo stays local. An administrator can force sync off. | Chrome local storage (`sheetspeedSettings`); optional Chrome sync under the user’s profile. |
 | Support email you choose to send | Yes, if you email support. | jarvis@agi-jarvis.com on Google Workspace. |
 | Website visits | Yes, ordinary page requests. | Cloudflare, GitHub Pages, Google Fonts, Cloudflare Web Analytics. No spreadsheet content. |
-| License or payment data | Not during early access. | ExtensionPay and Stripe, only after billing opens. |
+| License or payment data | Not during early access. The 0.4.6 Store package does not include ExtensionPay. | ExtensionPay is not a current subprocessor. It would return, with Stripe, only after billing opens and after the DPA’s 30-day notice. |
 
 The extension does **not** use `<all_urls>`, does not load remote code, and does not include page-content analytics.
 
@@ -111,3 +123,5 @@ This is a real gap for some reviews. A contractual commitment would be a separat
 No SOC 2, ISO 27001, penetration-test report, formal bug bounty, SSO/SCIM, or data-residency commitment. A standard [DPA](https://sheetspeed.agi-jarvis.com/dpa/) is offered. Personal-data breaches for data Dressler Labs actually holds are notified within 72 hours. Audits are by written questionnaire.
 
 **Support:** jarvis@agi-jarvis.com
+
+Last updated 19 November 2026.

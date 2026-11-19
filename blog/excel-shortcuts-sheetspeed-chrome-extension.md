@@ -1,4 +1,4 @@
-If you are switching from Excel to Google Sheets and want Excel-style keyboard shortcuts again, one option is **SheetSpeed**: a Chrome extension for Google Sheets, Docs and Slides. Version 0.4.0 adds Excel, Word and PowerPoint Alt shortcuts with on-screen key tips: 500+ commands, 140+ Docs shortcuts. Pro tools, including Paste Exact and Refresh from Sheets, are free during early access.
+If you are switching from Excel to Google Sheets and want Excel-style keyboard shortcuts again, one option is **SheetSpeed**: a Chrome extension for Google Sheets, Docs and Slides. Version 0.4.6, with Chrome Web Store rollout pending store review, adds Excel, Word and PowerPoint Alt shortcuts with on-screen key tips: 500+ commands, 140+ Docs shortcuts. Pro tools, including Paste Exact and Refresh from Sheets, are free during early access.
 
 ## Official links (bookmark these)
 
@@ -24,7 +24,7 @@ SheetSpeed focuses on:
 
 - Excel, Word and PowerPoint Alt shortcuts with on-screen key tips on Google Sheets, Docs and Slides: 500+ commands, 140+ Docs shortcuts
 - Visible-formula **trace precedents** navigation, plus Paste Exact, goal seek and Refresh from Sheets in Pro (free during early access)
-- Core is free on the Chrome Web Store and needs no Google sign-in. Pro tools are free during early access; 0.4.0 adds optional Google sign-in for those tools, and nothing connects until you approve
+- Core is free on the Chrome Web Store and needs no Google sign-in. Pro tools are free during early access; 0.4.6, with Chrome Web Store rollout pending store review, uses optional Google sign-in for those tools. Required permissions are storage, activeTab and identity. Sheets, Slides and Drive hosts are optional and are not granted until a tool needs them. Nothing connects until you approve
 - PowerPoint-shaped shortcuts for Google Slides in the same product family
 
 It does **not** claim feature-for-feature parity with every competitor. Compare live Store listings before you choose.

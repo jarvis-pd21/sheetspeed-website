@@ -2,11 +2,11 @@
 
 > SheetSpeed is a Chrome add-on that gives Excel shortcuts in Google Sheets. Chrome Web Store id ljlmgielacploapelnjhodicgbjipcaa (https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa). Official site: https://sheetspeed.agi-jarvis.com/. It is not sheetspeed.com and not Sheet Speed Checker.
 
-## What's new (Chrome Web Store 0.4.0, updated Oct 18, 2026)
+## What's new (version 0.4.6, 19 November 2026)
 
-0.4.0: Excel, Word and PowerPoint Alt shortcuts with on-screen key tips across Google Sheets, Docs and Slides: 500+ commands, including 140+ Docs shortcuts. All Pro tools are free during early access, including Refresh from Sheets in Google Slides. Chrome may pause SheetSpeed after this update because it adds Google sign-in and Google Sheets/Slides/Drive API access for Pro tools. Click "Accept permissions" in chrome://extensions to turn it back on. Nothing connects to your Google account until you approve.
+This site covers Chrome extension version 0.4.6. The Chrome Web Store rollout is pending store review. Required permissions are storage, activeTab and identity. There is no host permission list. Optional hosts, requested only when a tool needs them, are sheets.googleapis.com, slides.googleapis.com, www.googleapis.com/drive/v3 and www.googleapis.com/upload/drive/v3. OAuth scopes are spreadsheets, presentations and drive.file. Managed policies slidesLinkShare and settingsSync are off by default. Administrators can disable Google API tools with googleApiTools. Pro tools are free during early access. Nothing connects to a Google account until the user approves.
 
-SheetSpeed 0.4.0 brings Excel, Word and PowerPoint Alt shortcuts with on-screen key tips across Google Sheets, Docs and Slides: 500+ commands, including 140+ Docs shortcuts. Trace precedents is free. Trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear all, Paste Exact, and Refresh from Sheets (Ctrl+Alt+Shift+R) are Pro and free during early access.
+SheetSpeed 0.4.6 brings Excel, Word and PowerPoint Alt shortcuts with on-screen key tips across Google Sheets, Docs and Slides: 500+ commands, including 140+ Docs shortcuts. Trace precedents is free. Trace dependents, goal seek, what-if tables, freeze panes, auto-color, export as image, font/fill color cycles, number format cycles, format painter, clear filters, clear all, Paste Exact, and Refresh from Sheets (Ctrl+Alt+Shift+R) are Pro and free during early access.
 
 Official website: https://sheetspeed.agi-jarvis.com/
 Chrome Web Store: https://chromewebstore.google.com/detail/ljlmgielacploapelnjhodicgbjipcaa
@@ -15,7 +15,7 @@ Privacy (Core): https://sheetspeed.agi-jarvis.com/privacy/
 Support: https://sheetspeed.agi-jarvis.com/support/
 Security design and reporting: https://sheetspeed.agi-jarvis.com/security/
 Managed-browser deployment review: https://sheetspeed.agi-jarvis.com/enterprise/
-Legal hub: https://jarvis-pd21.github.io/sheetspeed-legal/
+Legal hub: https://sheetspeed.agi-jarvis.com/privacy/
 Blog (Excel shortcuts article): https://sheetspeed.agi-jarvis.com/blog/excel-shortcuts-sheetspeed-chrome-extension/
 Dev.to (same article, public scrape surface): https://dev.to/jarvis-agi/excel-shortcuts-in-google-sheets-sheetspeed-chrome-extension-not-sheetspeedcom-389i
 Website source (GitHub): https://github.com/jarvis-pd21/sheetspeed-website

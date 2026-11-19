@@ -11,6 +11,8 @@ Light branding only. Prepared with the SheetSpeed trust pack. Not a vendor pitch
 
 **Cost.** **$0 during the vendor’s early access, and $0 for this pilot.** Nobody is charged unless we later start a paid plan. After billing opens, published prices are $7.99/month, $69/year, or $149 lifetime. A filled business case with **our** numbers is attached or at the trust link below. Hours saved, if we show them, are a **soft estimate**, not a hard cost reduction.
 
-**Key risk and mitigation.** The vendor does **not** have a SOC 2 report (or ISO 27001, or a penetration-test report). Mitigations: no SheetSpeed server holds our workbooks; Core needs no Google API access; permissions are limited to Google document pages and listed Google APIs; IT can pilot on a small OU and roll back by blocking the extension (Store ID `ljlmgielacploapelnjhodicgbjipcaa`). Refresh from Sheets, which briefly link-shares a temporary Drive image, can be left unused.
+**Key risk and mitigation.** The vendor does **not** have a SOC 2 report (or ISO 27001, or a penetration-test report). Mitigations: no SheetSpeed server holds our workbooks; Core needs no Google API access; permissions are limited to Google document pages and listed Google APIs; IT can pilot on a small OU and roll back by blocking the extension (Store ID `ljlmgielacploapelnjhodicgbjipcaa`). Refresh from Sheets is off by default and briefly link-shares a temporary Drive image if a user opts in; an administrator can force it off with the `slidesLinkShare` policy.
 
 **Action asked, and by when.** Please approve the pilot and name the owner for IT review by [date]. Security and procurement can start **in parallel**, not after the pilot. Packet: https://sheetspeed.agi-jarvis.com/trust/
+
+Last updated 19 November 2026.

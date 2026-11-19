@@ -10,4 +10,4 @@ What we do not have: SOC 2, ISO 27001, pentest report, DPO, insurance claim, SSO
 
 Live legal pages (as of 10 November 2026, 7:33 AM Pacific/Honolulu): Privacy, Terms, Security, Enterprise, DPA, Subprocessors.
 
-Last updated 10 November 2026.
+Last updated 19 November 2026.

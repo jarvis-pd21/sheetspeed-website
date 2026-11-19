@@ -11,8 +11,8 @@ flowchart LR
   Site[GitHub Pages website]
   Fonts[Google Fonts]
   Mail[Google Workspace mailbox]
-  EP[ExtensionPay - when billing opens]
-  Stripe[Stripe - when billing opens]
+  EP[ExtensionPay - not current; after 30-day notice when billing opens]
+  Stripe[Stripe - not current; after 30-day notice when billing opens]
 
   User --> Ext
   Ext --> Page
@@ -24,4 +24,4 @@ flowchart LR
   User --> CF --> Site
   CF --> Fonts
   User -->|support email| Mail
-  Ext -.->|not during early access| EP --> Stripe
+  Ext -.->|not a current subprocessor| EP --> Stripe
