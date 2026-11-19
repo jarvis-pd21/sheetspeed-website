@@ -378,10 +378,6 @@ button {
   opacity: 1;
 }
 
-.marquee-track .logo-coinbase {
-  height: 30px;
-}
-
 .marquee-track .logo-google {
   height: 28px;
 }
@@ -1405,7 +1401,6 @@ section {
   }
 
   .marquee-track .logo,
-  .marquee-track .logo-coinbase,
   .marquee-track .logo-google,
   .marquee-track .logo-meta,
   .marquee-track .logo-jpm,
@@ -1493,7 +1488,6 @@ section {
   }
 
   .marquee-track .logo,
-  .marquee-track .logo-coinbase,
   .marquee-track .logo-google,
   .marquee-track .logo-meta,
   .marquee-track .logo-jpm,
@@ -1512,7 +1506,6 @@ section {
   }
 
   .marquee-track .logo,
-  .marquee-track .logo-coinbase,
   .marquee-track .logo-google,
   .marquee-track .logo-meta,
   .marquee-track .logo-jpm,
