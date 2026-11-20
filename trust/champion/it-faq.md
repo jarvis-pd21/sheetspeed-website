@@ -1,6 +1,6 @@
 # SheetSpeed IT FAQ
 
-**Forward this as-is to IT or security.** About 3–4 minutes. Chrome Web Store ID: `ljlmgielacploapelnjhodicgbjipcaa`. Evidence is the version 0.4.6 r65 package submitted for store review (SHA-256 `6f24355f5201f6148045847fb53fc68772523068285911fee5c65837aef8138a`; main at `c72ec7e`), plus the public legal pages.
+**Forward this as-is to IT or security.** About 3–4 minutes. Chrome Web Store ID: `ljlmgielacploapelnjhodicgbjipcaa`. Evidence is the live Chrome Web Store package 0.4.6 r65, published 2026-11-19 (SHA-256 `6f24355f5201f6148045847fb53fc68772523068285911fee5c65837aef8138a`; main at `c72ec7e`), plus the public legal pages.
 
 **Bottom line.** SheetSpeed is a Manifest V3 Chrome extension. It has no SheetSpeed-operated server for spreadsheet or document content. Pro tools talk to Google APIs from the user’s browser, only after the user consents.
 

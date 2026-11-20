@@ -1,6 +1,6 @@
 # Security overview (no SOC 2)
 
-**One page for a security reviewer.** SheetSpeed is a Chrome extension operated by Philip Dressler, doing business as Dressler Labs. Contact: jarvis@agi-jarvis.com. This page covers version 0.4.6. The Chrome Web Store rollout is pending store review.
+**One page for a security reviewer.** SheetSpeed is a Chrome extension operated by Philip Dressler, doing business as Dressler Labs. Contact: jarvis@agi-jarvis.com. This page covers version 0.4.6 r65, the live Chrome Web Store version published 2026-11-19.
 
 ## What we do not have
 

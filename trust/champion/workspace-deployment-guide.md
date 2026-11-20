@@ -43,7 +43,7 @@
 
 ## 4. Managed policies
 
-Version 0.4.6, whose Chrome Web Store rollout is pending store review, ships a `storage.managed_schema` with three boolean keys. A missing key leaves the default in place. `false` forces the feature off, including when a user already turned it on. There is no admin key that forces Refresh from Sheets or settings sync on.
+Version 0.4.6 r65, the live Chrome Web Store version published 2026-11-19, ships a `storage.managed_schema` with three boolean keys. A missing key leaves the default in place. `false` forces the feature off, including when a user already turned it on. There is no admin key that forces Refresh from Sheets or settings sync on.
 
 | Key | Default when unset | When set to `false` |
 | --- | --- | --- |

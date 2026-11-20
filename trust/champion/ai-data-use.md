@@ -1,6 +1,6 @@
 # AI and data-use statement
 
-**This statement covers version 0.4.6. The Chrome Web Store rollout is pending store review.**
+**This statement covers version 0.4.6 r65, the live Chrome Web Store version published 2026-11-19.**
 
 SheetSpeed’s **0.4.6 package does not send your spreadsheet, Doc or Slide content to an AI model, and it does not include a working AI feature.** There is no claim that customer content is used to train a model, because that content is not sent to Dressler Labs or to an AI vendor.
 

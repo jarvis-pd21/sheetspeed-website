@@ -1,6 +1,6 @@
 # SheetSpeed data map
 
-**No spreadsheet, Doc or Slide content is sent to a SheetSpeed server.** Dressler Labs does not receive Google access tokens. Evidence: the published Privacy Policy, DPA Annex A, and the 0.4.6 package submitted for store review (SHA-256 `6f24355f5201f6148045847fb53fc68772523068285911fee5c65837aef8138a`; main at `c72ec7e`). The Chrome Web Store rollout is pending store review.
+**No spreadsheet, Doc or Slide content is sent to a SheetSpeed server.** Dressler Labs does not receive Google access tokens. Evidence: the published Privacy Policy, DPA Annex A, and the live Chrome Web Store package 0.4.6 r65, published 2026-11-19 (SHA-256 `6f24355f5201f6148045847fb53fc68772523068285911fee5c65837aef8138a`; main at `c72ec7e`).
 
 ```mermaid
 flowchart LR
